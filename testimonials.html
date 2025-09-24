@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maya Events - Event Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'gray-850': '#1f2937',
+                        'gray-950': '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .bg-hero {
+            background-image: url('https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg?auto=compress&cs=tinysrgb&w=1260');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .bg-cta {
+            background-image: url('https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=1260');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .polaroid {
+            transform: rotate(2deg);
+            transition: transform 0.3s ease;
+        }
+
+        .polaroid:hover {
+            transform: rotate(0deg);
+        }
+
+        .polaroid:nth-child(2) {
+            transform: rotate(-2deg);
+        }
+
+        .polaroid:nth-child(3) {
+            transform: rotate(2deg);
+        }
+
+        .testimonial-card {
+            display: none;
+        }
+
+        .testimonial-card.active {
+            display: block;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Video Hero Styles */
+        .video-hero {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-hero video {
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @media (max-aspect-ratio: 16/9) {
+            .video-hero video {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        @media (min-aspect-ratio: 16/9) {
+            .video-hero video {
+                width: auto;
+                height: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-white font-sans antialiased">
+
+    <nav
+        class="relative bg-gradient-to-r from-white/10 via-white/5 to-white/10 backdrop-blur-xl border-b border-white/20 sticky top-0 z-50 shadow-2xl">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-teal-500/5"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Mobile Layout -->
+            <div class="md:hidden flex items-center justify-between h-16">
+                <button id="mobile-menu-button"
+                    class="relative text-white hover:text-blue-200 transition-all p-2 rounded-xl overflow-hidden group">
+                    <i class="relative z-10 fas fa-bars text-2xl"></i>
+                </button>
+                <div class="flex-1 flex justify-center">
+                    <img src="assets/images/MAYA_LOGO.png" alt="Maya Events Logo" class="h-12 w-auto">
+                </div>
+                <div>
+                    <button class="relative text-white px-3 py-2 rounded-xl transition-all overflow-hidden group">
+                        <i class="relative z-10 fas fa-mobile-alt text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Desktop Layout -->
+            <div class="hidden md:flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <img src="assets/images/MAYA_LOGO.png" alt="Maya Events Logo" class="h-14 w-auto">
+                </div>
+                <div class="flex items-center space-x-8">
+                    <a href="index.html"
+                        class="relative text-white hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
+                        <div class="absolute inset-0 bg-white/20 backdrop-blur-sm rounded-xl"></div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-teal-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <span class="relative z-10">Home</span>
+                    </a>
+                    <a href="about.html"
+                        class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
+                        <div
+                            class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <span class="relative z-10">About</span>
+                    </a>
+                    <a href="services.html"
+                        class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
+                        <div
+                            class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <span class="relative z-10">Services</span>
+                    </a>
+                    <a href="testimonials.html"
+                        class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
+                        <div
+                            class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <span class="relative z-10">Testimonials</span>
+                    </a>
+                    <a href="contact.html"
+                        class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
+                        <div
+                            class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <span class="relative z-10">Contact</span>
+                    </a>
+                </div>
+                <div>
+                    <button class="relative text-white px-4 py-2 rounded-xl transition-all overflow-hidden group">
+                        <div class="absolute inset-0 bg-white/20 backdrop-blur-md rounded-xl"></div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-teal-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <i class="relative z-10 fas fa-mobile-alt text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="hidden md:hidden">
+                <div
+                    class="px-2 pt-2 pb-3 space-y-1 bg-white/10 backdrop-blur-lg rounded-xl mt-2 border border-white/20">
+                    <a href="index.html"
+                        class="block text-white hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Home</a>
+                    <a href="about.html"
+                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">About</a>
+                    <a href="services.html"
+                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Services</a>
+                    <a href="testimonials.html"
+                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Testimonials</a>
+                        <a href="contact.html"
+                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Testimonials</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10">
+
+        <header class="relative video-hero h-[60vh] md:h-screen flex items-center justify-center">
+            <video autoplay loop muted playsinline class="absolute inset-0 min-w-full min-h-full object-cover">
+                <source src="https://assets-global.website-files.com/657e28373a62886f4439c362/6580f1469e6b5d214197e42d_Corporate_Event_3-transcode.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="absolute inset-0 bg-gray-950/70 backdrop-blur-sm"></div>
+            <div class="relative z-10 text-center px-4">
+                <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-white mb-4">
+                    Where Every Detail Matters
+                </h1>
+                <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+                    We craft unique, unforgettable experiences from corporate gatherings to personal celebrations.
+                </p>
+                <a href="contact.html"
+                    class="inline-block px-8 py-4 bg-blue-600 hover:bg-blue-700 transition-colors text-white font-semibold rounded-full shadow-lg transform hover:scale-105">
+                    Plan Your Event Today
+                </a>
+            </div>
+        </header>
+
+        <section id="about" class="py-20 bg-gray-900">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="relative">
+                        <img src="https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="A team planning an event"
+                            class="w-full h-auto rounded-xl shadow-2xl transform rotate-1 transition-transform duration-300 hover:rotate-0">
+                        <div class="absolute -bottom-4 -left-4 w-48 h-48 bg-teal-500/10 rounded-full blur-2xl -z-10"></div>
+                        <div class="absolute -top-4 -right-4 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl -z-10"></div>
+                    </div>
+                    <div>
+                        <!-- <span class="text-blue-400 font-semibold text-sm uppercase tracking-wider">Our Story</span> -->
+                        <h2 class="text-4xl font-bold mt-2 mb-4">
+                            More Than Events, We Create Memories.
+                        </h2>
+                        <p class="text-gray-400 text-lg leading-relaxed mb-6">
+                            Since our inception, Maya Events has been dedicated to transforming ordinary gatherings into extraordinary experiences. We are a team of passionate creators, meticulous planners, and expert coordinators committed to bringing your vision to life.
+                        </p>
+                        <ul class="space-y-4 text-gray-400">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-blue-500 text-2xl mr-3 flex-shrink-0"></i>
+                                <span>Expertise in a wide range of events, from corporate to weddings.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-blue-500 text-2xl mr-3 flex-shrink-0"></i>
+                                <span>A personalized, client-centric approach to planning.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-blue-500 text-2xl mr-3 flex-shrink-0"></i>
+                                <span>Creative and innovative solutions for any challenge.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="py-20 bg-gray-850">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <!-- <span class="text-teal-400 font-semibold text-sm uppercase tracking-wider">Our Offerings</span> -->
+                <h2 class="text-4xl font-bold mt-2 mb-12">
+                    Services Designed for Your Success
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div
+                        class="bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-blue-500 transition-colors duration-300 transform hover:-translate-y-2 group">
+                        <div
+                            class="inline-flex items-center justify-center p-4 rounded-full bg-blue-500/20 text-blue-400 mb-6 group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                            <i class="fas fa-briefcase text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-2">Corporate Events</h3>
+                        <p class="text-gray-400">
+                            From conferences and product launches to team-building retreats, we manage corporate events that leave a lasting professional impression.
+                        </p>
+                    </div>
+
+                    <div
+                        class="bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-teal-500 transition-colors duration-300 transform hover:-translate-y-2 group">
+                        <div
+                            class="inline-flex items-center justify-center p-4 rounded-full bg-teal-500/20 text-teal-400 mb-6 group-hover:bg-teal-500 group-hover:text-white transition-colors">
+                            <i class="fas fa-gem text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-2">Social Celebrations</h3>
+                        <p class="text-gray-400">
+                            Weddings, birthdays, anniversaries—whatever the occasion, we bring joy and magic to your special moments.
+                        </p>
+                    </div>
+
+                    <div
+                        class="bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-blue-500 transition-colors duration-300 transform hover:-translate-y-2 group">
+                        <div
+                            class="inline-flex items-center justify-center p-4 rounded-full bg-blue-500/20 text-blue-400 mb-6 group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                            <i class="fas fa-microscope text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-2">Customized Events</h3>
+                        <p class="text-gray-400">
+                            Have a unique idea? We specialize in crafting tailor-made experiences to match your specific vision and needs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="py-20 bg-gray-900">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <!-- <span class="text-blue-400 font-semibold text-sm uppercase tracking-wider">What Clients Say</span> -->
+                <h2 class="text-4xl font-bold mt-2 mb-12">
+                    Trusted by Happy Clients
+                </h2>
+                <div class="relative max-w-3xl mx-auto">
+                    <div class="testimonial-card active" id="testimonial-1">
+                        <p class="text-lg md:text-xl italic text-gray-300 mb-6">
+                            "The team at Maya Events exceeded all our expectations for our annual conference. Everything was flawless, from the venue selection to the catering. We can't wait to work with them again!"
+                        </p>
+                        <div class="flex flex-col items-center">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Client Avatar" class="w-16 h-16 rounded-full mb-2 border-2 border-blue-500">
+                            <p class="font-bold text-white">Ravi Sharma</p>
+                            <p class="text-sm text-gray-400">CEO, Tech Innovators</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-card" id="testimonial-2">
+                        <p class="text-lg md:text-xl italic text-gray-300 mb-6">
+                            "Our wedding was a dream come true, thanks to Maya Events. They handled every detail with such care and professionalism, allowing us to simply enjoy our special day. Highly recommended!"
+                        </p>
+                        <div class="flex flex-col items-center">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Client Avatar" class="w-16 h-16 rounded-full mb-2 border-2 border-teal-500">
+                            <p class="font-bold text-white">Priya Patel</p>
+                            <p class="text-sm text-gray-400">Happy Bride</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-card" id="testimonial-3">
+                        <p class="text-lg md:text-xl italic text-gray-300 mb-6">
+                            "The creativity and dedication of the Maya Events team are simply unmatched. They took our vague ideas for a product launch and turned them into a stunning, impactful event that generated huge buzz."
+                        </p>
+                        <div class="flex flex-col items-center">
+                            <img src="https://randomuser.me/api/portraits/men/70.jpg" alt="Client Avatar" class="w-16 h-16 rounded-full mb-2 border-2 border-blue-500">
+                            <p class="font-bold text-white">Sameer Khan</p>
+                            <p class="text-sm text-gray-400">Marketing Director</p>
+                        </div>
+                    </div>
+
+                    <button id="prev-btn"
+                        class="absolute left-0 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button id="next-btn"
+                        class="absolute right-0 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="py-20 bg-gray-850">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <!-- <span class="font-display text-teal-400 font-semibold text-sm uppercase tracking-wider">Our Portfolio</span> -->
+                <h2 class="text-4xl font-bold mt-2 mb-12">
+                    A Glimpse of Our Work
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="relative group overflow-hidden rounded-xl shadow-lg">
+                        <img src="./testimonials/Corporate-Gala.jpg" alt="Corporate event setup"
+                            class="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-500">
+                        <div
+                            class="absolute inset-0 bg-gray-950/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <p class="text-white text-lg font-bold">Corporate Gala</p>
+                        </div>
+                    </div>
+                    <div class="relative group overflow-hidden rounded-xl shadow-lg">
+                        <img src="./testimonials/Wedding-Reception.jpg" alt="Wedding ceremony"
+                            class="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-500">
+                        <div
+                            class="absolute inset-0 bg-gray-950/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <p class="text-white text-lg font-bold">Wedding Reception</p>
+                        </div>
+                    </div>
+                    <div class="relative group overflow-hidden rounded-xl shadow-lg">
+                        <img src="./testimonials/Concert-Experience.jpg" alt="Music concert stage"
+                            class="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-500">
+                        <div
+                            class="absolute inset-0 bg-gray-950/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <p class="text-white text-lg font-bold">Concert Experience</p>
+                        </div>
+                    </div>
+                    <div class="relative group overflow-hidden rounded-xl shadow-lg">
+                        <img src="./testimonials/birthday.jpg" alt="Birthday party"
+                            class="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-500">
+                        <div
+                            class="absolute inset-0 bg-gray-950/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <p class="text-white text-lg font-bold">Birthday Bash</p>
+                        </div>
+                    </div>
+                    <div class="relative group overflow-hidden rounded-xl shadow-lg">
+                        <img src="./testimonials/Outdoor-Ceremony.jpg" alt="Outdoor ceremony"
+                            class="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-500">
+                        <div
+                            class="absolute inset-0 bg-gray-950/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <p class="text-white text-lg font-bold">Outdoor Ceremony</p>
+                        </div>
+                    </div>
+                    <div class="relative group overflow-hidden rounded-xl shadow-lg">
+                        <img src="./testimonials/Corporate Meeting.jpg" alt="Business meeting"
+                            class="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-500">
+                        <div
+                            class="absolute inset-0 bg-gray-950/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <p class="text-white text-lg font-bold">Corporate Meeting</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 bg-cta bg-fixed relative">
+            <div class="absolute inset-0 bg-gray-950/80"></div>
+            <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-4xl font-bold mb-4">
+                    Ready to Create an Unforgettable Event?
+                </h2>
+                <p class="text-lg text-gray-300 mb-8">
+                    Let's discuss your vision and make it a reality. Contact us today for a free consultation.
+                </p>
+                <a href="contact.html"
+                    class="inline-block px-10 py-4 bg-teal-500 hover:bg-teal-600 transition-colors text-white font-semibold rounded-full shadow-lg transform hover:scale-105">
+                    Get a Free Quote
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact" class="bg-gray-800 border-t border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <img src="./assets/images/MAYA_LOGO.png" alt="Maya Events Logo" class="h-12 w-auto mb-4">
+                    <p class="text-gray-400 mb-4">Creating Memorable Events in Bangalore</p>
+                    <p class="text-gray-400 text-sm">
+                        Your premier destination for exceptional event planning and unforgettable experiences across Karnataka and beyond.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-blue-400 transition-colors">Home</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-blue-400 transition-colors">About</a></li>
+                        <li><a href="service1.html" class="text-gray-400 hover:text-blue-400 transition-colors">Service</a></li>
+                        <li><a href="testimonials.html" class="text-gray-400 hover:text-blue-400 transition-colors">Testimonials</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-blue-400 transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Contact Us</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>📍 MG Road, Bangalore 560001, Karnataka</li>
+                        <li>📞 +91 80 1234 5678</li>
+                        <li>✉️ info@mayaevents.com</li>
+                        <li>🕒 Mon - Fri: 9AM - 6PM IST</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Subscribe</h4>
+                    <p class="text-gray-400 mb-4 text-sm">Stay updated with our latest events and special offers.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email"
+                            class="flex-1 px-4 py-2 bg-gray-700 border border-gray-600 rounded-l-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition-colors">
+                            Subscribe
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">© 2024 Maya Events. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Testimonial Carousel
+        const testimonials = document.querySelectorAll('.testimonial-card');
+        const prevButton = document.getElementById('prev-btn');
+        const nextButton = document.getElementById('next-btn');
+        let currentTestimonial = 0;
+
+        function showTestimonial(index) {
+            testimonials.forEach((testimonial, i) => {
+                testimonial.classList.remove('active');
+                if (i === index) {
+                    testimonial.classList.add('active');
+                }
+            });
+        }
+
+        prevButton.addEventListener('click', () => {
+            currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+            showTestimonial(currentTestimonial);
+        });
+
+        nextButton.addEventListener('click', () => {
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            showTestimonial(currentTestimonial);
+        });
+
+        // Auto-cycle testimonials every 5 seconds
+        setInterval(() => {
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            showTestimonial(currentTestimonial);
+        }, 5000);
+    </script>
+</body>
+
+</html>

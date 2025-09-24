@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maya Events - Event Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'gray-850': '#1f2937',
+                        'gray-950': '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .bg-hero {
+            background-image: url('https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg?auto=compress&cs=tinysrgb&w=1260');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .bg-cta {
+            background-image: url('https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=1260');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .polaroid {
+            transform: rotate(2deg);
+            transition: transform 0.3s ease;
+        }
+
+        .polaroid:hover {
+            transform: rotate(0deg);
+        }
+
+        .polaroid:nth-child(2) {
+            transform: rotate(-2deg);
+        }
+
+        .polaroid:nth-child(3) {
+            transform: rotate(2deg);
+        }
+
+        .testimonial-card {
+            display: none;
+        }
+
+        .testimonial-card.active {
+            display: block;
+        }
+
+        /* Video Hero Styles */
+        .video-hero {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-hero video {
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @media (max-aspect-ratio: 16/9) {
+            .video-hero video {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        @media (min-aspect-ratio: 16/9) {
+            .video-hero video {
+                width: auto;
+                height: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-white">
+
+    <!-- Navigation -->
+    <nav
+        class="relative bg-gradient-to-r from-white/10 via-white/5 to-white/10 backdrop-blur-xl border-b border-white/20 sticky top-0 z-50 shadow-2xl">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-teal-500/5"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Mobile Layout -->
+            <div class="md:hidden flex items-center justify-between h-16">
+                <button id="mobile-menu-button"
+                    class="relative text-white hover:text-blue-200 transition-all p-2 rounded-xl overflow-hidden group">
+                    <i class="relative z-10 fas fa-bars text-2xl"></i>
+                </button>
+                <div class="flex-1 flex justify-center">
+                    <img src="assets/images/MAYA_LOGO.png" alt="Maya Events Logo" class="h-12 w-auto">
+                </div>
+                <div>
+                    <button class="relative text-white px-3 py-2 rounded-xl transition-all overflow-hidden group">
+                        <i class="relative z-10 fas fa-mobile-alt text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Desktop Layout -->
+            <div class="hidden md:flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <img src="assets/images/MAYA_LOGO.png" alt="Maya Events Logo" class="h-14 w-auto">
+                </div>
+                <div class="flex items-center space-x-8">
+                    <a href="index.html"
+                        class="relative text-white hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
+                        <div class="absolute inset-0 bg-white/20 backdrop-blur-sm rounded-xl"></div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-teal-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <span class="relative z-10">Home</span>
+                    </a>
+                    <a href="about.html"
+                        class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
+                        <div
+                            class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <span class="relative z-10">About</span>
+                    </a>
+                    <a href="services.html"
+                        class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
+                        <div
+                            class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <span class="relative z-10">Services</span>
+                    </a>
+                    <a href="testimonials.html"
+                        class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
+                        <div
+                            class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <span class="relative z-10">Testimonials</span>
+                    </a>
+                    <a href="contact.html"
+                        class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
+                        <div
+                            class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <span class="relative z-10">Contact</span>
+                    </a>
+                </div>
+                <div>
+                    <button class="relative text-white px-4 py-2 rounded-xl transition-all overflow-hidden group">
+                        <div class="absolute inset-0 bg-white/20 backdrop-blur-md rounded-xl"></div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-teal-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <i class="relative z-10 fas fa-mobile-alt text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="hidden md:hidden">
+                <div
+                    class="px-2 pt-2 pb-3 space-y-1 bg-white/10 backdrop-blur-lg rounded-xl mt-2 border border-white/20">
+                    <a href="index.html"
+                        class="block text-white hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Home</a>
+                    <a href="about.html"
+                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">About</a>
+                    <a href="services.html"
+                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Services</a>
+                    <a href="testimonials.html"
+                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Testimonials</a>
+                    <a href="contact.html"
+                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Services Section -->
+
+    <section id="services-header" class="min-h-screen flex flex-col justify-center items-center bg-gray-950 text-white">
+        <div class="max-w-3xl text-center px-4">
+            <!-- Increased font sizes -->
+            <h2 class="text-6xl md:text-7xl font-bold mb-8">Comprehensive Event Management Services</h2>
+            <p class="text-xl md:text-2xl text-gray-300 mb-10">
+                Creating extraordinary corporate experiences that inspire, educate, and propel organizations to new
+                heights.
+            </p>
+            <a href="about.html"
+                class="inline-block px-10 py-5 text-xl md:text-2xl bg-gradient-to-r from-blue-500 to-teal-500 text-white font-semibold rounded-xl shadow-lg hover:scale-105 transition-transform">
+                Turn Your Idea Into Reality
+            </a>
+        </div>
+    </section>
+
+
+    <!-- Service Cards Section -->
+    <section id="services-cards"
+        class="min-h-screen flex flex-col justify-center items-center bg-gray-850 text-white py-20">
+        <div class="max-w-7xl px-4 sm:px-6 lg:px-8 text-center mb-12">
+            <!-- Tagline / Heading -->
+            <h2 class="text-5xl md:text-6xl font-bold mb-6">
+                Endless Expertise.<br>
+                Limitless Experiences.
+            </h2>
+            <p class="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto">
+                Crafting every detail with precision. Transforming ideas into unforgettable moments. Your vision is our
+                canvas, and we bring it to life with flair and finesse.
+            </p>
+        </div>
+
+        <!-- Service Cards Grid -->
+        <div class="max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+            <!-- Card examples (6 cards) -->
+            <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+                <i class="fas fa-briefcase text-5xl text-blue-500 mb-4"></i>
+                <h3 class="text-2xl font-semibold mb-2">Business Events</h3>
+                <p class="text-gray-400">Professional business events planning and execution with attention to every
+                    detail.</p>
+                <!-- Make this span clickable -->
+                <a href="#service-business-events" class="mt-4 inline-block text-blue-400 hover:underline">Explore
+                    Services</a>
+            </div>
+
+            <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+                <i class="fas fa-birthday-cake text-5xl text-pink-500 mb-4"></i>
+                <h3 class="text-2xl font-semibold mb-2">Celebrations</h3>
+                <p class="text-gray-400">Professional celebrations galore planning and execution with attention to every
+                    detail.</p>
+                <a href="#Celebrations-Galore" class="mt-4 inline-block text-blue-400 hover:underline">Explore
+                    Services</a>
+            </div>
+            <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+                <i class="fas fa-rocket text-5xl text-yellow-400 mb-4"></i>
+                <h3 class="text-2xl font-semibold mb-2">Launches</h3>
+                <p class="text-gray-400">Professional launches planning and execution with attention to every detail.
+                </p>
+                <a href="#service-launches" class="mt-4 inline-block text-blue-400 hover:underline">Explore
+                    Services</a>
+            </div>
+            <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+                <i class="fas fa-video text-5xl text-green-500 mb-4"></i>
+                <h3 class="text-2xl font-semibold mb-2">Hybrid Events</h3>
+                <p class="text-gray-400">Professional planning and execution with attention to every detail.</p>
+                <a href="#service-hybrid" class="mt-4 inline-block text-blue-400 hover:underline">Explore
+                    Services</a>
+            </div>
+            <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+                <i class="fas fa-users text-5xl text-purple-500 mb-4"></i>
+                <h3 class="text-2xl font-semibold mb-2">Industry Conventions</h3>
+                <p class="text-gray-400">Professional industry conventions planning and execution with attention to
+                    every detail.</p>
+                <a href="#service-industry" class="mt-4 inline-block text-blue-400 hover:underline">Explore
+                    Services</a>
+            </div>
+            <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+                <i class="fas fa-gem text-5xl text-orange-500 mb-4"></i>
+                <h3 class="text-2xl font-semibold mb-2">Special Projects</h3>
+                <p class="text-gray-400">Professional special projects planning and execution with attention to every
+                    detail.</p>
+                <a href="#service-special" class="mt-4 inline-block text-blue-400 hover:underline">Explore
+                    Services</a>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Detailed Services Section -->
+    <section id="services-details" class="bg-gray-900 text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-28">
+
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-extrabold text-white">Our Comprehensive Services</h2>
+                <p class="mt-4 text-xl text-gray-400">From concept to execution, we craft every event to be a
+                    masterpiece of precision and purpose.</p>
+            </div>
+
+            <div id="service-business-events" class="flex flex-col md:flex-row items-center gap-12 group">
+                <img src="./services/large.jpg" alt="Business leaders at a conference"
+                    class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
+                <div class="md:w-1/2">
+                    <h3 class="text-4xl font-bold mb-4">Business Critical Events - Conferences | All Hands | Summits
+                    </h3>
+                    <p class="text-gray-300 mb-6">We specialize in crafting extraordinary business conferences that
+                        inspire, educate, and propel organizations to new heights. Our strategic approach ensures every
+                        session, keynote, and workshop is meticulously designed to achieve your key organizational
+                        objectives, leaving a lasting impression on every attendee.</p>
+                    <ul class="text-gray-400 space-y-3 list-disc list-inside">
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">Full-Service
+                            Event Production & Management</li>
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">Strategic
+                            Content & Speaker Curation</li>
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">Audience
+                            Engagement & Networking Solutions</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="Celebrations-Galore" class="flex flex-col md:flex-row-reverse items-center gap-12 group">
+                <img src="./services/Celebrations.jpg" alt="A vibrant party celebration"
+                    class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
+                <div class="md:w-1/2">
+                    <h3 class="text-4xl font-bold mb-4">Celebrations & Milestones - Anniversaries | Parties</h3>
+                    <p class="text-gray-300 mb-6">From corporate anniversaries to festive holiday parties, we transform
+                        milestones into magnificent celebrations. Our team handles every logistic, from decor and
+                        catering to entertainment, ensuring a seamless and unforgettable experience that perfectly
+                        captures the spirit of the occasion.</p>
+                    <ul class="text-gray-400 space-y-3 list-disc list-inside">
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">Bespoke
+                            Theming & Venue Sourcing</li>
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">Guest
+                            Management & VIP Experiences</li>
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">Live
+                            Entertainment & Creative Direction</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="service-launches" class="flex flex-col md:flex-row items-center gap-12 group">
+                <img src="./services/opening.jpg" alt="A product being unveiled on a stage"
+                    class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
+                <div class="md:w-1/2">
+                    <h3 class="text-4xl font-bold mb-4">Product & Brand Launches - Exclusives</h3>
+                    <p class="text-gray-300 mb-6">Create a powerful introduction for your new product or brand with an
+                        event that generates massive buzz. We design high-impact launches that captivate your audience,
+                        engage key stakeholders, and secure media attention, ensuring your go-to-market strategy is
+                        executed with flawless precision.</p>
+                    <ul class="text-gray-400 space-y-3 list-disc list-inside">
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">Interactive
+                            Product Demonstrations</li>
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">Media &
+                            Influencer Press Kits</li>
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">Immersive
+                            Experience Design</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="service-hybrid" class="flex flex-col md:flex-row-reverse items-center gap-12 group">
+                <img src="./services/Hybrid-Events.jpg" alt="People in a meeting with a large screen"
+                    class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
+                <div class="md:w-1/2">
+                    <h3 class="text-4xl font-bold mb-4">Hybrid & Digital Experiences - Webinars | Live Streams | Virtual
+                        Summits</h3>
+                    <p class="text-gray-300 mb-6">Expand your event's reach far beyond the physical venue with our
+                        seamless hybrid and virtual solutions. We expertly blend in-person engagement with high-quality
+                        digital broadcasting, creating an inclusive and immersive experience that connects audiences
+                        from anywhere in the world.</p>
+                    <ul class="text-gray-400 space-y-3 list-disc list-inside">
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">High-Fidelity
+                            Live Streaming & AV Production</li>
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">Interactive
+                            Virtual Platforms</li>
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">Post-Event
+                            Analytics & Reporting</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="service-industry" class="flex flex-col md:flex-row items-center gap-12 group">
+                <img src="./services/Industry-Conventions.jpg" alt="A large convention hall with attendees"
+                    class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
+                <div class="md:w-1/2">
+                    <h3 class="text-4xl font-bold mb-4">Industry Conventions & Exhibitions - Trade Shows | B2B Expos |
+                        Forums</h3>
+                    <p class="text-gray-300 mb-6">Elevate your large-scale industry event into a powerful platform for
+                        networking, knowledge sharing, and commerce. We manage every aspect of the exhibition and forum,
+                        from intricate logistical planning to attendee experience design, to create an environment where
+                        collaboration thrives.</p>
+                    <ul class="text-gray-400 space-y-3 list-disc list-inside">
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">Comprehensive
+                            Exhibitor Management</li>
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">Venue Layout &
+                            Traffic Flow Optimization</li>
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">Multi-Track
+                            Session Planning & Coordination</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="service-special" class="flex flex-col md:flex-row-reverse items-center gap-12 group">
+                <img src="./services/banquet.jpg" alt="A banquet hall set up for a gala"
+                    class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
+                <div class="md:w-1/2">
+                    <h3 class="text-4xl font-bold mb-4">Special Projects & One-of-a-Kind Events</h3>
+                    <p class="text-gray-300 mb-6">Some visions are so unique they require a completely custom approach.
+                        Our Special Projects team thrives on these challenges, providing tailored solutions for
+                        intricate or highly confidential events. We work with you to bring your most ambitious ideas to
+                        life, ensuring a flawless and exclusive experience.</p>
+                    <ul class="text-gray-400 space-y-3 list-disc list-inside">
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">Custom Concept
+                            Development & Design</li>
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">Confidential &
+                            Sensitive Event Management</li>
+                        <li class="transform transition-transform duration-300 group-hover:translate-x-2">Luxury &
+                            High-Profile Event Coordination</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 border-t border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <img src="assets/images/MAYA_LOGO.png" alt="Maya Events Logo" class="h-12 w-auto mb-4">
+                    <p class="text-gray-400 mb-4">Creating Memorable Events in Bangalore</p>
+                    <p class="text-gray-400 text-sm">
+                        Your premier destination for exceptional event planning and unforgettable experiences across
+                        Karnataka and beyond.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-blue-400 transition-colors">Home</a>
+                        </li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-blue-400 transition-colors">About'</a>
+                        </li>
+                        <li><a href="service.html"
+                                class="text-gray-400 hover:text-blue-400 transition-colors">Service</a></li>
+                        <li><a href="testimonials.html"
+                                class="text-gray-400 hover:text-blue-400 transition-colors">Testimonials</a></li>
+                        <li><a href="contact.html"
+                                class="text-gray-400 hover:text-blue-400 transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Contact Us</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>📍 MG Road, Bangalore 560001, Karnataka</li>
+                        <li>📞 +91 80 1234 5678</li>
+                        <li>✉️ info@mayaevents.com</li>
+                        <li>🕒 Mon - Fri: 9AM - 6PM IST</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Subscribe</h4>
+                    <p class="text-gray-400 mb-4 text-sm">Stay updated with our latest events and special offers.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email"
+                            class="flex-1 px-4 py-2 bg-gray-700 border border-gray-600 rounded-l-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition-colors">
+                            Subscribe
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">© 2024 Maya Events. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+</body>
+
+</html>
