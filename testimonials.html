@@ -148,7 +148,7 @@
                         </div>
                         <span class="relative z-10">About</span>
                     </a>
-                    <a href="services.html"
+                                        <a href="services.html"
                         class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
                         <div
                             class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
@@ -157,6 +157,16 @@
                             class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
                         </div>
                         <span class="relative z-10">Services</span>
+                    </a>
+                    <a href="gallery.html"
+                        class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
+                        <div
+                            class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <span class="relative z-10">Gallery</span>
                     </a>
                     <a href="testimonials.html"
                         class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
@@ -200,10 +210,12 @@
                         class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">About</a>
                     <a href="services.html"
                         class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Services</a>
+                        <a href="gallery.html"
+                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Gallery</a>
                     <a href="testimonials.html"
                         class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Testimonials</a>
                         <a href="contact.html"
-                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Testimonials</a>
+                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Contact</a>
                 </div>
             </div>
         </div>
@@ -211,25 +223,23 @@
 
     <main class="relative z-10">
 
-        <header class="relative video-hero h-[60vh] md:h-screen flex items-center justify-center">
-            <video autoplay loop muted playsinline class="absolute inset-0 min-w-full min-h-full object-cover">
-                <source src="https://assets-global.website-files.com/657e28373a62886f4439c362/6580f1469e6b5d214197e42d_Corporate_Event_3-transcode.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-            <div class="absolute inset-0 bg-gray-950/70 backdrop-blur-sm"></div>
-            <div class="relative z-10 text-center px-4">
-                <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-white mb-4">
-                    Where Every Detail Matters
-                </h1>
-                <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-8">
-                    We craft unique, unforgettable experiences from corporate gatherings to personal celebrations.
-                </p>
-                <a href="contact.html"
+       
+
+        <section id="home" class="bg-hero min-h-[60vh] relative flex items-center">
+  <div class="absolute inset-0 bg-black/60"></div>
+  <div class="relative max-w-4xl mx-auto px-4 text-center">
+    <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight"> Where Every Detail Matters</h1>
+    <p class="mt-4 text-lg text-gray-200 max-w-2xl mx-auto">
+      We craft unique, unforgettable experiences from corporate gatherings to personal celebrations.
+    </p>
+    <div class="mt-6">
+      <a href="contact.html"
                     class="inline-block px-8 py-4 bg-blue-600 hover:bg-blue-700 transition-colors text-white font-semibold rounded-full shadow-lg transform hover:scale-105">
                     Plan Your Event Today
                 </a>
-            </div>
-        </header>
+    </div>
+  </div>
+</section>
 
         <section id="about" class="py-20 bg-gray-900">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -313,130 +323,147 @@
             </div>
         </section>
 
-        <section id="testimonials" class="py-20 bg-gray-900">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <!-- <span class="text-blue-400 font-semibold text-sm uppercase tracking-wider">What Clients Say</span> -->
-                <h2 class="text-4xl font-bold mt-2 mb-12">
-                    Trusted by Happy Clients
-                </h2>
-                <div class="relative max-w-3xl mx-auto">
-                    <div class="testimonial-card active" id="testimonial-1">
-                        <p class="text-lg md:text-xl italic text-gray-300 mb-6">
-                            "The team at Maya Events exceeded all our expectations for our annual conference. Everything was flawless, from the venue selection to the catering. We can't wait to work with them again!"
-                        </p>
-                        <div class="flex flex-col items-center">
-                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Client Avatar" class="w-16 h-16 rounded-full mb-2 border-2 border-blue-500">
-                            <p class="font-bold text-white">Ravi Sharma</p>
-                            <p class="text-sm text-gray-400">CEO, Tech Innovators</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-card" id="testimonial-2">
-                        <p class="text-lg md:text-xl italic text-gray-300 mb-6">
-                            "Our wedding was a dream come true, thanks to Maya Events. They handled every detail with such care and professionalism, allowing us to simply enjoy our special day. Highly recommended!"
-                        </p>
-                        <div class="flex flex-col items-center">
-                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Client Avatar" class="w-16 h-16 rounded-full mb-2 border-2 border-teal-500">
-                            <p class="font-bold text-white">Priya Patel</p>
-                            <p class="text-sm text-gray-400">Happy Bride</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-card" id="testimonial-3">
-                        <p class="text-lg md:text-xl italic text-gray-300 mb-6">
-                            "The creativity and dedication of the Maya Events team are simply unmatched. They took our vague ideas for a product launch and turned them into a stunning, impactful event that generated huge buzz."
-                        </p>
-                        <div class="flex flex-col items-center">
-                            <img src="https://randomuser.me/api/portraits/men/70.jpg" alt="Client Avatar" class="w-16 h-16 rounded-full mb-2 border-2 border-blue-500">
-                            <p class="font-bold text-white">Sameer Khan</p>
-                            <p class="text-sm text-gray-400">Marketing Director</p>
-                        </div>
-                    </div>
+ <section id="testimonials" class="py-20 bg-gray-900">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white">What Our Clients Say</h2>
+            <p class="text-gray-400 max-w-2xl mx-auto">
+                Our clients trust us to create unforgettable experiences. Here’s what they have to say about working with Maya Events.
+            </p>
+        </div>
 
-                    <button id="prev-btn"
-                        class="absolute left-0 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button id="next-btn"
-                        class="absolute right-0 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
+        <div class="relative">
+            <!-- Testimonials Container -->
+            <div id="testimonial-wrapper" class="space-y-12">
+                
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card active text-center">
+                    <img src="https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=400"
+                        alt="Rajesh Kumar"
+                        class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-blue-500 mb-6">
+                    <div class="mb-6 flex justify-center space-x-1">
+                        <!-- 5 stars -->
+                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                    </div>
+                    <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
+                        "Maya Events exceeded all our expectations for our annual corporate conference. Their attention to detail and creative solutions transformed our event into an unforgettable experience."
+                    </p>
+                    <h4 class="text-lg font-bold text-white">Rajesh Kumar</h4>
+                    <p class="text-blue-400">Managing Director at TechCorp India</p>
                 </div>
-            </div>
-        </section>
 
-        <section id="gallery" class="py-20 bg-gray-850">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <!-- <span class="font-display text-teal-400 font-semibold text-sm uppercase tracking-wider">Our Portfolio</span> -->
-                <h2 class="text-4xl font-bold mt-2 mb-12">
-                    A Glimpse of Our Work
-                </h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="relative group overflow-hidden rounded-xl shadow-lg">
-                        <img src="./testimonials/Corporate-Gala.jpg" alt="Corporate event setup"
-                            class="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-500">
-                        <div
-                            class="absolute inset-0 bg-gray-950/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="text-white text-lg font-bold">Corporate Gala</p>
-                        </div>
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card text-center">
+                    <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=400"
+                        alt="Anita Sharma"
+                        class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-pink-500 mb-6">
+                    <div class="mb-6 flex justify-center space-x-1">
+                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
                     </div>
-                    <div class="relative group overflow-hidden rounded-xl shadow-lg">
-                        <img src="./testimonials/Wedding-Reception.jpg" alt="Wedding ceremony"
-                            class="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-500">
-                        <div
-                            class="absolute inset-0 bg-gray-950/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="text-white text-lg font-bold">Wedding Reception</p>
-                        </div>
-                    </div>
-                    <div class="relative group overflow-hidden rounded-xl shadow-lg">
-                        <img src="./testimonials/Concert-Experience.jpg" alt="Music concert stage"
-                            class="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-500">
-                        <div
-                            class="absolute inset-0 bg-gray-950/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="text-white text-lg font-bold">Concert Experience</p>
-                        </div>
-                    </div>
-                    <div class="relative group overflow-hidden rounded-xl shadow-lg">
-                        <img src="./testimonials/birthday.jpg" alt="Birthday party"
-                            class="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-500">
-                        <div
-                            class="absolute inset-0 bg-gray-950/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="text-white text-lg font-bold">Birthday Bash</p>
-                        </div>
-                    </div>
-                    <div class="relative group overflow-hidden rounded-xl shadow-lg">
-                        <img src="./testimonials/Outdoor-Ceremony.jpg" alt="Outdoor ceremony"
-                            class="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-500">
-                        <div
-                            class="absolute inset-0 bg-gray-950/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="text-white text-lg font-bold">Outdoor Ceremony</p>
-                        </div>
-                    </div>
-                    <div class="relative group overflow-hidden rounded-xl shadow-lg">
-                        <img src="./testimonials/Corporate Meeting.jpg" alt="Business meeting"
-                            class="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-500">
-                        <div
-                            class="absolute inset-0 bg-gray-950/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="text-white text-lg font-bold">Corporate Meeting</p>
-                        </div>
-                    </div>
+                    <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
+                        "The Maya Events team flawlessly handled our product launch. Their professionalism, creativity, and attention to detail made the entire experience seamless and enjoyable."
+                    </p>
+                    <h4 class="text-lg font-bold text-white">Anita Sharma</h4>
+                    <p class="text-blue-400">CEO at InnovateX</p>
                 </div>
-            </div>
-        </section>
 
-        <section class="py-20 bg-cta bg-fixed relative">
-            <div class="absolute inset-0 bg-gray-950/80"></div>
-            <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="text-4xl font-bold mb-4">
-                    Ready to Create an Unforgettable Event?
-                </h2>
-                <p class="text-lg text-gray-300 mb-8">
-                    Let's discuss your vision and make it a reality. Contact us today for a free consultation.
-                </p>
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card text-center">
+                    <img src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400"
+                        alt="Vikram Singh"
+                        class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-green-500 mb-6">
+                    <div class="mb-6 flex justify-center space-x-1">
+                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                    </div>
+                    <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
+                        "Maya Events transformed our annual festival into a spectacular celebration. Their attention to logistics and guest experience was outstanding. Highly recommended!"
+                    </p>
+                    <h4 class="text-lg font-bold text-white">Vikram Singh</h4>
+                    <p class="text-blue-400">Event Manager at FunFest</p>
+                </div>
+
+            </div>
+
+            <!-- Carousel Buttons -->
+            <button onclick="prevTestimonial()"
+                class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+            <button onclick="nextTestimonial()"
+                class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+</section>
+
+<script>
+let currentIndex = 0;
+const testimonials = document.querySelectorAll('.testimonial-card');
+
+function showTestimonial(index) {
+    testimonials.forEach((card, i) => {
+        card.classList.remove('active');
+        card.style.display = 'none';
+    });
+    testimonials[index].classList.add('active');
+    testimonials[index].style.display = 'block';
+}
+
+function nextTestimonial() {
+    currentIndex = (currentIndex + 1) % testimonials.length;
+    showTestimonial(currentIndex);
+}
+
+function prevTestimonial() {
+    currentIndex = (currentIndex - 1 + testimonials.length) % testimonials.length;
+    showTestimonial(currentIndex);
+}
+
+// Initialize
+showTestimonial(currentIndex);
+</script>
+
+
+
+
+                <!-- CTA Section -->
+    <section class="py-20 relative bg-cta">
+        <div class="absolute inset-0 bg-gray-900/80"></div>
+        <div class="relative z-10 max-w-4xl mx-auto text-center px-4">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">Let's Make Your Next Event Exceptional</h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Partner with us to create memorable experiences that will leave lasting impressions on your guests and
+                exceed your expectations.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="contact.html"
-                    class="inline-block px-10 py-4 bg-teal-500 hover:bg-teal-600 transition-colors text-white font-semibold rounded-full shadow-lg transform hover:scale-105">
-                    Get a Free Quote
+                    class="bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white px-8 py-3 rounded-lg transition-all font-medium text-center">
+                    Plan your Event
+                </a>
+                <a href="contact.html"
+                    class="border border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-3 rounded-lg transition-all font-medium text-center">
+                    Contact us
                 </a>
             </div>
-        </section>
+        </div>
+    </section>
     </main>
 
     <footer id="contact" class="bg-gray-800 border-t border-gray-700">
@@ -456,6 +483,7 @@
                         <li><a href="index.html" class="text-gray-400 hover:text-blue-400 transition-colors">Home</a></li>
                         <li><a href="about.html" class="text-gray-400 hover:text-blue-400 transition-colors">About</a></li>
                         <li><a href="service1.html" class="text-gray-400 hover:text-blue-400 transition-colors">Service</a></li>
+                        <li><a href="gallery.html" class="text-gray-400 hover:text-blue-400 transition-colors">Gallery</a></li>
                         <li><a href="testimonials.html" class="text-gray-400 hover:text-blue-400 transition-colors">Testimonials</a></li>
                         <li><a href="contact.html" class="text-gray-400 hover:text-blue-400 transition-colors">Contact</a></li>
                     </ul>
@@ -504,36 +532,7 @@
             mobileMenu.classList.toggle('hidden');
         });
 
-        // Testimonial Carousel
-        const testimonials = document.querySelectorAll('.testimonial-card');
-        const prevButton = document.getElementById('prev-btn');
-        const nextButton = document.getElementById('next-btn');
-        let currentTestimonial = 0;
-
-        function showTestimonial(index) {
-            testimonials.forEach((testimonial, i) => {
-                testimonial.classList.remove('active');
-                if (i === index) {
-                    testimonial.classList.add('active');
-                }
-            });
-        }
-
-        prevButton.addEventListener('click', () => {
-            currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
-            showTestimonial(currentTestimonial);
-        });
-
-        nextButton.addEventListener('click', () => {
-            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
-            showTestimonial(currentTestimonial);
-        });
-
-        // Auto-cycle testimonials every 5 seconds
-        setInterval(() => {
-            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
-            showTestimonial(currentTestimonial);
-        }, 5000);
+      
     </script>
 </body>
 
