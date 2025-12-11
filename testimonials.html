@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maya Events - Event Management</title>
+    <title>Maya Events - Services</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -25,6 +25,8 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            /* Set height to full viewport height for the Hero section */
+            height: 100vh;
         }
 
         .bg-cta {
@@ -69,423 +71,468 @@
             }
         }
 
-        /* Video Hero Styles */
-        .video-hero {
-            position: relative;
-            overflow: hidden;
+        /* NEW CUSTOM STYLES for Floating Header (from previous requests) */
+        /* Custom Hamburger Button Style (large white circle, black bars) */
+        .custom-hamburger {
+            width: 60px;
+            height: 60px;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s;
         }
 
-        .video-hero video {
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .custom-hamburger .bar {
+            background-color: black;
         }
 
-        @media (max-aspect-ratio: 16/9) {
-            .video-hero video {
-                width: 100%;
-                height: auto;
-            }
+        /* Off-Canvas Menu Styling */
+        #off-canvas-menu {
+            transition: transform 0.3s ease-out;
         }
 
-        @media (min-aspect-ratio: 16/9) {
-            .video-hero video {
-                width: auto;
-                height: 100%;
-            }
+        #off-canvas-menu.hidden-menu {
+            transform: translateX(100%);
         }
     </style>
 </head>
 
-<body class="bg-gray-900 text-white font-sans antialiased">
+<body class="bg-gray-900 text-white">
 
-    <nav
-        class="relative bg-gradient-to-r from-white/10 via-white/5 to-white/10 backdrop-blur-xl border-b border-white/20 sticky top-0 z-50 shadow-2xl">
-        <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-teal-500/5"></div>
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Mobile Layout -->
-            <div class="md:hidden flex items-center justify-between h-16">
-                <button id="mobile-menu-button"
-                    class="relative text-white hover:text-blue-200 transition-all p-2 rounded-xl overflow-hidden group">
-                    <i class="relative z-10 fas fa-bars text-2xl"></i>
+    <header class="fixed top-0 w-full z-50 bg-transparent py-3">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
+            <div class="flex items-center">
+                <img src="assets/images/MAYA_LOGO.png" alt="Maya Adfinity Logo" class="h-16 w-auto">
+            </div>
+
+            <div>
+                <button id="menu-toggle-button" class="relative custom-hamburger">
+                    <div class="space-y-1.5 w-8 h-8 flex flex-col justify-center items-center">
+                        <span class="bar block w-6 h-0.5 transition-all duration-300"></span>
+                        <span class="bar block w-6 h-0.5 transition-all duration-300"></span>
+                        <span class="bar block w-6 h-0.5 transition-all duration-300"></span>
+                    </div>
                 </button>
-                <div class="flex-1 flex justify-center">
-                    <img src="assets/images/MAYA_LOGO.png" alt="Maya Events Logo" class="h-12 w-auto">
-                </div>
-                <div>
-                    <button class="relative text-white px-3 py-2 rounded-xl transition-all overflow-hidden group">
-                        <i class="relative z-10 fas fa-mobile-alt text-2xl"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Desktop Layout -->
-            <div class="hidden md:flex items-center justify-between h-16">
-                <div class="flex items-center">
-                    <img src="assets/images/MAYA_LOGO.png" alt="Maya Events Logo" class="h-14 w-auto">
-                </div>
-                <div class="flex items-center space-x-8">
-                    <a href="index.html"
-                        class="relative text-white hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
-                        <div class="absolute inset-0 bg-white/20 backdrop-blur-sm rounded-xl"></div>
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-teal-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <span class="relative z-10">Home</span>
-                    </a>
-                    <a href="about.html"
-                        class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
-                        <div
-                            class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <span class="relative z-10">About</span>
-                    </a>
-                                        <a href="services.html"
-                        class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
-                        <div
-                            class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <span class="relative z-10">Services</span>
-                    </a>
-                    <a href="gallery.html"
-                        class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
-                        <div
-                            class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <span class="relative z-10">Gallery</span>
-                    </a>
-                    <a href="testimonials.html"
-                        class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
-                        <div
-                            class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <span class="relative z-10">Testimonials</span>
-                    </a>
-                    <a href="contact.html"
-                        class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
-                        <div
-                            class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <span class="relative z-10">Contact</span>
-                    </a>
-                </div>
-                <div>
-                    <button class="relative text-white px-4 py-2 rounded-xl transition-all overflow-hidden group">
-                        <div class="absolute inset-0 bg-white/20 backdrop-blur-md rounded-xl"></div>
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-teal-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <i class="relative z-10 fas fa-mobile-alt text-lg"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Mobile menu -->
-            <div id="mobile-menu" class="hidden md:hidden">
-                <div
-                    class="px-2 pt-2 pb-3 space-y-1 bg-white/10 backdrop-blur-lg rounded-xl mt-2 border border-white/20">
-                    <a href="index.html"
-                        class="block text-white hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Home</a>
-                    <a href="about.html"
-                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">About</a>
-                    <a href="services.html"
-                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Services</a>
-                        <a href="gallery.html"
-                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Gallery</a>
-                    <a href="testimonials.html"
-                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Testimonials</a>
-                        <a href="contact.html"
-                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Contact</a>
-                </div>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <main class="relative z-10">
+    <div id="off-canvas-menu"
+        class="fixed inset-y-0 right-0 w-80 sm:w-96 bg-gray-950/95 backdrop-blur-xl z-[90] shadow-2xl p-6 hidden-menu">
+        <div class="flex justify-end mb-10">
+            <button id="menu-close-button" class="text-white hover:text-teal-400 transition-colors">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
 
-       
+        <nav class="space-y-6 text-xl">
+            <a href="index.html" class="block text-white hover:text-teal-400 transition-colors border-b border-white/10 pb-3">
+                <i class="fas fa-home w-6 mr-3"></i> Home
+            </a>
+            <a href="about.html" class="block text-white hover:text-teal-400 transition-colors border-b border-white/10 pb-3">
+                <i class="fas fa-info-circle w-6 mr-3"></i> About
+            </a>
+            <a href="services.html" class="block text-white hover:text-teal-400 transition-colors border-b border-white/10 pb-3">
+                <i class="fas fa-briefcase w-6 mr-3"></i> Services
+            </a>
+            <a href="gallery.html" class="block text-white hover:text-teal-400 transition-colors border-b border-white/10 pb-3">
+                <i class="fas fa-images w-6 mr-3"></i> Gallery
+            </a>
+            <a href="testimonials.html" class="block text-white hover:text-teal-400 transition-colors border-b border-white/10 pb-3">
+                <i class="fas fa-comment-alt w-6 mr-3"></i> Testimonials
+            </a>
+            <a href="contact.html" class="block text-white hover:text-teal-400 transition-colors">
+                <i class="fas fa-envelope w-6 mr-3"></i> Contact
+            </a>
+        </nav>
 
-        <section id="home" class="bg-hero min-h-[60vh] relative flex items-center">
-  <div class="absolute inset-0 bg-black/60"></div>
-  <div class="relative max-w-4xl mx-auto px-4 text-center">
-    <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight"> Where Every Detail Matters</h1>
-    <p class="mt-4 text-lg text-gray-200 max-w-2xl mx-auto">
-      We craft unique, unforgettable experiences from corporate gatherings to personal celebrations.
-    </p>
-    <div class="mt-6">
-      <a href="contact.html"
-                    class="inline-block px-8 py-4 bg-blue-600 hover:bg-blue-700 transition-colors text-white font-semibold rounded-full shadow-lg transform hover:scale-105">
-                    Plan Your Event Today
-                </a>
+        <div class="mt-12 pt-6 border-t border-white/10">
+            <h4 class="text-lg font-semibold mb-3 text-blue-400">Request a Quote</h4>
+            <a onclick="openModal()"
+                class="cursor-pointer w-full inline-block text-center px-6 py-3 text-white bg-gradient-to-r from-blue-600 to-teal-600 rounded-lg transition-all hover:opacity-90">
+                Plan Your Event
+            </a>
+        </div>
     </div>
-  </div>
-</section>
 
-        <section id="about" class="py-20 bg-gray-900">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                    <div class="relative">
-                        <img src="https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="A team planning an event"
-                            class="w-full h-auto rounded-xl shadow-2xl transform rotate-1 transition-transform duration-300 hover:rotate-0">
-                        <div class="absolute -bottom-4 -left-4 w-48 h-48 bg-teal-500/10 rounded-full blur-2xl -z-10"></div>
-                        <div class="absolute -top-4 -right-4 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl -z-10"></div>
-                    </div>
-                    <div>
-                        <!-- <span class="text-blue-400 font-semibold text-sm uppercase tracking-wider">Our Story</span> -->
-                        <h2 class="text-4xl font-bold mt-2 mb-4">
-                            More Than Events, We Create Memories.
-                        </h2>
-                        <p class="text-gray-400 text-lg leading-relaxed mb-6">
-                            Since our inception, Maya Events has been dedicated to transforming ordinary gatherings into extraordinary experiences. We are a team of passionate creators, meticulous planners, and expert coordinators committed to bringing your vision to life.
-                        </p>
-                        <ul class="space-y-4 text-gray-400">
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-blue-500 text-2xl mr-3 flex-shrink-0"></i>
-                                <span>Expertise in a wide range of events, from corporate to weddings.</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-blue-500 text-2xl mr-3 flex-shrink-0"></i>
-                                <span>A personalized, client-centric approach to planning.</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-blue-500 text-2xl mr-3 flex-shrink-0"></i>
-                                <span>Creative and innovative solutions for any challenge.</span>
-                            </li>
+    <div id="menu-backdrop" class="fixed inset-0 bg-black/50 z-40 opacity-0 invisible transition-opacity duration-300"></div>
+
+
+    <main>
+        <section id="home" class="bg-hero min-h-screen relative flex items-center">
+            <div class="absolute inset-0 bg-black/60"></div>
+            <div class="relative max-w-4xl mx-auto px-4 text-center">
+                <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">Comprehensive Event Management Services</h1>
+                <p class="mt-4 text-lg text-gray-200 max-w-2xl mx-auto">
+                    Creating extraordinary corporate experiences that inspire, educate, and propel organizations to new
+                    heights.
+                </p>
+                <div class="mt-6">
+                    <a href="about.html"
+                        class="inline-block px-10 py-5 text-xl md:text-2xl bg-gradient-to-r from-blue-500 to-teal-500 text-white font-semibold rounded-xl shadow-lg hover:scale-105 transition-transform">
+                        Turn Your Idea Into Reality
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="services-cards"
+            class="min-h-screen flex flex-col justify-center items-center bg-gray-850 text-white py-20">
+            <div class="max-w-7xl px-4 sm:px-6 lg:px-8 text-center mb-12">
+                <h2 class="text-5xl md:text-6xl font-bold mb-6">
+                    Endless Expertise.<br>
+                    Limitless Experiences.
+                </h2>
+                <p class="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto">
+                    Crafting every detail with precision. Transforming ideas into unforgettable moments. Your vision is our
+                    canvas, and we bring it to life with flair and finesse.
+                </p>
+            </div>
+
+            <div class="max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+                    <i class="fas fa-briefcase text-5xl text-blue-500 mb-4"></i>
+                    <h3 class="text-2xl font-semibold mb-2">Business Events</h3>
+                    <p class="text-gray-400">Professional business events planning and execution with attention to every
+                        detail.</p>
+                    <a href="#service-business-events" class="mt-4 inline-block text-blue-400 hover:underline">Explore
+                        Services</a>
+                </div>
+
+                <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+                    <i class="fas fa-birthday-cake text-5xl text-pink-500 mb-4"></i>
+                    <h3 class="text-2xl font-semibold mb-2">Celebrations</h3>
+                    <p class="text-gray-400">Professional celebrations galore planning and execution with attention to every
+                        detail.</p>
+                    <a href="#Celebrations-Galore" class="mt-4 inline-block text-blue-400 hover:underline">Explore
+                        Services</a>
+                </div>
+                <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+                    <i class="fas fa-rocket text-5xl text-yellow-400 mb-4"></i>
+                    <h3 class="text-2xl font-semibold mb-2">Launches</h3>
+                    <p class="text-gray-400">Professional launches planning and execution with attention to every detail.
+                    </p>
+                    <a href="#service-launches" class="mt-4 inline-block text-blue-400 hover:underline">Explore
+                        Services</a>
+                </div>
+                <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+                    <i class="fas fa-video text-5xl text-green-500 mb-4"></i>
+                    <h3 class="text-2xl font-semibold mb-2">Hybrid Events</h3>
+                    <p class="text-gray-400">Professional planning and execution with attention to every detail.</p>
+                    <a href="#service-hybrid" class="mt-4 inline-block text-blue-400 hover:underline">Explore
+                        Services</a>
+                </div>
+                <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+                    <i class="fas fa-users text-5xl text-purple-500 mb-4"></i>
+                    <h3 class="text-2xl font-semibold mb-2">Industry Conventions</h3>
+                    <p class="text-gray-400">Professional industry conventions planning and execution with attention to
+                        every detail.</p>
+                    <a href="#service-industry" class="mt-4 inline-block text-blue-400 hover:underline">Explore
+                        Services</a>
+                </div>
+                <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+                    <i class="fas fa-gem text-5xl text-orange-500 mb-4"></i>
+                    <h3 class="text-2xl font-semibold mb-2">Special Projects</h3>
+                    <p class="text-gray-400">Professional special projects planning and execution with attention to every
+                        detail.</p>
+                    <a href="#service-special" class="mt-4 inline-block text-blue-400 hover:underline">Explore
+                        Services</a>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="services-details" class="bg-gray-900 text-white py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-28">
+
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl font-extrabold text-white">Our Comprehensive Services</h2>
+                    <p class="mt-4 text-xl text-gray-400">From concept to execution, we craft every event to be a
+                        masterpiece of precision and purpose.</p>
+                </div>
+
+                <div id="service-business-events" class="flex flex-col md:flex-row items-center gap-12 group">
+                    <img src="./assets/images/EVENTSCONSULTINGSOULUTIONS.jpg" alt="Business leaders at a conference"
+                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
+                    <div class="md:w-1/2">
+                        <h3 class="text-4xl font-bold mb-4">EVENTS CONSULTING & SOLUTIONS
+                        </h3>
+                        <p class="text-gray-300 mb-6">At Maya Adfinity, we stand out by offering expert consultations built
+                            on years of experience and practical solutions. We are proud to have a team of highly skilled
+                            professionals specializing in event management and digital communication. We maintain an open
+                            channel of communication with our clients throughout the planning process to ensure
+                            transparency, collaboration, and the best possible results for every project.
+                        <p>
+                        <ul class="text-gray-400 space-y-3 list-disc list-inside">
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">Full-Service
+                                Event Production & Management</li>
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">Strategic
+                                Content & Speaker Curation</li>
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">Audience
+                                Engagement & Networking Solutions</li>
                         </ul>
                     </div>
                 </div>
+
+                <div id="Celebrations-Galore" class="flex flex-col md:flex-row-reverse items-center gap-12 group">
+                    <img src="./services/Celebrations.jpg" alt="A vibrant party celebration"
+                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
+                    <div class="md:w-1/2">
+                        <h3 class="text-4xl font-bold mb-4">ENTERTAINMENT MANAGEMENT</h3>
+                        <p class="text-gray-300 mb-6">At Maya Adfinity, we specialize in creating unforgettable
+                            entertainment experiences that engage, inspire, and delight audiences. From concept development
+                            to execution, we manage every detail to ensure flawless delivery and maximum impact.
+                            Our entertainment management services cover live performances, cultural shows, music concerts,
+                            celebrity appearances, theater productions, and interactive audience experiences.
+                            With a creative approach and a dedicated team of professionals, we design and deliver
+                            entertainment programs that perfectly match the theme and purpose of your event.
+                            By combining creativity, innovation, and seamless management, we make sure every entertainment
+                            element adds value, energy, and excitement to your event.</p>
+                        <ul class="text-gray-400 space-y-3 list-disc list-inside">
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">Bespoke
+                                Theming & Venue Sourcing</li>
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">Guest
+                                Management & VIP Experiences</li>
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">Live
+                                Entertainment & Creative Direction</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="service-launches" class="flex flex-col md:flex-row items-center gap-12 group">
+                    <img src="./assets/images/people-taking-part-high-protocol-event.jpg"
+                        alt="A product being unveiled on a stage"
+                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
+                    <div class="md:w-1/2">
+                        <h3 class="text-4xl font-bold mb-4">MEETINGS & CONFERENCE PLANNING</h3>
+                        <p class="text-gray-300 mb-6">At Maya Adfinity, we rely on our accumulated experience in organizing
+                            conferences and meetings to fully meet our clients' needs. Our team has managed hundreds of
+                            successful events, gaining strong organizational and managerial skills that align with
+                            international standards.
+                            We also support the fast-growing digital transformation by providing advanced solutions for
+                            virtual meetings and webinars. With our skilled technical team and the latest tools, we ensure
+                            high-quality, seamless experiences that match our clients' goals and ambitions.
+                        <p>
+                        <ul class="text-gray-400 space-y-3 list-disc list-inside">
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">Interactive
+                                Product Demonstrations</li>
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">Media &
+                                Influencer Press Kits</li>
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">Immersive
+                                Experience Design</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="service-hybrid" class="flex flex-col md:flex-row-reverse items-center gap-12 group">
+                    <img src="./services/Hybrid-Events.jpg" alt="People in a meeting with a large screen"
+                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
+                    <div class="md:w-1/2">
+                        <h3 class="text-4xl font-bold mb-4">ORGANIZING EXHIBITION & BOOTHS</h3>
+                        <p class="text-gray-300 mb-6">At Maya Adfinity, we believe we have what it takes to excel in the
+                            field of exhibitions and pavilions. Our strength lies in delivering the highest standards of
+                            creativity, content innovation, and professional execution. Over the years, we have built
+                            credibility by providing complete technical, intellectual, and logistic services that ensure
+                            successful exhibitions and pavilions.
+                            In addition to organizing our own exhibitions, we have also managed numerous projects with
+                            proven success. One of our innovative achievements is the creation of special platforms and
+                            virtual tours for art exhibitions, offering audiences a modern and engaging experience with a
+                            fresh vision.</p>
+                        <ul class="text-gray-400 space-y-3 list-disc list-inside">
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">High-Fidelity
+                                Live Streaming & AV Production</li>
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">Interactive
+                                Virtual Platforms</li>
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">Post-Event
+                                Analytics & Reporting</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="service-industry" class="flex flex-col md:flex-row items-center gap-12 group">
+                    <img src="./services/Industry-Conventions.jpg" alt="A large convention hall with attendees"
+                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
+                    <div class="md:w-1/2">
+                        <h3 class="text-4xl font-bold mb-4">INTERNAL COMMUNICATION PROGRAM</h3>
+                        <p class="text-gray-300 mb-6">At Maya Adfinity, we help companies and organizations achieve their
+                            goals by creating engaging and motivational environments that boost employee productivity. We
+                            have successfully organized a wide variety of events for both government and private sectors,
+                            including closing ceremonies, international days, and award ceremonies for employees and VIPs.
+                            Our creative concepts include folk performances, international live shows, musical programs,
+                            cultural events, and customized entertainment experiences. From annual celebrations and
+                            initiative launches to brand unveilings and gala dinners, we plan, design, and deliver every
+                            event at the highest standards while following international protocols-making us true partners
+                            in our clients' success.</p>
+                        <ul class="text-gray-400 space-y-3 list-disc list-inside">
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">Comprehensive
+                                Exhibitor Management</li>
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">Venue Layout &
+                                Traffic Flow Optimization</li>
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">Multi-Track
+                                Session Planning & Coordination</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="service-special" class="flex flex-col md:flex-row-reverse items-center gap-12 group">
+                    <img src="./services/banquet.jpg" alt="A banquet hall set up for a gala"
+                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
+                    <div class="md:w-1/2">
+                        <h3 class="text-4xl font-bold mb-4">Special Projects & One-of-a-Kind Events</h3>
+                        <p class="text-gray-300 mb-6">Some visions are so unique they require a completely custom approach.
+                            Our Special Projects team thrives on these challenges, providing tailored solutions for
+                            intricate or highly confidential events. We work with you to bring your most ambitious ideas to
+                            life, ensuring a flawless and exclusive experience.</p>
+                        <ul class="text-gray-400 space-y-3 list-disc list-inside">
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">Custom Concept
+                                Development & Design</li>
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">Confidential &
+                                Sensitive Event Management</li>
+                            <li class="transform transition-transform duration-300 group-hover:translate-x-2">Luxury &
+                                High-Profile Event Coordination</li>
+                        </ul>
+                    </div>
+                </div>
+
             </div>
         </section>
 
-        <section id="services" class="py-20 bg-gray-850">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <!-- <span class="text-teal-400 font-semibold text-sm uppercase tracking-wider">Our Offerings</span> -->
-                <h2 class="text-4xl font-bold mt-2 mb-12">
-                    Services Designed for Your Success
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div
-                        class="bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-blue-500 transition-colors duration-300 transform hover:-translate-y-2 group">
-                        <div
-                            class="inline-flex items-center justify-center p-4 rounded-full bg-blue-500/20 text-blue-400 mb-6 group-hover:bg-blue-500 group-hover:text-white transition-colors">
-                            <i class="fas fa-briefcase text-3xl"></i>
+        <section id="testimonials" class="py-20 bg-gray-900">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white">What Our Clients Say</h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        Our clients trust us to create unforgettable experiences. Here’s what they have to say about working with Maya Events.
+                    </p>
+                </div>
+
+                <div class="relative">
+                    <div id="testimonial-wrapper" class="space-y-12">
+                        
+                        <div class="testimonial-card active text-center">
+                            <img src="https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=400"
+                                alt="Rajesh Kumar"
+                                class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-blue-500 mb-6">
+                            <div class="mb-6 flex justify-center space-x-1">
+                                <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                                <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                                <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                                <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                                <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                            </div>
+                            <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
+                                "Maya Events exceeded all our expectations for our annual corporate conference. Their attention to detail and creative solutions transformed our event into an unforgettable experience."
+                            </p>
+                            <h4 class="text-lg font-bold text-white">Rajesh Kumar</h4>
+                            <p class="text-blue-400">Managing Director at TechCorp India</p>
                         </div>
-                        <h3 class="text-2xl font-semibold mb-2">Corporate Events</h3>
-                        <p class="text-gray-400">
-                            From conferences and product launches to team-building retreats, we manage corporate events that leave a lasting professional impression.
-                        </p>
+
+                        <div class="testimonial-card text-center">
+                            <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=400"
+                                alt="Anita Sharma"
+                                class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-pink-500 mb-6">
+                            <div class="mb-6 flex justify-center space-x-1">
+                                <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                                <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                                <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                                <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                                <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                            </div>
+                            <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
+                                "The Maya Events team flawlessly handled our product launch. Their professionalism, creativity, and attention to detail made the entire experience seamless and enjoyable."
+                            </p>
+                            <h4 class="text-lg font-bold text-white">Anita Sharma</h4>
+                            <p class="text-blue-400">CEO at InnovateX</p>
+                        </div>
+
+                        <div class="testimonial-card text-center">
+                            <img src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400"
+                                alt="Vikram Singh"
+                                class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-green-500 mb-6">
+                            <div class="mb-6 flex justify-center space-x-1">
+                                <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                                <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                                <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                                <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                                <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                            </div>
+                            <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
+                                "Maya Events transformed our annual festival into a spectacular celebration. Their attention to logistics and guest experience was outstanding. Highly recommended!"
+                            </p>
+                            <h4 class="text-lg font-bold text-white">Vikram Singh</h4>
+                            <p class="text-blue-400">Event Manager at FunFest</p>
+                        </div>
+
                     </div>
 
-                    <div
-                        class="bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-teal-500 transition-colors duration-300 transform hover:-translate-y-2 group">
-                        <div
-                            class="inline-flex items-center justify-center p-4 rounded-full bg-teal-500/20 text-teal-400 mb-6 group-hover:bg-teal-500 group-hover:text-white transition-colors">
-                            <i class="fas fa-gem text-3xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-semibold mb-2">Social Celebrations</h3>
-                        <p class="text-gray-400">
-                            Weddings, birthdays, anniversaries—whatever the occasion, we bring joy and magic to your special moments.
-                        </p>
-                    </div>
-
-                    <div
-                        class="bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-blue-500 transition-colors duration-300 transform hover:-translate-y-2 group">
-                        <div
-                            class="inline-flex items-center justify-center p-4 rounded-full bg-blue-500/20 text-blue-400 mb-6 group-hover:bg-blue-500 group-hover:text-white transition-colors">
-                            <i class="fas fa-microscope text-3xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-semibold mb-2">Customized Events</h3>
-                        <p class="text-gray-400">
-                            Have a unique idea? We specialize in crafting tailor-made experiences to match your specific vision and needs.
-                        </p>
-                    </div>
+                    <button onclick="prevTestimonial()"
+                        class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <button onclick="nextTestimonial()"
+                        class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </section>
 
- <section id="testimonials" class="py-20 bg-gray-900">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white">What Our Clients Say</h2>
-            <p class="text-gray-400 max-w-2xl mx-auto">
-                Our clients trust us to create unforgettable experiences. Here’s what they have to say about working with Maya Events.
-            </p>
-        </div>
-
-        <div class="relative">
-            <!-- Testimonials Container -->
-            <div id="testimonial-wrapper" class="space-y-12">
-                
-                <!-- Testimonial 1 -->
-                <div class="testimonial-card active text-center">
-                    <img src="https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=400"
-                        alt="Rajesh Kumar"
-                        class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-blue-500 mb-6">
-                    <div class="mb-6 flex justify-center space-x-1">
-                        <!-- 5 stars -->
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                    </div>
-                    <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
-                        "Maya Events exceeded all our expectations for our annual corporate conference. Their attention to detail and creative solutions transformed our event into an unforgettable experience."
-                    </p>
-                    <h4 class="text-lg font-bold text-white">Rajesh Kumar</h4>
-                    <p class="text-blue-400">Managing Director at TechCorp India</p>
+        <section class="py-20 relative bg-cta">
+            <div class="absolute inset-0 bg-gray-900/80"></div>
+            <div class="relative z-10 max-w-4xl mx-auto text-center px-4">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Let's Make Your Next Event Exceptional</h2>
+                <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                    Partner with us to create memorable experiences that will leave lasting impressions on your guests and
+                    exceed your expectations.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a onclick="openModal()"
+                        class="cursor-pointer bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white px-8 py-3 rounded-lg transition-all font-medium text-center">
+                        Plan your Event
+                    </a>
+                    <a href="contact.html"
+                        class="border border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-3 rounded-lg transition-all font-medium text-center">
+                        Contact us
+                    </a>
                 </div>
-
-                <!-- Testimonial 2 -->
-                <div class="testimonial-card text-center">
-                    <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=400"
-                        alt="Anita Sharma"
-                        class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-pink-500 mb-6">
-                    <div class="mb-6 flex justify-center space-x-1">
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                    </div>
-                    <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
-                        "The Maya Events team flawlessly handled our product launch. Their professionalism, creativity, and attention to detail made the entire experience seamless and enjoyable."
-                    </p>
-                    <h4 class="text-lg font-bold text-white">Anita Sharma</h4>
-                    <p class="text-blue-400">CEO at InnovateX</p>
-                </div>
-
-                <!-- Testimonial 3 -->
-                <div class="testimonial-card text-center">
-                    <img src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400"
-                        alt="Vikram Singh"
-                        class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-green-500 mb-6">
-                    <div class="mb-6 flex justify-center space-x-1">
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                    </div>
-                    <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
-                        "Maya Events transformed our annual festival into a spectacular celebration. Their attention to logistics and guest experience was outstanding. Highly recommended!"
-                    </p>
-                    <h4 class="text-lg font-bold text-white">Vikram Singh</h4>
-                    <p class="text-blue-400">Event Manager at FunFest</p>
-                </div>
-
             </div>
-
-            <!-- Carousel Buttons -->
-            <button onclick="prevTestimonial()"
-                class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-            </button>
-            <button onclick="nextTestimonial()"
-                class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-            </button>
-        </div>
-    </div>
-</section>
-
-<script>
-let currentIndex = 0;
-const testimonials = document.querySelectorAll('.testimonial-card');
-
-function showTestimonial(index) {
-    testimonials.forEach((card, i) => {
-        card.classList.remove('active');
-        card.style.display = 'none';
-    });
-    testimonials[index].classList.add('active');
-    testimonials[index].style.display = 'block';
-}
-
-function nextTestimonial() {
-    currentIndex = (currentIndex + 1) % testimonials.length;
-    showTestimonial(currentIndex);
-}
-
-function prevTestimonial() {
-    currentIndex = (currentIndex - 1 + testimonials.length) % testimonials.length;
-    showTestimonial(currentIndex);
-}
-
-// Initialize
-showTestimonial(currentIndex);
-</script>
-
-
-
-
-                <!-- CTA Section -->
-    <section class="py-20 relative bg-cta">
-        <div class="absolute inset-0 bg-gray-900/80"></div>
-        <div class="relative z-10 max-w-4xl mx-auto text-center px-4">
-            <h2 class="text-4xl md:text-5xl font-bold mb-6">Let's Make Your Next Event Exceptional</h2>
-            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Partner with us to create memorable experiences that will leave lasting impressions on your guests and
-                exceed your expectations.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="contact.html"
-                    class="bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white px-8 py-3 rounded-lg transition-all font-medium text-center">
-                    Plan your Event
-                </a>
-                <a href="contact.html"
-                    class="border border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-3 rounded-lg transition-all font-medium text-center">
-                    Contact us
-                </a>
-            </div>
-        </div>
-    </section>
+        </section>
     </main>
 
     <footer id="contact" class="bg-gray-800 border-t border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <img src="./assets/images/MAYA_LOGO.png" alt="Maya Events Logo" class="h-12 w-auto mb-4">
+                    <img src="assets/images/MAYA_LOGO.png" alt="Maya Events Logo" class="h-12 w-auto mb-4">
                     <p class="text-gray-400 mb-4">Creating Memorable Events in Bangalore</p>
                     <p class="text-gray-400 text-sm">
-                        Your premier destination for exceptional event planning and unforgettable experiences across Karnataka and beyond.
+                        Your premier destination for exceptional event planning and unforgettable experiences across
+                        Karnataka and beyond.
                     </p>
                 </div>
 
                 <div>
                     <h4 class="text-white font-semibold mb-4">Quick Links</h4>
                     <ul class="space-y-2">
-                        <li><a href="index.html" class="text-gray-400 hover:text-blue-400 transition-colors">Home</a></li>
-                        <li><a href="about.html" class="text-gray-400 hover:text-blue-400 transition-colors">About</a></li>
-                        <li><a href="service1.html" class="text-gray-400 hover:text-blue-400 transition-colors">Service</a></li>
-                        <li><a href="gallery.html" class="text-gray-400 hover:text-blue-400 transition-colors">Gallery</a></li>
-                        <li><a href="testimonials.html" class="text-gray-400 hover:text-blue-400 transition-colors">Testimonials</a></li>
-                        <li><a href="contact.html" class="text-gray-400 hover:text-blue-400 transition-colors">Contact</a></li>
+                        <li><a href="index.html" class="text-gray-400 hover:text-blue-400 transition-colors">Home</a>
+                        </li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-blue-400 transition-colors">About</a>
+                        </li>
+                        <li><a href="services.html"
+                                class="text-gray-400 hover:text-blue-400 transition-colors">Services</a></li>
+                        <li><a href="gallery.html"
+                                class="text-gray-400 hover:text-blue-400 transition-colors">Gallery</a></li>
+                        <li><a href="testimonials.html"
+                                class="text-gray-400 hover:text-blue-400 transition-colors">Testimonials</a></li>
+                        <li><a href="contact.html"
+                                class="text-gray-400 hover:text-blue-400 transition-colors">Contact</a></li>
                     </ul>
                 </div>
 
@@ -522,17 +569,180 @@ showTestimonial(currentIndex);
             </div>
         </div>
     </footer>
+    <div id="contact-modal"
+        class="modal fixed inset-0 z-[100] bg-gray-900/70 backdrop-blur-md flex items-center justify-center opacity-0 invisible transition-opacity duration-300 ease-out"
+        onclick="closeModal(event)">
+
+        <div class="relative bg-gray-800/90 backdrop-blur-xl text-white rounded-xl shadow-[0_0_20px_rgba(0,255,255,0.15)] w-full max-w-md m-3 transform scale-95 transition-transform duration-300 hover:scale-100"
+            onclick="event.stopPropagation()">
+
+            <div
+                class="p-4 bg-gradient-to-r from-indigo-600 via-blue-500 to-teal-500 rounded-t-xl flex justify-between items-center">
+                <h3 class="text-xl font-bold">Request a Quote</h3>
+                <button onclick="closeModal()" class="text-white hover:scale-110 transition-transform">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+
+            <form class="p-5 space-y-3 text-sm">
+                <p class="text-gray-300">Tell us about your event. We'll respond within 24 hours.</p>
+
+                <div>
+                    <label for="modal-name" class="block text-xs font-medium text-teal-400 mb-1">Full Name</label>
+                    <input type="text" id="modal-name" placeholder="Your Name"
+                        class="w-full px-3 py-2 bg-gray-700/70 border border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent outline-none transition"
+                        required>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label for="modal-email" class="block text-xs font-medium text-teal-400 mb-1">Email</label>
+                        <input type="email" id="modal-email" placeholder="you@gmail.com"
+                            class="w-full px-3 py-2 bg-gray-700/70 border border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent outline-none transition"
+                            required>
+                    </div>
+                    <div>
+                        <label for="modal-phone" class="block text-xs font-medium text-teal-400 mb-1">Phone</label>
+                        <input type="tel" id="modal-phone" placeholder="+91 "
+                            class="w-full px-3 py-2 bg-gray-700/70 border border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent outline-none transition"
+                            required>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="modal-event" class="block text-xs font-medium text-teal-400 mb-1">Type of Event</label>
+                    <select id="modal-event"
+                        class="w-full px-3 py-2 bg-gray-700/70 border border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent outline-none transition"
+                        required>
+                        <option value="">Select an Option</option>
+                        <option value="corporate">Corporate</option>
+                        <option value="wedding">Wedding</option>
+                        <option value="social">Party</option>
+                        <option value="custom">Custom Event</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="modal-details" class="block text-xs font-medium text-teal-400 mb-1">Event
+                        Details</label>
+                    <textarea id="modal-details" rows="2" placeholder="Date, location, estimated guests..."
+                        class="w-full px-3 py-2 bg-gray-700/70 border border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent outline-none transition"></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-gradient-to-r from-teal-400 via-blue-500 to-indigo-500 hover:from-teal-500 hover:to-indigo-600 text-white font-semibold py-2.5 rounded-lg text-sm transition-all duration-300 shadow-md shadow-teal-500/30 hover:shadow-indigo-500/40">
+                    Send Request
+                </button>
+            </form>
+
+            <div
+                class="absolute inset-0 rounded-xl pointer-events-none border border-transparent [mask-image:linear-gradient(white,transparent)] bg-gradient-to-r from-blue-500 via-teal-400 to-indigo-600 opacity-20">
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Mobile Menu Toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
+        const modal = document.getElementById('contact-modal');
+        let popupTimer;
 
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+        // === MODAL POPUP AND TIMER LOGIC ===
+        function openModal() {
+            modal.classList.remove('invisible', 'opacity-0');
+            modal.classList.add('visible', 'opacity-100');
+            modal.querySelector('div').classList.replace('scale-95', 'scale-100');
+            document.body.style.overflow = 'hidden';
+            clearInterval(popupTimer);
+            // Ensure off-canvas menu is closed if modal is opened
+            const menu = document.getElementById('off-canvas-menu');
+            if (menu && !menu.classList.contains('hidden-menu')) {
+                closeOffCanvasMenu();
+            }
+        }
+
+        function closeModal(event) {
+            // Check if click is outside modal content (or escape key logic handles it)
+            if (event && event.target !== modal && event.target.closest('.modal > div')) return;
+
+            modal.classList.remove('visible', 'opacity-100');
+            modal.classList.add('invisible', 'opacity-0');
+            modal.querySelector('div').classList.replace('scale-100', 'scale-95');
+            document.body.style.overflow = '';
+            startPopupTimer();
+        }
+
+        function startPopupTimer() {
+            clearInterval(popupTimer);
+            popupTimer = setInterval(openModal, 20000);
+        }
+
+        // === OFF-CANVAS MENU LOGIC ===
+        const menu = document.getElementById('off-canvas-menu');
+        const menuToggle = document.getElementById('menu-toggle-button');
+        const menuClose = document.getElementById('menu-close-button');
+        const menuBackdrop = document.getElementById('menu-backdrop');
+
+        function openOffCanvasMenu() {
+            if (!menu || !menuBackdrop) return;
+            menu.classList.remove('hidden-menu'); // Slides into view
+            menuBackdrop.classList.remove('opacity-0', 'invisible');
+            menuBackdrop.classList.add('opacity-100', 'visible');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeOffCanvasMenu() {
+            if (!menu || !menuBackdrop) return;
+            menu.classList.add('hidden-menu'); // Slides out
+            menuBackdrop.classList.remove('opacity-100', 'visible');
+            menuBackdrop.classList.add('opacity-0', 'invisible');
+            // Only restore scrolling if the modal is not open
+            if (modal.classList.contains('invisible')) {
+                document.body.style.overflow = '';
+            }
+        }
+
+        // === INITIALIZATION AND EVENT LISTENERS ===
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initial call to start popup timer
+            startPopupTimer();
+
+            // Modal listeners
+            modal.addEventListener('click', (e) => e.target === modal && closeModal());
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') {
+                    if (modal.classList.contains('visible')) closeModal();
+                    if (menu && !menu.classList.contains('hidden-menu')) closeOffCanvasMenu();
+                }
+            });
+
+            // Off-Canvas Menu Listeners
+            if (menuToggle) {
+                menuToggle.addEventListener('click', openOffCanvasMenu);
+            }
+            if (menuClose) {
+                menuClose.addEventListener('click', closeOffCanvasMenu);
+            }
+            if (menuBackdrop) {
+                menuBackdrop.addEventListener('click', closeOffCanvasMenu);
+            }
+            // Close menu when a navigation link is clicked
+            document.querySelectorAll('#off-canvas-menu a').forEach(link => {
+                link.addEventListener('click', closeOffCanvasMenu);
+            });
+
+            // Smooth scrolling for anchor links 
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
         });
-
-      
     </script>
 </body>
 

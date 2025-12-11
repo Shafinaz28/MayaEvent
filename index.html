@@ -4,22 +4,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maya Events - Event Management</title>
+    <title>Maya Adfinity - Event & Brand Experience Agency (Home)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         'gray-850': '#1f2937',
-                        'gray-950': '#0f172a'
+                        'gray-950': '#0f172a',
+                        // Dark navy color to match the off-canvas menu image
+                        'maya-dark': '#121926',
+                    },
+                    animation: {
+                        'contactOverlayZoom': 'contactOverlayZoom 1.5s ease-out 1.5s forwards',
+                        'scroll-loop': 'scroll-loop 60s linear infinite', 
+                        'slideInFromTop': 'slideInFromTop 1.2s ease-out forwards', 
+                    },
+                    keyframes: {
+                        slideInFromTop: {
+                            '0%': { transform: 'translateY(-50px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        contactOverlayZoom: {
+                            '0%': { transform: 'translate(-50%, -50%) scale(0.8)', opacity: '0' },
+                            '100%': { transform: 'translate(-50%, -50%) scale(1)', opacity: '1' },
+                        },
+                        // Keyframe for the infinite Portfolio scroll
+                        'horizontal-grid-scroll': {
+                             '0%': { transform: 'translateX(0)' },
+                             '100%': { transform: 'translateX(-50%)' }
+                        }
                     }
                 }
             }
         }
     </script>
     <style>
+        /* --- General Styles --- */
+        body {
+            transition: overflow 0.3s;
+        }
+        
+        /* Styles to match the provided menu image look */
+        #off-canvas-menu {
+            background-color: #121926; 
+            transition: transform 0.7s ease-out;
+        }
+
+        #off-canvas-menu.hidden-menu {
+            transform: translateX(100%);
+        }
+
+        #off-canvas-nav a {
+            /* Ensures proper spacing and the light divider line */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 12px !important; 
+            padding-top: 12px !important; 
+        }
+
+        /* --- Video/Hero/Image Styles --- */
         .bg-hero {
             background-image: url('https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg?auto=compress&cs=tinysrgb&w=1260');
             background-size: cover;
@@ -33,695 +81,637 @@
             background-position: center;
         }
 
-        .polaroid {
-            transform: rotate(2deg);
-            transition: transform 0.3s ease;
+        .video-hero { position: relative; overflow: hidden; height: 100vh; }
+        .video-hero video { min-width: 100%; min-height: 100%; width: auto; height: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+        @media (max-aspect-ratio: 16/9) { .video-hero video { width: 100%; height: auto; } }
+        @media (min-aspect-ratio: 16/9) { .video-hero video { width: auto; height: 100%; } }
+
+        .event-image-stack-item {
+            top: 50%; left: 50%; background-color: white; padding: 8px; border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, z-index 0.3s ease-in-out;
+            aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center;
+        }
+        .event-image-stack-item img { border-radius: 8px; }
+        .event-image-stack-item:nth-child(1) { transform: translate(-50%, -50%) rotate(10deg) translate(15px, 15px); z-index: 10; }
+        .event-image-stack-item:nth-child(2) { transform: translate(-50%, -50%) rotate(0deg); z-index: 20; }
+        .event-image-stack-item:nth-child(3) { transform: translate(-50%, -50%) rotate(-10deg) translate(-15px, -15px); z-index: 30; }
+        .event-image-stack-item:hover {
+            transform: translate(-50%, -50%) scale(1.05) rotate(0deg) !important;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6); z-index: 40;
         }
 
-        .polaroid:hover {
-            transform: rotate(0deg);
+        .custom-hamburger {
+            width: 60px; height: 60px; background-color: white; display: flex; align-items: center;
+            justify-content: center; border-radius: 50%; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); transition: background-color 0.3s;
+        }
+        .custom-hamburger .bar { background-color: black; }
+        
+        /* FIX: Applying direct CSS animation properties to the Portfolio track to guarantee infinite loop */
+        .image-scroll-track {
+            display: flex;
+            width: max-content;
+            animation: horizontal-grid-scroll 45s linear infinite; 
+            will-change: transform;
+        }
+        .image-scroll-track:hover { animation-play-state: paused; }
+        #featured-scroll-grid-container {
+            position: relative; height: 350px; overflow: hidden; padding: 10px 0;
+        }
+        .image-scroll-group { display: flex; flex-shrink: 0; }
+        .image-scroll-item {
+            position: relative; overflow: hidden; width: 320px; height: 300px;
+            border-radius: 8px; margin-right: 20px;
+        }
+        .image-scroll-item img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Testimonial Scroll */
+        /* IMPORTANT: Setting overflow-x: scroll and snap properties allows manual JS control */
+        .horizontal-scroll-container { 
+            overflow-x: scroll;
+            scrollbar-width: none; 
+            -ms-overflow-style: none; 
+            padding-bottom: 1rem;
+            scroll-behavior: smooth; /* Smooth scrolling for arrows */
+            /* Using flex-wrap: nowrap; and overflow-x: hidden for CSS infinite scroll */
+            overflow-x: hidden; 
+        }
+        .horizontal-scroll-container::-webkit-scrollbar { display: none; }
+        
+        /* NEW: Testimonial Inner Track for CSS Infinite Scroll */
+        #testimonial-track-inner {
+            display: flex;
+            width: max-content; 
+            animation: testimonial-scroll 40s linear infinite;
+            will-change: transform;
+        }
+        .testimonial-scroll-track:hover #testimonial-track-inner {
+            animation-play-state: paused; 
         }
 
-        .polaroid:nth-child(2) {
-            transform: rotate(-2deg);
-        }
-
-        .polaroid:nth-child(3) {
-            transform: rotate(2deg);
-        }
-
-        .testimonial-card {
-            display: none;
-        }
-
-        .testimonial-card.active {
-            display: block;
-        }
-
-        /* Video Hero Styles */
-        .video-hero {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .video-hero video {
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        /* Ensure video covers full area */
-        @media (max-aspect-ratio: 16/9) {
-            .video-hero video {
-                width: 100%;
-                height: auto;
-            }
-        }
-
-        @media (min-aspect-ratio: 16/9) {
-            .video-hero video {
-                width: auto;
-                height: 100%;
-            }
+        .testimonial-card { 
+            min-width: 80vw; 
+            max-width: 450px; 
+            margin-right: 24px; 
+            padding: 24px;
+            background-color: #1f2937; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
         }
     </style>
 </head>
 
 <body class="bg-gray-900 text-white">
-    <!-- Navigation -->
-    <nav
-        class="relative bg-gradient-to-r from-white/10 via-white/5 to-white/10 backdrop-blur-xl border-b border-white/20 sticky top-0 z-50 shadow-2xl">
-        <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-teal-500/5"></div>
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Mobile Layout -->
-            <div class="md:hidden flex items-center justify-between h-16">
-                <!-- Mobile menu button -->
-                <div>
-                    <button id="mobile-menu-button"
-                        class="relative text-white hover:text-blue-200 transition-all p-2 rounded-xl overflow-hidden group">
-                        <i class="relative z-10 fas fa-bars text-2xl"></i>
-                    </button>
-                </div>
 
-                <!-- Logo - Centered on mobile -->
-                <div class="flex-1 flex justify-center">
-                    <img src="assets/images/MAYA_LOGO.png" alt="Maya Events Logo" class="h-12 w-auto">
-                </div>
-
-                <!-- Mobile contact button -->
-                <div>
-                    <button class="relative text-white px-3 py-2 rounded-xl transition-all overflow-hidden group">
-                        <i class="relative z-10 fas fa-mobile-alt text-2xl"></i>
-                    </button>
-                </div>
+    <header class="fixed top-0 w-full z-50 bg-transparent py-3">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
+            <div class="flex items-center">
+                <a href="index.html">
+                    <img src="assets/images/MAYA_LOGO.png" alt="Maya Adfinity Logo" class="h-16 w-auto">
+                </a>
             </div>
 
-            <!-- Desktop Layout -->
-            <div class="hidden md:flex items-center justify-between h-16">
-                <!-- Logo - Left on desktop -->
-                <div class="flex items-center">
-                    <img src="assets/images/MAYA_LOGO.png" alt="Maya Events Logo" class="h-14 w-auto">
-                </div>
-
-                <!-- Desktop navigation links -->
-                <div class="flex items-center space-x-8">
-                    <a href="index.html"
-                        class="relative text-white hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
-                        <div class="absolute inset-0 bg-white/20 backdrop-blur-sm rounded-xl"></div>
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-teal-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <span class="relative z-10">Home</span>
-                    </a>
-                    <a href="about.html"
-                        class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
-                        <div
-                            class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <span class="relative z-10">About</span>
-                    </a>
-                    <a href="services.html"
-                        class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
-                        <div
-                            class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <span class="relative z-10">Services</span>
-                    </a>
-                    <a href="gallery.html"
-                        class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
-                        <div
-                            class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <span class="relative z-10">Gallery</span>
-                        <a href="testimonials.html"
-                            class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
-                            <div
-                                class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                            </div>
-                            <div
-                                class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                            </div>
-                            <span class="relative z-10">Testimonials</span>
-                        </a>
-                        <a href="contact.html"
-                            class="relative text-white/90 hover:text-blue-200 transition-all px-4 py-2 text-sm font-medium rounded-xl overflow-hidden group">
-                            <div
-                                class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                            </div>
-                            <div
-                                class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                            </div>
-                            <span class="relative z-10">Contact</span>
-                        </a>
-                </div>
-
-                <!-- Contact button -->
-                <div>
-                    <button class="relative text-white px-4 py-2 rounded-xl transition-all overflow-hidden group">
-                        <div class="absolute inset-0 bg-white/20 backdrop-blur-md rounded-xl"></div>
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-teal-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        </div>
-                        <i class="relative z-10 fas fa-mobile-alt text-lg"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Mobile menu -->
-            <div id="mobile-menu" class="hidden md:hidden">
-                <div
-                    class="px-2 pt-2 pb-3 space-y-1 bg-white/10 backdrop-blur-lg rounded-xl mt-2 border border-white/20">
-                    <a href="index.html"
-                        class="block text-white hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Home</a>
-                    <a href="about.html"
-                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">About</a>
-                    <a href="services.html"
-                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Gallery</a>
-                    <a href="gallery.html"
-                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Contact</a>
-                    <a href="testimonials.html"
-                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Testimonials</a>
-                    <a href="contact.html"
-                        class="block text-white/90 hover:text-blue-200 transition-colors px-3 py-2 rounded-lg hover:bg-white/10">Contact</a>
-                </div>
+            <div>
+                <button id="menu-toggle-button" class="relative custom-hamburger">
+                    <div class="space-y-1.5 w-8 h-8 flex flex-col justify-center items-center">
+                        <span class="bar block w-6 h-0.5 transition-all duration-300"></span>
+                        <span class="bar block w-6 h-0.5 transition-all duration-300"></span>
+                        <span class="bar block w-6 h-0.5 transition-all duration-300"></span>
+                    </div>
+                </button>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Hero Section -->
+    <div id="off-canvas-menu"
+        class="fixed inset-y-0 right-0 w-80 sm:w-96 bg-maya-dark backdrop-blur-xl z-[90] shadow-2xl p-6 hidden-menu">
+        <div class="flex justify-end mb-10">
+            <button id="menu-close-button" class="text-white hover:text-teal-400 transition-colors">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
+
+        <nav id="off-canvas-nav" class="space-y-1 text-xl">
+            <a href="index.html"
+                class="text-white hover:text-teal-400 transition-colors pb-3 pt-3 menu-link block">
+                <i class="fas fa-home w-6 mr-3"></i> Home
+            </a>
+            <a href="about.html"
+                class="text-white hover:text-teal-400 transition-colors pb-3 pt-3 menu-link block">
+                <i class="fas fa-info-circle w-6 mr-3"></i> About
+            </a>
+            <a href="services.html"
+                class="text-white hover:text-teal-400 transition-colors pb-3 pt-3 menu-link block">
+                <i class="fas fa-briefcase w-6 mr-3"></i> Services
+            </a>
+            <a href="gallery.html"
+                class="text-white hover:text-teal-400 transition-colors pb-3 pt-3 menu-link block">
+                <i class="fas fa-image w-6 mr-3"></i> Gallery
+            </a>
+            <a href="testimonials.html"
+                class="text-white hover:text-teal-400 transition-colors pb-3 pt-3 menu-link block">
+                <i class="fas fa-comment-alt w-6 mr-3"></i> Testimonials
+            </a>
+            <a href="contact.html" class="text-white hover:text-teal-400 transition-colors pt-3 menu-link block">
+                <i class="fas fa-envelope w-6 mr-3"></i> Contact
+            </a>
+            <div class="border-t border-white/10 mt-8 pt-4"></div> 
+        </nav>
+
+        <div class="mt-4 pt-4">
+            <h4 class="text-lg font-semibold mb-3 text-blue-400">Get Started</h4>
+            <a onclick="openModal()"
+                class="cursor-pointer w-full inline-block text-center px-6 py-3 text-white bg-gradient-to-r from-blue-600 to-teal-600 rounded-lg transition-all hover:opacity-90">
+                Plan Your Event
+            </a>
+        </div>
+    </div>
+    <div id="menu-backdrop" class="fixed inset-0 bg-black/50 z-40 opacity-0 invisible transition-opacity duration-300">
+    </div>
+
     <section class="relative min-h-screen flex items-center justify-center overflow-hidden video-hero">
-        <!-- Video Background -->
         <video id="hero-video" class="absolute inset-0 w-full h-full object-cover z-0" autoplay muted loop playsinline
             preload="auto">
             <source src="assets/videos/maya logo1.mp4" type="video/mp4">
             <source src="https://cdn.pixabay.com/video/2016/03/09/2549-176243_large.mp4" type="video/mp4">
             <source src="https://cdn.pixabay.com/video/2017/08/30/18071-230473561_large.mp4" type="video/mp4">
         </video>
-
-        <!-- Fallback Background Image -->
         <div id="fallback-bg" class="absolute inset-0 bg-hero z-0" style="display: none;"></div>
-
-        <!-- Minimal overlay for video visibility -->
-        <div class="absolute inset-0 bg-black/20 z-10"></div>
+        
+        <div class="relative z-10 text-center max-w-4xl mx-auto px-4 text-white">
+            <h1 class="text-5xl sm:text-7xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-400 opacity-0" id="hero-title">
+                The Creative Powerhouse
+            </h1>
+            <p class="text-xl font-medium max-w-3xl mx-auto mb-8 opacity-0" id="hero-subtitle">
+                Crafting technologically superior and strategically impactful brand experiences.
+            </p>
+            <a onclick="openModal()" class="cursor-pointer inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full transition transform hover:scale-105 opacity-0" id="hero-cta">
+                Plan Your Event <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
     </section>
 
-    <!-- About Section -->
+
     <section id="about" class="py-20 bg-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">What's Special About Us</h2>
+            <div class="text-center mb-16 scroll-animated-element about-title-block">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-blue-400">MAYA ADFINITY: The Creative Powerhouse</h2>
+                <p class="text-lg text-gray-300 max-w-3xl mx-auto">
+                    At Maya Adfinity, we don’t just plan events — we craft experiences, ignite emotions, and bring
+                    imagination to life. A proud unit of Trivexa Events and Promotions Pvt. Ltd., we stand at the
+                    intersection of **creativity, strategy, and flawless execution**.
+                </p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <h3 class="text-2xl font-bold mb-4 text-blue-400">We Create Memorable Events That Last for a
-                        Lifetime</h3>
+                <div class="scroll-animated-element about-text-content">
+                    <h3 class="text-2xl font-bold mb-4 text-white">Our Vision: Transformative Experiences</h3>
+                    <blockquote class="border-l-4 border-teal-400 pl-4 py-2 mb-6 italic text-gray-300">
+                        "To deliver innovative and transformative experiences with lasting positive impact, leading the
+                        live entertainment industry toward a vibrant and lasting future."
+                    </blockquote>
                     <p class="text-gray-300 mb-6 leading-relaxed">
-                        At Maya Events, we believe that every event deserves to be extraordinary. Whether you're
-                        planning a corporate conference, wedding celebration, or social gathering, we bring creativity,
-                        expertise, and passion to every detail.
-                    </p>
-                    <p class="text-gray-300 mb-8 leading-relaxed">
-                        Based in Bangalore, our team of dedicated planners, designers, and coordinators work closely
-                        with clients to understand their vision and exceed their expectations. From intimate gatherings
-                        to large-scale productions, we handle every aspect with precision, elegance, and style.
+                        We believe every project is more than a deliverable—it’s a **canvas**, a **story**, and an
+                        opportunity to **push boundaries**. Our diverse team of designers, planners, and fabricators
+                        ensures your vision is executed to perfection.
                     </p>
 
-                    <div class="grid grid-cols-2 gap-8">
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-blue-400">3000+</div>
-                            <div class="text-sm text-gray-400">Happy Clients</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-teal-400">3000+</div>
-                            <div class="text-sm text-gray-400"> Events Done</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-blue-400">08+</div>
-                            <div class="text-sm text-gray-400">Cities</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-teal-400">18+</div>
-                            <div class="text-sm text-gray-400">Years of Experience</div>
-                        </div>
-                    </div>
+                    <h4 class="text-xl font-semibold mb-4 text-blue-400">What We Do Best:</h4>
+                    <ul class="space-y-2 text-gray-300 list-disc list-inside">
+                        <li>Turn corporate gatherings into **impactful brand moments**.</li>
+                        <li>Transform blank spaces into **stunning stages and immersive environments**.</li>
+                        <li>Build event experiences with **precision, design intelligence, and technical mastery**.</li>
+                        <li>Elevate brands through creative storytelling and **visual innovation**.</li>
+                    </ul>
 
                     <div class="mt-8 flex justify-center lg:justify-start">
                         <a href="about.html"
-                            class="text-white hover:text-blue-400 transition-colors text-lg font-medium inline-flex items-center group">
-                            More Details
+                            class="text-teal-400 hover:text-blue-400 transition-colors text-lg font-medium inline-flex items-center group">
+                            Know Our Story
                             <i
                                 class="fas fa-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1"></i>
                         </a>
                     </div>
                 </div>
 
-                <div class="relative h-[350px] md:h-[450px] lg:h-[550px] flex items-center justify-center py-8">
-                    <div class="event-image-stack-item absolute w-[70%] sm:w-[60%] md:w-[70%] z-10"
-                        style="transform: translate(-50%, -50%) rotate(-10deg) translate(-15px, 15px);">
+                <div class="relative h-[350px] md:h-[450px] lg:h-[550px] flex items-center justify-center py-8 scroll-animated-element about-image-stack">
+                    <div class="event-image-stack-item absolute w-[70%] sm:w-[60%] md:w-[70%] z-10">
                         <img src="./services/Hybrid-Events.jpg" alt="Corporate Event"
                             class="w-full h-full object-cover rounded-md">
                     </div>
-                    <div class="event-image-stack-item absolute w-[70%] sm:w-[60%] md:w-[70%] z-20"
-                        style="transform: translate(-50%, -50%) rotate(0deg);">
+                    <div class="event-image-stack-item absolute w-[70%] sm:w-[60%] md:w-[70%] z-20">
                         <img src="./services/Celebrations.jpg" alt="Wedding Celebration"
                             class="w-full h-full object-cover rounded-md">
                     </div>
-                    <div class="event-image-stack-item absolute w-[70%] sm:w-[60%] md:w-[70%] z-30"
-                        style="transform: translate(-50%, -50%) rotate(10deg) translate(15px, -15px);">
-                        <img src="./services/banquet.jpg" alt="Gala Dinner"
-                            class="w-full h-full object-cover rounded-md">
+                    <div class="event-image-stack-item absolute w-[70%] sm:w-[60%] md:w-[70%] z-30">
+                        <img src="./services/banquet.jpg" alt="Gala Dinner" class="w-full h-full object-cover rounded-md">
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <style>
-        /* Add this to your existing style block or a new <style> tag */
-        .event-image-stack-item {
-            top: 50%;
-            left: 50%;
-            background-color: white;
-            /* White border background */
-            padding: 8px;
-            /* Thickness of the white border */
-            border-radius: 12px;
-            /* Smoother rounded corners for the outer border */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            /* Stronger shadow */
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, z-index 0.3s ease-in-out;
-            aspect-ratio: 3/4;
-            /* This creates the lengthy image effect */
-            display: flex;
-            /* To ensure the image inside fills the padded area */
-            align-items: center;
-            justify-content: center;
-        }
+    <section id="service-showcase" class="bg-gray-900 py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-center text-4xl md:text-5xl font-bold mb-16 text-teal-400 scroll-animated-element service-showcase-title">Our Specializations</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 service-cards-container">
 
-        .event-image-stack-item img {
-            border-radius: 8px;
-            /* Slightly smaller rounded corners for the actual image */
-        }
+                <div
+                    class="group bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-blue-500 transition-all duration-500 shadow-xl hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] scroll-animated-element service-card-item">
+                    <div
+                        class="mb-6 w-16 h-16 flex items-center justify-center rounded-full bg-blue-500/20 text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500 transform group-hover:scale-110">
+                        <i class="fas fa-bullhorn text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-white">Brand Activation</h3>
+                    <p class="text-gray-400 text-sm">Create memorable, interactive campaigns that leave a lasting
+                        impression on your target audience.</p>
+                </div>
 
-        /* *************************************************************** */
-        /* UPDATED: Specific rotations and translations for RIGHT-TO-LEFT fan */
-        /* *************************************************************** */
-        .event-image-stack-item:nth-child(1) {
-            /* Rightmost card (behind, rotated right) */
-            transform: translate(-50%, -50%) rotate(10deg) translate(15px, 15px);
-            z-index: 10;
-        }
+                <div
+                    class="group bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-pink-500 transition-all duration-500 shadow-xl hover:shadow-[0_0_30px_rgba(236,72,153,0.3)] scroll-animated-element service-card-item">
+                    <div
+                        class="mb-6 w-16 h-16 flex items-center justify-center rounded-full bg-pink-500/20 text-pink-400 group-hover:bg-pink-500 group-hover:text-white transition-all duration-500 transform group-hover:scale-110">
+                        <i class="fas fa-sitemap text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-white">Technical Production</h3>
+                    <p class="text-gray-400 text-sm">Flawless execution of sound, lighting, stage design, and AV for any
+                        scale event.</p>
+                </div>
 
-        .event-image-stack-item:nth-child(2) {
-            /* Middle card (straight) */
-            transform: translate(-50%, -50%) rotate(0deg);
-            z-index: 20;
-        }
+                <div
+                    class="group bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-teal-500 transition-all duration-500 shadow-xl hover:shadow-[0_0_30px_rgba(20,184,166,0.3)] scroll-animated-element service-card-item">
+                    <div
+                        class="mb-6 w-16 h-16 flex items-center justify-center rounded-full bg-teal-500/20 text-teal-400 group-hover:bg-teal-500 group-hover:text-white transition-all duration-500 transform group-hover:scale-110">
+                        <i class="fas fa-industry text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-white">Exhibition & Fabrication</h3>
+                    <p class="text-gray-400 text-sm">Custom, high-quality fabrication of stalls, stages, and set pieces
+                        with design intelligence.</p>
+                </div>
 
-        .event-image-stack-item:nth-child(3) {
-            /* Leftmost card (front, rotated left) */
-            transform: translate(-50%, -50%) rotate(-10deg) translate(-15px, -15px);
-            z-index: 30;
-        }
+                <div
+                    class="group bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-indigo-500 transition-all duration-500 shadow-xl hover:shadow-[0_0_30px_rgba(99,102,241,0.3)] scroll-animated-element service-card-item">
+                    <div
+                        class="mb-6 w-16 h-16 flex items-center justify-center rounded-full bg-indigo-500/20 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-500 transform group-hover:scale-110">
+                        <i class="fas fa-users text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-white">Guest Management</h3>
+                    <p class="text-gray-400 text-sm">Comprehensive logistics, registration, and hospitality ensuring a
+                        seamless guest experience.</p>
+                </div>
 
-        /* Hover effect for the stack - making the hovered image straighten and come forward */
-        .event-image-stack-item:hover {
-            transform: translate(-50%, -50%) scale(1.05) rotate(0deg) !important;
-            /* Overrides specific rotations */
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6);
-            z-index: 40;
-            /* Bring to front on hover */
-        }
-    </style>
+            </div>
+        </div>
+    </section>
 
-    <!-- Services Section -->
     <section class="bg-gray-950 py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-20">Enjoy Our Services</h2>
+            <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-20 scroll-animated-element commitment-title">Our Commitment to Excellence</h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-24">
-                <div class="space-y-4">
-                    <h3 class="text-2xl font-bold text-white">Affordable Packages</h3>
-                    <p class="text-gray-400 max-w-xs mx-auto">Customizable pricing to fit any event size or budget.</p>
-                    <!-- <a href="#images" class="inline-block mt-4 px-6 py-2 text-sm font-semibold text-white bg-white/10 hover:bg-white/20 rounded-full transition-colors transform hover:scale-105">
-                    View Images
-                </a> -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-24 commitment-features-container">
+                <div class="space-y-4 scroll-animated-element commitment-feature">
+                    <i class="fas fa-magic text-6xl text-teal-400 mb-4"></i>
+                    <h3 class="text-2xl font-bold text-white">Creative Storytelling</h3>
+                    <p class="text-gray-400 max-w-xs mx-auto">We transform your brand narrative into bold, immersive, and
+                        unforgettable experiences.</p>
                 </div>
-                <div class="space-y-4">
-                    <h3 class="text-2xl font-bold text-white">Energetic Events</h3>
-                    <p class="text-gray-400 max-w-xs mx-auto">Dynamic and engaging experiences that leave a lasting
-                        impression.</p>
-                    <!-- <a href="#images" class="inline-block mt-4 px-6 py-2 text-sm font-semibold text-white bg-white/10 hover:bg-white/20 rounded-full transition-colors transform hover:scale-105">
-                    View Images
-                </a> -->
+                <div class="space-y-4 scroll-animated-element commitment-feature">
+                    <i class="fas fa-project-diagram text-6xl text-blue-400 mb-4"></i>
+                    <h3 class="text-2xl font-bold text-white">Strategic Execution</h3>
+                    <p class="text-gray-400 max-w-xs mx-auto">Precision planning and technical mastery ensure flawless
+                        delivery every single time.</p>
                 </div>
-                <div class="space-y-4">
-                    <h3 class="text-2xl font-bold text-white">Unique Events</h3>
-                    <p class="text-gray-400 max-w-xs mx-auto">Bespoke concepts tailored to your vision, ensuring a
-                        one-of-a-kind celebration.</p>
-                    <!-- <a href="#images" class="inline-block mt-4 px-6 py-2 text-sm font-semibold text-white bg-white/10 hover:bg-white/20 rounded-full transition-colors transform hover:scale-105">
-                    View Images
-                </a> -->
+                <div class="space-y-4 scroll-animated-element commitment-feature">
+                    <i class="fas fa-lightbulb text-6xl text-indigo-400 mb-4"></i>
+                    <h3 class="text-2xl font-bold text-white">Visual Innovation</h3>
+                    <p class="text-gray-400 max-w-xs mx-auto">From cutting-edge fabrication to persuasive digital design,
+                        we elevate your visuals.</p>
                 </div>
             </div>
-
-            <div id="images" class="flex flex-col md:flex-row justify-center items-end gap-16 md:gap-12 lg:gap-20">
-                <div
-                    class="relative w-72 h-96 bg-white p-3 shadow-xl transform rotate-6 hover:rotate-0 transition-transform duration-300">
-                    <img src="./assets/images/Energetic-Events.jpg" alt="Joyful Celebrations"
-                        class="w-full h-full object-cover">
-                    <div class="absolute bottom-3 left-3 right-3 text-xs text-gray-700 text-left">
-                        <p class="font-semibold">Joyful Celebrations</p>
-                        <p>Capturing candid moments.</p>
-                    </div>
-                </div>
-
-                <div
-                    class="relative w-72 h-96 bg-white p-4 shadow-xl transform -rotate-6 hover:rotate-0 transition-transform duration-300">
-                    <img src="assets/images/Unique Events.jpg" alt="Energetic Events"
-                        class="w-full h-full object-cover">
-                    <div class="absolute bottom-4 left-4 right-4 text-sm text-gray-700 text-left">
-                        <p class="font-semibold">Dynamic Engagements</p>
-                        <p>High-energy events that excite.</p>
-                    </div>
-                </div>
-
-                <div
-                    class="relative w-72 h-96 bg-white p-3 shadow-xl transform rotate-6 hover:rotate-0 transition-transform duration-300">
-                    <img src="assets/images/tall.jpg" alt="Elegant Settings" class="w-full h-full object-cover">
-                    <div class="absolute bottom-3 left-3 right-3 text-xs text-gray-700 text-left">
-                        <p class="font-semibold">Elegant Settings</p>
-                        <p>Sophisticated decor and ambiance.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-20">
+            <div class="mt-20 scroll-animated-element commitment-cta">
                 <a href="services.html"
                     class="inline-block px-8 py-3 text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-full transition-colors transform hover:scale-105">
-                    Explore All Services
+                    Explore All 7 Service Lines
                 </a>
             </div>
         </div>
     </section>
-    <!-- Event Categories -->
-    <section class="py-20 bg-gray-800">
+
+    <section class="py-20 bg-gray-850">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <div class="flex justify-center space-x-4 mb-8">
-                    <button
-                        class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 rounded-full transition-colors category-btn active"
-                        data-category="events">
-                        Events
-                    </button>
-                    
-                    <button
-                        class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 rounded-full transition-colors category-btn"
-                        data-category="custom">
-                        Custom Events
-                    </button>
-                </div>
+            <div class="text-center mb-12 scroll-animated-element offerings-title-block">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 text-white">Our Integrated Offerings</h2>
+                <p class="text-lg text-gray-400">Precision in planning, creativity in delivery.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow">
-                    <img src="./assets/images/EVENTSCONSULTINGSOULUTIONS.jpg" alt="Basketball Tournament"
-                        class="w-full h-48 object-cover">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 offerings-cards-container">
+                <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow group scroll-animated-element offering-card-item">
+                    <img src="./assets/images/EVENTSCONSULTINGSOULUTIONS.jpg" alt="Consulting"
+                        class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
                     <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">EVENTS CONSULTING & SOULUTIONS</h3>
-                        <p class="text-gray-400 text-sm mb-4">Creating and designing solutions for events, marketing
-                            Communication and consulting to provide the best experiences locally and internationally</p>
-                        <div class="flex items-center justify-between">
-                            <!-- <span class="text-2xl font-bold text-blue-400">$299</span> -->
-                            <!-- <button
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
-                                Book Now
-                            </button> -->
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow">
-                    <img src="https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=600"
-                        alt="Sports Annual Meeting" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">ENTERTAINMENT MANAGEMENT</h3>
-                        <p class="text-gray-400 text-sm mb-4">We create exciting entertainment experiences that engage
-                            and delight audiences. from live shows and concerts to cultural programs and celebrity
-                            appearances, we plan and manage it all. our goal is to add energy, fun, and lasting memories
-                            to every event.
-
+                        <h3 class="text-xl font-bold mb-2 text-teal-400">EVENTS CONSULTING & STRATEGY</h3>
+                        <p class="text-gray-400 text-sm mb-4">Creating and designing comprehensive solutions for events,
+                            marketing
+                            communication, and consulting to provide the best experiences locally and internationally.
                         </p>
-                        <div class="flex items-center justify-between">
-                            <!-- <span class="text-2xl font-bold text-teal-400">$199</span> -->
-                            <!-- <button
-                                class="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded-lg transition-colors">
-                                Book Now
-                            </button> -->
-                        </div>
                     </div>
                 </div>
 
-                <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow">
-                    <img src="./assets/images/people-taking-part-high-protocol-event.jpg" alt="IPL Championship"
-                        class="w-full h-48 object-cover">
+                <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow group scroll-animated-element offering-card-item">
+                    <img src="https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=600"
+                        alt="Entertainment"
+                        class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
                     <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">MEETINGS & CONFERENCE PLANNING</h3>
+                        <h3 class="text-xl font-bold mb-2 text-blue-400">ENTERTAINMENT MANAGEMENT</h3>
+                        <p class="text-gray-400 text-sm mb-4">We create exciting entertainment experiences, from live
+                            shows and concerts to cultural programs and celebrity appearances, adding energy and lasting
+                            memories.</p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow group scroll-animated-element offering-card-item">
+                    <img src="./assets/images/people-taking-part-high-protocol-event.jpg" alt="Conference"
+                        class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-indigo-400">MEETINGS & CONFERENCE PLANNING</h3>
                         <p class="text-gray-400 text-sm mb-4">We provide integrated solutions for designing scientific
-                            programs for conferences, forums and events, as well as workshops and meetings.</p>
-                        <div class="flex items-center justify-between">
-                            <!-- <span class="text-2xl font-bold text-blue-400">$399</span> -->
-                            <!-- <button
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
-                                Book Now
-                            </button> -->
-                        </div>
+                            programs, workshops, and large-scale corporate forums, ensuring seamless and professional
+                            delivery.</p>
                     </div>
                 </div>
             </div>
-            <!-- Service Page Anchor -->
-            <div class="text-center mt-12">
+
+            <div class="text-center mt-12 scroll-animated-element offerings-cta">
                 <a href="services.html"
                     class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full text-lg font-semibold transition-colors">
-                    More Details
+                    View All Services & Specializations
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Maya Events Organizer Gallery Section (Dark Theme) -->
-    <section id="gallery" class="py-20 bg-gray-850">
+    <section id="unified-portfolio-carousel" class="bg-gray-950 py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <!-- <span class="font-display text-teal-400 font-semibold text-sm uppercase tracking-wider">Our Portfolio</span> -->
-            <h2 class="text-4xl font-bold mt-2 mb-12">
-                Event Moments
+            <h2 class="text-4xl md:text-5xl font-bold mb-12 text-teal-400 scroll-animated-element portfolio-title">
+                🚀 Our Event Portfolio: Experiences Brought to Life
             </h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="relative group overflow-hidden rounded-xl shadow-lg">
-                    <img src="./testimonials/Corporate-Gala.jpg" alt="Corporate event setup"
-                        class="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-500">
-                    <div
-                        class="absolute inset-0 bg-gray-950/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <p class="text-white text-lg font-bold">A glimpse of our beautifully organized events</p>
-                    </div>
-                </div>
-                <div class="relative group overflow-hidden rounded-xl shadow-lg">
-                    <img src="./testimonials/Wedding-Reception.jpg" alt="Wedding ceremony"
-                        class="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-500">
-                    <div
-                        class="absolute inset-0 bg-gray-950/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <p class="text-white text-lg font-bold">Wedding Reception</p>
-                    </div>
-                </div>
-                <div class="relative group overflow-hidden rounded-xl shadow-lg">
-                    <img src="./testimonials/Concert-Experience.jpg" alt="Music concert stage"
-                        class="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-500">
-                    <div
-                        class="absolute inset-0 bg-gray-950/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <p class="text-white text-lg font-bold">Concert Experience</p>
-                    </div>
-                </div>
+            <p class="text-lg text-gray-400 mb-8 max-w-3xl mx-auto scroll-animated-element portfolio-subtitle">
+                Explore a curated selection of our most innovative and impactful projects, showcasing our mastery in
+                technical production, stage design, and immersive environments.
+            </p>
 
+            <div id="featured-scroll-grid-container" class="max-w-full mx-auto h-[350px]">
+                <div id="featured-scroll-track" class="image-scroll-track">
+                    <div class="image-scroll-group">
+                        <div class="image-scroll-item">
+                            <img src="https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=1260"
+                                alt="Concert Stage">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=600"
+                                alt="Gala Dinner Setup">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="./assets/images/Energetic-Events.jpg" alt="Conference Audience">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="./services/Hybrid-Events.jpg" alt="Hybrid Studio Setup">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="./testimonials/Corporate-Gala.jpg" alt="Corporate Gala Event">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="./testimonials/Wedding-Reception.jpg" alt="Grand Social Celebrations">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="./testimonials/Concert-Experience.jpg" alt="Technical Production Setup">
+                        </div>
+                    </div>
 
+                    <div class="image-scroll-group">
+                        <div class="image-scroll-item">
+                            <img src="https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                alt="Outdoor Music Festival">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="https://images.pexels.com/photos/4099411/pexels-photo-4099411.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                alt="Product Launch Booth">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="https://images.pexels.com/photos/1619572/pexels-photo-1619572.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                alt="Fashion Show Setup">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="https://images.pexels.com/photos/10368305/pexels-photo-10368305.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                alt="Corporate Awards Ceremony">
+                        </div>
+                    </div>
+                    <div class="image-scroll-group">
+                        <div class="image-scroll-item">
+                            <img src="https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=1260"
+                                alt="Concert Stage Duplicate">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=600"
+                                alt="Gala Dinner Setup Duplicate">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="./assets/images/Energetic-Events.jpg" alt="Conference Audience Duplicate">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="./services/Hybrid-Events.jpg" alt="Hybrid Studio Setup Duplicate">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="./testimonials/Corporate-Gala.jpg" alt="Corporate Gala Event Duplicate">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="./testimonials/Wedding-Reception.jpg" alt="Grand Social Celebrations Duplicate">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="./testimonials/Concert-Experience.jpg" alt="Technical Production Setup Duplicate">
+                        </div>
+                    </div>
 
-            </div>
-            <div class="text-center mt-12">
-                <a href="gallery.html"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full text-lg font-semibold transition-colors">
-                    View Gallery
-                </a>
+                    <div class="image-scroll-group">
+                        <div class="image-scroll-item">
+                            <img src="https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                alt="Outdoor Music Festival Duplicate">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="https://images.pexels.com/photos/4099411/pexels-photo-4099411.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                alt="Product Launch Booth Duplicate">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="https://images.pexels.com/photos/1619572/pexels-photo-1619572.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                alt="Fashion Show Setup Duplicate">
+                        </div>
+                        <div class="image-scroll-item">
+                            <img src="https://images.pexels.com/photos/10368305/pexels-photo-10368305.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                alt="Corporate Awards Ceremony Duplicate">
+                        </div>
+                    </div>
+                    </div>
             </div>
         </div>
     </section>
 
-
-    <!-- Testimonials -->
-    <section id="testimonials" class="py-20 bg-gray-900">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white">What Our Clients Say</h2>
-            <p class="text-gray-400 max-w-2xl mx-auto">
-                Our clients trust us to create unforgettable experiences. Here’s what they have to say about working with Maya Events.
-            </p>
-        </div>
-
-        <div class="relative">
-            <!-- Testimonials Container -->
-            <div id="testimonial-wrapper" class="space-y-12">
-                
-
-                <!-- Testimonial 1 -->
-                <div class="testimonial-card text-center">
-                    <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=400"
-                        alt="Anita Sharma"
-                        class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-pink-500 mb-6">
-                    <div class="mb-6 flex justify-center space-x-1">
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                    </div>
-                    <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
-                        "The Maya Events team flawlessly handled our product launch. Their professionalism, creativity, and attention to detail made the entire experience seamless and enjoyable."
-                    </p>
-                    <h4 class="text-lg font-bold text-white">Anita Sharma</h4>
-                    <p class="text-blue-400">CEO at InnovateX</p>
+    <section id="testimonials" class="py-20 bg-gray-850">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 scroll-animated-element testimonials-title-block">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white">Trusted by Leaders</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    We deliver experiences that are strategically smart and emotionally powerful. Here’s what our valued
+                    clients say.
+                </p>
+                <div class="testimonial-navigation-wrapper mt-8 flex justify-center space-x-4">
+                    <button id="prev-testimonial" class="p-3 rounded-full bg-gray-900 text-teal-400 hover:bg-gray-700 transition">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <button id="next-testimonial" class="p-3 rounded-full bg-gray-900 text-teal-400 hover:bg-gray-700 transition">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
                 </div>
-
-                <!-- Testimonial 2 -->
-                <div class="testimonial-card text-center">
-                    <img src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400"
-                        alt="Vikram Singh"
-                        class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-green-500 mb-6">
-                    <div class="mb-6 flex justify-center space-x-1">
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                    </div>
-                    <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
-                        "Maya Events transformed our annual festival into a spectacular celebration. Their attention to logistics and guest experience was outstanding. Highly recommended!"
-                    </p>
-                    <h4 class="text-lg font-bold text-white">Vikram Singh</h4>
-                    <p class="text-blue-400">Event Manager at FunFest</p>
-                </div>
-
-                  <!-- Testimonial 3 -->
-                <div class="testimonial-card active text-center">
-                    <img src="https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=400"
-                        alt="Rajesh Kumar"
-                        class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-blue-500 mb-6">
-                    <div class="mb-6 flex justify-center space-x-1">
-                        <!-- 5 stars -->
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                        <svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                    </div>
-                    <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
-                        "Maya Events exceeded all our expectations for our annual corporate conference. Their attention to detail and creative solutions transformed our event into an unforgettable experience."
-                    </p>
-                    <h4 class="text-lg font-bold text-white">Rajesh Kumar</h4>
-                    <p class="text-blue-400">Managing Director at TechCorp India</p>
-                </div>
-
             </div>
 
-            <!-- Carousel Buttons -->
-            <button onclick="prevTestimonial()"
-                class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-            </button>
-            <button onclick="nextTestimonial()"
-                class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-            </button>
+            <div class="horizontal-scroll-container testimonial-scroll-track">
+                <div id="testimonial-track-inner"> 
+                    <div class="testimonial-card snap-center text-center bg-gray-900 shadow-xl scroll-animated-element testimonial-item">
+                        <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=400"
+                            alt="Anita Sharma"
+                            class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-pink-500 mb-6">
+                        <div class="mb-6 flex justify-center space-x-1 text-yellow-400">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
+                            "The Maya Adfinity team flawlessly handled our product launch. Their professionalism,
+                            creativity, and attention to detail made the entire experience seamless and enjoyable. Truly
+                            a full-scale creative powerhouse."
+                        </p>
+                        <h4 class="text-lg font-bold text-white">Anita Sharma</h4>
+                        <p class="text-blue-400">CEO at InnovateX</p>
+                    </div>
+
+                    <div class="testimonial-card snap-center text-center bg-gray-900 shadow-xl scroll-animated-element testimonial-item">
+                        <img src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400"
+                            alt="Vikram Singh"
+                            class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-green-500 mb-6">
+                        <div class="mb-6 flex justify-center space-x-1 text-yellow-400">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
+                            "Maya Adfinity transformed our annual festival into a spectacular celebration. Their attention
+                            to logistics, entertainment management, and overall guest experience was outstanding. Highly
+                            recommended!"
+                        </p>
+                        <h4 class="text-lg font-bold text-white">Vikram Singh</h4>
+                        <p class="text-blue-400">Event Manager at FunFest</p>
+                    </div>
+
+                    <div class="testimonial-card snap-center text-center bg-gray-900 shadow-xl scroll-animated-element testimonial-item">
+                        <img src="https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=400"
+                            alt="Rajesh Kumar"
+                            class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-blue-500 mb-6">
+                        <div class="mb-6 flex justify-center space-x-1 text-yellow-400">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
+                            "Maya Adfinity exceeded all our expectations for our annual corporate conference. Their
+                            attention to detail and creative solutions delivered a truly transformative and unforgettable
+                            experience."
+                        </p>
+                        <h4 class="text-lg font-bold text-white">Rajesh Kumar</h4>
+                        <p class="text-blue-400">Managing Director at TechCorp India</p>
+                    </div>
+
+                    <div class="testimonial-card snap-center text-center bg-gray-900 shadow-xl scroll-animated-element testimonial-item">
+                        <img src="https://images.pexels.com/photos/3775087/pexels-photo-3775087.jpeg?auto=compress&cs=tinysrgb&w=400"
+                            alt="Deepa Varma"
+                            class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-teal-500 mb-6">
+                        <div class="mb-6 flex justify-center space-x-1 text-yellow-400">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
+                            "The sheer scale and technical brilliance of the stage design were breathtaking. Maya Adfinity is
+                            the only choice for large-scale, immersive brand experiences."
+                        </p>
+                        <h4 class="text-lg font-bold text-white">Deepa Varma</h4>
+                        <p class="text-blue-400">Head of Marketing, GlobalTech</p>
+                    </div>
+
+                    <div class="testimonial-card snap-center text-center bg-gray-900 shadow-xl scroll-animated-element testimonial-item">
+                        <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=400"
+                            alt="Anita Sharma"
+                            class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-pink-500 mb-6">
+                        <div class="mb-6 flex justify-center space-x-1 text-yellow-400">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
+                            "The Maya Adfinity team flawlessly handled our product launch. Their professionalism,
+                            creativity, and attention to detail made the entire experience seamless and enjoyable. Truly
+                            a full-scale creative powerhouse."
+                        </p>
+                        <h4 class="text-lg font-bold text-white">Anita Sharma</h4>
+                        <p class="text-blue-400">CEO at InnovateX</p>
+                    </div>
+                    
+                    <div class="testimonial-card snap-center text-center bg-gray-900 shadow-xl scroll-animated-element testimonial-item">
+                        <img src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400"
+                            alt="Vikram Singh"
+                            class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-green-500 mb-6">
+                        <div class="mb-6 flex justify-center space-x-1 text-yellow-400">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
+                            "Maya Adfinity transformed our annual festival into a spectacular celebration. Their attention
+                            to logistics, entertainment management, and overall guest experience was outstanding. Highly
+                            recommended!"
+                        </p>
+                        <h4 class="text-lg font-bold text-white">Vikram Singh</h4>
+                        <p class="text-blue-400">Event Manager at FunFest</p>
+                    </div>
+
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<script>
-let currentIndex = 0;
-const testimonials = document.querySelectorAll('.testimonial-card');
-
-function showTestimonial(index) {
-    testimonials.forEach((card, i) => {
-        card.classList.remove('active');
-        card.style.display = 'none';
-    });
-    testimonials[index].classList.add('active');
-    testimonials[index].style.display = 'block';
-}
-
-function nextTestimonial() {
-    currentIndex = (currentIndex + 1) % testimonials.length;
-    showTestimonial(currentIndex);
-}
-
-function prevTestimonial() {
-    currentIndex = (currentIndex - 1 + testimonials.length) % testimonials.length;
-    showTestimonial(currentIndex);
-}
-
-// Initialize
-showTestimonial(currentIndex);
-</script>
-
-
-    <!-- CTA Section -->
     <section class="py-20 relative bg-cta">
         <div class="absolute inset-0 bg-gray-900/80"></div>
         <div class="relative z-10 max-w-4xl mx-auto text-center px-4">
-            <h2 class="text-4xl md:text-5xl font-bold mb-6">Let's Make Your Next Event Exceptional</h2>
-            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Partner with us to create memorable experiences that will leave lasting impressions on your guests and
-                exceed your expectations.
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 scroll-animated-element cta-title">Ready to Push Boundaries?</h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto scroll-animated-element cta-text">
+                Partner with Maya Adfinity to transform your next idea into an emotionally powerful and perfectly
+                executed reality.
             </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="contact.html"
-                    class="bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white px-8 py-3 rounded-lg transition-all font-medium text-center">
-                    Plan your Event
+            <div class="flex flex-col sm:flex-row gap-4 justify-center cta-buttons-container">
+                <a onclick="openModal()"
+                    class="cursor-pointer bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white px-8 py-3 rounded-lg transition-all font-medium text-center scroll-animated-element cta-button-left">
+                    Request a Consultation
                 </a>
                 <a href="contact.html"
-                    class="border border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-3 rounded-lg transition-all font-medium text-center">
-                    Contact us
+                    class="border border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-3 rounded-lg transition-all font-medium text-center scroll-animated-element cta-button-right">
+                    Get in Touch
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="bg-gray-800 border-t border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <img src="assets/images/MAYA_LOGO.png" alt="Maya Events Logo" class="h-12 w-auto mb-4">
-                    <p class="text-gray-400 mb-4">Creating Memorable Events in Bangalore</p>
+                    <img src="assets/images/MAYA_LOGO.png" alt="Maya Adfinity Logo" class="h-12 w-auto mb-4">
+                    <p class="text-gray-400 mb-4">Crafting Experiences, Igniting Emotions.</p>
                     <p class="text-gray-400 text-sm">
-                        Your premier destination for exceptional event planning and unforgettable experiences across
-                        Karnataka and beyond.
+                        Your premier partner for exceptional event planning, creative services, and brand experiences. A
+                        proud unit of Trivexa Events and Promotions Pvt. Ltd.
                     </p>
                 </div>
 
@@ -730,12 +720,11 @@ showTestimonial(currentIndex);
                     <ul class="space-y-2">
                         <li><a href="index.html" class="text-gray-400 hover:text-blue-400 transition-colors">Home</a>
                         </li>
-                        <li><a href="about.html" class="text-gray-400 hover:text-blue-400 transition-colors">About</a>
+                        <li><a href="about.html" class="text-gray-400 hover:text-blue-400 transition-colors">About Us</a>
                         </li>
                         <li><a href="service.html"
-                                class="text-gray-400 hover:text-blue-400 transition-colors">Service</a></li>
-                        <li><a href="gallery.html"
-                                class="text-gray-400 hover:text-blue-400 transition-colors">Gallery</a></li>
+                                class="text-gray-400 hover:text-blue-400 transition-colors">Services</a></li>
+                        <li><a href="#unified-portfolio-carousel" class="text-gray-400 hover:text-blue-400 transition-colors">Portfolio</a></li>
                         <li><a href="testimonials.html"
                                 class="text-gray-400 hover:text-blue-400 transition-colors">Testimonials</a></li>
                         <li><a href="contact.html"
@@ -746,29 +735,31 @@ showTestimonial(currentIndex);
                 <div>
                     <h4 class="text-white font-semibold mb-4">Contact Us</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li>📍 MG Road, Bangalore 560001, Karnataka</li>
+                        <li>📍 MG Road, Bengaluru 560001, Karnataka (Head Office)</li>
                         <li>📞 +91 80 1234 5678</li>
-                        <li>✉️ info@mayaevents.com</li>
+                        <li>✉️ info@mayaadfinity.com</li>
                         <li>🕒 Mon - Fri: 9AM - 6PM IST</li>
                     </ul>
                 </div>
 
                 <div>
-                    <h4 class="text-white font-semibold mb-4">Subscribe</h4>
-                    <p class="text-gray-400 mb-4 text-sm">Stay updated with our latest events and special offers.</p>
-                    <div class="flex">
-                        <input type="email" placeholder="Your email"
-                            class="flex-1 px-4 py-2 bg-gray-700 border border-gray-600 rounded-l-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <button
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition-colors">
-                            Subscribe
-                        </button>
+                    <h4 class="text-white font-semibold mb-4">Stay Connected</h4>
+                    <p class="text-gray-400 mb-4 text-sm">Follow our journey of creative transformation.</p>
+                    <div class="flex space-x-4 text-2xl">
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors"><i
+                                class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors"><i
+                                class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors"><i
+                                class="fab fa-youtube"></i></a>
                     </div>
                 </div>
             </div>
 
             <div class="border-t border-gray-700 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-gray-400 text-sm">© 2024 Maya Events. All rights reserved.</p>
+                <p class="text-gray-400 text-sm">© 2025 Maya Adfinity. All rights reserved.</p>
                 <div class="flex space-x-6 mt-4 md:mt-0">
                     <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">Privacy Policy</a>
                     <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">Terms of Service</a>
@@ -777,67 +768,299 @@ showTestimonial(currentIndex);
         </div>
     </footer>
 
+    <div id="contact-modal"
+        class="modal fixed inset-0 z-[100] bg-gray-900/70 backdrop-blur-md flex items-center justify-center opacity-0 invisible transition-opacity duration-300 ease-out">
+    </div>
+
+
     <script>
-        // Video fallback functionality
+        // === GSAP ANIMAETED COUNTER LOGIC (Used via ScrollTrigger) ===
+        function animateCount(targetId, targetValue, duration = 2, suffix = '') {
+            const element = document.getElementById(targetId);
+            if (!element) return;
+            gsap.to({ value: 0 }, {
+                value: targetValue,
+                duration: duration,
+                ease: 'power1.out',
+                onUpdate: function() {
+                    element.textContent = Math.floor(this.targets()[0].value).toLocaleString() + suffix;
+                },
+                onComplete: function() {
+                    element.textContent = targetValue.toLocaleString() + suffix;
+                }
+            });
+        }
+
+        // === MODAL & MENU LOGIC ===
+        const modal = document.getElementById('contact-modal');
+        let popupTimer;
+
+        function openModal() {
+            if (modal) {
+                modal.classList.remove('invisible', 'opacity-0');
+                modal.classList.add('visible', 'opacity-100');
+            }
+            document.body.style.overflow = 'hidden';
+            clearInterval(popupTimer);
+            closeOffCanvasMenu(); 
+        }
+
+        function closeModal(event) {
+            if (modal) {
+                modal.classList.remove('visible', 'opacity-100');
+                modal.classList.add('invisible', 'opacity-0');
+            }
+            document.body.style.overflow = '';
+            startPopupTimer();
+        }
+
+        function startPopupTimer() {
+            clearInterval(popupTimer);
+            // Re-enable if modal implementation is complete
+            // popupTimer = setInterval(openModal, 20000); 
+        }
+
+        const menu = document.getElementById('off-canvas-menu');
+        const menuToggle = document.getElementById('menu-toggle-button');
+        const menuClose = document.getElementById('menu-close-button');
+        const menuBackdrop = document.getElementById('menu-backdrop');
+        const menuLinks = document.querySelectorAll('#off-canvas-nav .menu-link'); 
+        
+        // GSAP Timeline for Menu Links
+        const menuTimeline = gsap.timeline({ paused: true });
+
+        // Initialize Menu Links: SLIDE FROM RIGHT (x: 50) and slower duration
+        menuTimeline.from(menuLinks, { 
+            x: 50, 
+            opacity: 0, 
+            duration: 0.6, 
+            ease: "power1.out", 
+            stagger: 0.15 
+        });
+
+
+        function openOffCanvasMenu() {
+            menu.classList.remove('hidden-menu');
+            menuBackdrop.classList.remove('opacity-0', 'invisible');
+            menuBackdrop.classList.add('opacity-100', 'visible');
+            document.body.style.overflow = 'hidden';
+            
+            // Play the menu animation timeline from the beginning
+            menuTimeline.timeScale(1).play(0); 
+        }
+
+        function closeOffCanvasMenu() {
+            // Reverse the animation before closing the menu
+            menuTimeline.timeScale(1.5).reverse(0.4).then(() => {
+                 menu.classList.add('hidden-menu');
+                 menuBackdrop.classList.remove('opacity-100', 'visible');
+                 menuBackdrop.classList.add('opacity-0', 'invisible');
+                 
+                 // FIX: Ensure body overflow is restored only if the modal is not visible 
+                 const modalIsHidden = modal ? modal.classList.contains('invisible') : true;
+
+                 if (modalIsHidden) {
+                     document.body.style.overflow = '';
+                 }
+            });
+           
+        }
+
+        // === TESTIMONIAL SCROLL ARROW LOGIC ===
+        const testimonialTrackInner = document.getElementById('testimonial-track-inner');
+        const testimonialContainer = document.querySelector('.testimonial-scroll-track');
+        const prevButton = document.getElementById('prev-testimonial');
+        const nextButton = document.getElementById('next-testimonial');
+
+        function scrollTestimonials(direction) {
+            if (!testimonialContainer) return;
+            
+            // Pause the CSS animation temporarily
+            testimonialTrackInner.style.animationPlayState = 'paused';
+
+            // Calculate the width of one card plus margin
+            const firstCard = testimonialTrackInner.querySelector('.testimonial-card');
+            if (!firstCard) return;
+
+            // Use card width + margin for reliable scroll distance
+            const scrollDistance = firstCard.clientWidth + 24; 
+            
+            // Scroll the container manually
+            testimonialContainer.scroll({
+                left: testimonialContainer.scrollLeft + (direction * scrollDistance),
+                behavior: 'smooth'
+            });
+            
+            // Resume CSS animation after a short delay (optional, can be tricky with user interaction)
+            setTimeout(() => {
+                testimonialTrackInner.style.animationPlayState = 'running';
+            }, 500); 
+        }
+        
+        if (prevButton) prevButton.addEventListener('click', () => scrollTestimonials(-1));
+        if (nextButton) nextButton.addEventListener('click', () => scrollTestimonials(1));
+
+
+        // === INITIALIZATION AND EVENT LISTENERS ===
         document.addEventListener('DOMContentLoaded', function () {
-            const video = document.getElementById('hero-video');
-            const fallbackBg = document.getElementById('fallback-bg');
+            startPopupTimer(); 
+            gsap.registerPlugin(ScrollTrigger);
 
-            // Check if video can play
-            video.addEventListener('error', function () {
-                console.log('Video failed to load, showing fallback image');
-                video.style.display = 'none';
-                fallbackBg.style.display = 'block';
-            });
+            // 1. Initial State Setup 
+            const animElements = document.querySelectorAll('.scroll-animated-element');
+            
+            // Set initial state for all scroll-triggered elements (Fade Up default)
+            gsap.set(animElements, { opacity: 0, y: 30 });
+            
+            // Set initial state for menu links
+            gsap.set(menuLinks, { opacity: 0 }); 
 
-            // Try to play video
-            video.addEventListener('canplay', function () {
-                video.play().catch(function (error) {
-                    console.log('Video autoplay failed:', error);
-                    fallbackBg.style.display = 'block';
+
+            // --- Helper function for quick FadeUp animation ---
+            function createFadeUpTrigger(selector, startOffset = "top 85%", delay = 0) {
+                gsap.to(selector, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.0,
+                    ease: "power2.out",
+                    delay: delay,
+                    scrollTrigger: {
+                        trigger: selector,
+                        start: startOffset,
+                        toggleActions: "play reverse play reverse", 
+                    }
                 });
-            });
+            }
 
-            // Fallback if video doesn't load within 3 seconds
-            setTimeout(function () {
-                if (video.readyState < 3) { // HAVE_FUTURE_DATA
-                    console.log('Video taking too long to load, showing fallback');
-                    video.style.display = 'none';
-                    fallbackBg.style.display = 'block';
-                }
-            }, 3000);
-        });
 
-        // Mobile menu functionality
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
+            // --- HERO SECTION ANIMATION (Runs once on load) ---
+            gsap.from("#hero-title", { opacity: 0, y: -30, duration: 1, delay: 0.5 });
+            gsap.from("#hero-subtitle", { opacity: 0, y: -30, duration: 1, delay: 0.8 });
+            gsap.from("#hero-cta", { opacity: 0, y: 30, duration: 0.8, delay: 1.1 });
 
-        mobileMenuButton.addEventListener('click', function () {
-            mobileMenu.classList.toggle('hidden');
-        });
 
-        // Close mobile menu when clicking on a link
-        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
-        mobileMenuLinks.forEach(link => {
-            link.addEventListener('click', function () {
-                mobileMenu.classList.add('hidden');
-            });
-        });
-
-       
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+            // --- ABOUT SECTION (Split-Screen Slide & Text) ---
+            const aboutTimeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#about",
+                    start: "top 70%",
+                    end: "bottom top",
+                    toggleActions: "play reverse play reverse", 
                 }
             });
+
+            // Explicitly set initial x-positions for the left/right slide
+            gsap.set(".about-text-content", { x: -100, opacity: 0, y: 30 });
+            gsap.set(".about-image-stack", { x: 100, opacity: 0, y: 30 });
+
+
+            aboutTimeline.to(".about-title-block", { opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, 0); 
+            aboutTimeline.to(".about-text-content", { x: 0, opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, 0.2); 
+            aboutTimeline.to(".about-image-stack", { x: 0, opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, 0.2); 
+            
+            // Image stack animation (Subtle parallax on the container)
+            gsap.to(".about-image-stack", {
+                y: 50, 
+                ease: "none",
+                scrollTrigger: {
+                    trigger: "#about",
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: 1, 
+                }
+            });
+
+
+            // --- SERVICES SHOWCASE (Staggered Fade-Up) ---
+            createFadeUpTrigger(".service-showcase-title", "top 85%");
+            gsap.to(".service-card-item", {
+                opacity: 1,
+                y: 0,
+                duration: 1.0,
+                stagger: 0.2,
+                scrollTrigger: { 
+                    trigger: ".service-cards-container", 
+                    start: "top 80%", 
+                    toggleActions: "play reverse play reverse" 
+                }
+            });
+
+
+            // --- COMMITMENT TO EXCELLENCE (Staggered Fade-Up) ---
+            createFadeUpTrigger(".commitment-title", "top 85%");
+            gsap.to(".commitment-feature", {
+                opacity: 1,
+                y: 0,
+                duration: 1.0,
+                stagger: 0.2,
+                scrollTrigger: { 
+                    trigger: ".commitment-features-container", 
+                    start: "top 80%", 
+                    toggleActions: "play reverse play reverse" 
+                }
+            });
+            createFadeUpTrigger(".commitment-cta", "bottom 95%");
+
+
+            // --- INTEGRATED OFFERINGS (Staggered Fade-Up) ---
+            createFadeUpTrigger(".offerings-title-block", "top 90%");
+            gsap.to(".offering-card-item", {
+                opacity: 1,
+                y: 0,
+                duration: 1.0,
+                stagger: 0.2,
+                scrollTrigger: { 
+                    trigger: ".offerings-cards-container", 
+                    start: "top 80%", 
+                    toggleActions: "play reverse play reverse" 
+                }
+            });
+            createFadeUpTrigger(".offerings-cta", "bottom 95%");
+
+
+            // --- PORTFOLIO & TESTIMONIALS (Fade Up) ---
+            createFadeUpTrigger(".portfolio-title", "top 85%");
+            createFadeUpTrigger(".portfolio-subtitle", "top 80%");
+            createFadeUpTrigger(".testimonials-title-block", "top 85%");
+            
+            // Stagger Testimonial Cards
+            gsap.to(".testimonial-item", {
+                opacity: 1,
+                y: 0,
+                duration: 1.0,
+                stagger: 0.2,
+                scrollTrigger: { 
+                    trigger: ".testimonial-scroll-track", 
+                    start: "top 85%", 
+                    toggleActions: "play reverse play reverse" 
+                }
+            });
+
+
+            // --- CTA SECTION (Fade Up and Slide) ---
+            createFadeUpTrigger(".cta-title", "top 75%");
+            createFadeUpTrigger(".cta-text", "top 75%", 0.2);
+
+            const ctaButtonsTimeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: ".cta-buttons-container",
+                    start: "top 85%",
+                    toggleActions: "play reverse play reverse",
+                }
+            });
+
+            // Explicitly set x-position for sliding buttons BEFORE the timeline starts
+            gsap.set(".cta-button-left", { x: -50, opacity: 0, y: 30 });
+            gsap.set(".cta-button-right", { x: 50, opacity: 0, y: 30 });
+
+            ctaButtonsTimeline.to(".cta-button-left", { x: 0, opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 0);
+            ctaButtonsTimeline.to(".cta-button-right", { x: 0, opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 0.2);
+
+
+            // Assign menu event listeners
+            if (menuToggle) { menuToggle.addEventListener('click', openOffCanvasMenu); }
+            if (menuClose) { menuClose.addEventListener('click', closeOffCanvasMenu); }
+            if (menuBackdrop) { menuBackdrop.addEventListener('click', closeOffCanvasMenu); }
         });
     </script>
 </body>
