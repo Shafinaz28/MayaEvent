@@ -7,6 +7,11 @@
     <title>Maya Events - Services</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script> 
+    
     <script>
         tailwind.config = {
             theme: {
@@ -22,55 +27,20 @@
     <style>
         .bg-hero {
             /* Note: This image is used for the header. Ensure it has good contrast for the text. */
-            background-image: url('https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg?auto=compress&cs=tinysrgb&w=1260'); 
+            background-image: url('https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg?auto=compress&cs=tinysrgb&w=1260');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            /* Set height to full viewport height for the Hero section */
-            height: 100vh;
+            
+            /* Initial height (60vh) */
+            height: 60vh; 
+            min-height: 400px; 
         }
 
         .bg-cta {
             background-image: url('https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=1260');
             background-size: cover;
             background-position: center;
-        }
-
-        /* Polaroid/Testimonial styles */
-        .polaroid {
-            transform: rotate(2deg);
-            transition: transform 0.3s ease;
-        }
-
-        .polaroid:hover {
-            transform: rotate(0deg);
-        }
-
-        .polaroid:nth-child(2) {
-            transform: rotate(-2deg);
-        }
-
-        .polaroid:nth-child(3) {
-            transform: rotate(2deg);
-        }
-
-        .testimonial-card {
-            display: none;
-        }
-
-        .testimonial-card.active {
-            display: block;
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
         }
 
         /* Custom Hamburger Button Style */
@@ -98,6 +68,11 @@
         #off-canvas-menu.hidden-menu {
             transform: translateX(100%);
         }
+
+        /* GSAP Initial State Class */
+        .scroll-animated-element {
+            opacity: 0;
+        }
     </style>
 </head>
 
@@ -106,7 +81,9 @@
     <header class="fixed top-0 w-full z-50 bg-transparent py-3">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
             <div class="flex items-center">
-                <img src="assets/images/MAYA_LOGO.png" alt="Maya Adfinity Logo" class="h-16 w-auto">
+                <a href="index.html">
+                    <img id="logo-main" src="assets/images/MAYA_LOGO.png" alt="Maya Adfinity Logo" class="h-16 w-auto">
+                </a>
                 <p class="text-sm italic font-light text-black ml-3">Event & Brand Experience</p>
             </div>
 
@@ -131,22 +108,22 @@
         </div>
 
         <nav class="space-y-6 text-xl">
-            <a href="index.html" class="block text-white hover:text-teal-400 transition-colors border-b border-white/10 pb-3">
+            <a href="index.html" class="block text-white hover:text-teal-400 transition-colors border-b border-white/10 pb-3 menu-link">
                 <i class="fas fa-home w-6 mr-3"></i> Home
             </a>
-            <a href="about.html" class="block text-white hover:text-teal-400 transition-colors border-b border-white/10 pb-3">
+            <a href="about.html" class="block text-white hover:text-teal-400 transition-colors border-b border-white/10 pb-3 menu-link">
                 <i class="fas fa-info-circle w-6 mr-3"></i> About
             </a>
-            <a href="services.html" class="block text-white hover:text-teal-400 transition-colors border-b border-white/10 pb-3">
+            <a href="services.html" class="block text-white hover:text-teal-400 transition-colors border-b border-white/10 pb-3 menu-link">
                 <i class="fas fa-briefcase w-6 mr-3"></i> Services
             </a>
-            <a href="gallery.html" class="block text-white hover:text-teal-400 transition-colors border-b border-white/10 pb-3">
+            <a href="gallery.html" class="block text-white hover:text-teal-400 transition-colors border-b border-white/10 pb-3 menu-link">
                 <i class="fas fa-images w-6 mr-3"></i> Gallery
             </a>
-            <a href="testimonials.html" class="block text-white hover:text-teal-400 transition-colors border-b border-white/10 pb-3">
+            <a href="testimonials.html" class="block text-white hover:text-teal-400 transition-colors border-b border-white/10 pb-3 menu-link">
                 <i class="fas fa-comment-alt w-6 mr-3"></i> Testimonials
             </a>
-            <a href="contact.html" class="block text-white hover:text-teal-400 transition-colors">
+            <a href="contact.html" class="block text-white hover:text-teal-400 transition-colors menu-link">
                 <i class="fas fa-envelope w-6 mr-3"></i> Contact
             </a>
         </nav>
@@ -163,17 +140,17 @@
     <div id="menu-backdrop" class="fixed inset-0 bg-black/50 z-40 opacity-0 invisible transition-opacity duration-300"></div>
 
     <main>
-        <section id="home" class="bg-hero min-h-screen relative flex items-center">
-            <div class="absolute inset-0 bg-black/60"></div>
-            <div class="relative max-w-4xl mx-auto px-4 text-center">
-                <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">Comprehensive Event Management Services</h1>
-                <p class="mt-4 text-lg text-gray-200 max-w-2xl mx-auto">
+        <section id="home" class="bg-hero relative flex items-center">
+            <div id="hero-overlay" class="absolute inset-0 bg-black/60"></div>
+            <div id="hero-content" class="relative max-w-4xl mx-auto px-4 text-center py-12">
+                <h1 id="hero-title" class="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">Comprehensive Event Management Services</h1>
+                <p id="hero-text" class="mt-4 text-lg text-gray-200 max-w-2xl mx-auto">
                     Creating extraordinary corporate experiences that inspire, educate, and propel organizations to new
                     heights.
                 </p>
                 <div class="mt-6">
                     <a href="about.html"
-                        class="inline-block px-10 py-5 text-xl md:text-2xl bg-gradient-to-r from-blue-500 to-teal-500 text-white font-semibold rounded-xl shadow-lg hover:scale-105 transition-transform">
+                        class="inline-block px-10 py-5 text-xl md:text-2xl bg-gradient-to-r from-blue-500 to-teal-500 text-white font-semibold rounded-xl shadow-lg hover:scale-105 transition-transform" id="hero-button">
                         Turn Your Idea Into Reality
                     </a>
                 </div>
@@ -182,19 +159,19 @@
 
         <section id="services-cards"
             class="min-h-screen flex flex-col justify-center items-center bg-gray-850 text-white py-20">
-            <div class="max-w-7xl px-4 sm:px-6 lg:px-8 text-center mb-12">
-                <h2 class="text-5xl md:text-6xl font-bold mb-6">
+            <div id="card-header" class="max-w-7xl px-4 sm:px-6 lg:px-8 text-center mb-12">
+                <h2 class="text-5xl md:text-6xl font-bold mb-6 scroll-animated-element">
                     Endless Expertise.<br>
                     Limitless Experiences.
                 </h2>
-                <p class="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto">
+                <p class="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto scroll-animated-element">
                     Crafting every detail with precision. Transforming ideas into unforgettable moments. Your vision is our
                     canvas, and we bring it to life with flair and finesse.
                 </p>
             </div>
 
-            <div class="max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-                <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+            <div id="service-cards-container" class="max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                <div class="service-card bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow scroll-animated-element">
                     <i class="fas fa-briefcase text-5xl text-blue-500 mb-4"></i>
                     <h3 class="text-2xl font-semibold mb-2">Business Events</h3>
                     <p class="text-gray-400">Professional business events planning and execution with attention to every
@@ -203,7 +180,7 @@
                         Services</a>
                 </div>
 
-                <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+                <div class="service-card bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow scroll-animated-element">
                     <i class="fas fa-birthday-cake text-5xl text-pink-500 mb-4"></i>
                     <h3 class="text-2xl font-semibold mb-2">Celebrations</h3>
                     <p class="text-gray-400">Professional celebrations galore planning and execution with attention to every
@@ -211,7 +188,7 @@
                     <a href="#Celebrations-Galore" class="mt-4 inline-block text-blue-400 hover:underline">Explore
                         Services</a>
                 </div>
-                <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+                <div class="service-card bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow scroll-animated-element">
                     <i class="fas fa-rocket text-5xl text-yellow-400 mb-4"></i>
                     <h3 class="text-2xl font-semibold mb-2">Launches</h3>
                     <p class="text-gray-400">Professional launches planning and execution with attention to every detail.
@@ -219,14 +196,14 @@
                     <a href="#service-launches" class="mt-4 inline-block text-blue-400 hover:underline">Explore
                         Services</a>
                 </div>
-                <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+                <div class="service-card bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow scroll-animated-element">
                     <i class="fas fa-video text-5xl text-green-500 mb-4"></i>
                     <h3 class="text-2xl font-semibold mb-2">Hybrid Events</h3>
                     <p class="text-gray-400">Professional planning and execution with attention to every detail.</p>
                     <a href="#service-hybrid" class="mt-4 inline-block text-blue-400 hover:underline">Explore
                         Services</a>
                 </div>
-                <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+                <div class="service-card bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow scroll-animated-element">
                     <i class="fas fa-users text-5xl text-purple-500 mb-4"></i>
                     <h3 class="text-2xl font-semibold mb-2">Industry Conventions</h3>
                     <p class="text-gray-400">Professional industry conventions planning and execution with attention to
@@ -234,7 +211,7 @@
                     <a href="#service-industry" class="mt-4 inline-block text-blue-400 hover:underline">Explore
                         Services</a>
                 </div>
-                <div class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow">
+                <div class="service-card bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-2xl transition-shadow scroll-animated-element">
                     <i class="fas fa-gem text-5xl text-orange-500 mb-4"></i>
                     <h3 class="text-2xl font-semibold mb-2">Special Projects</h3>
                     <p class="text-gray-400">Professional special projects planning and execution with attention to every
@@ -249,16 +226,16 @@
         <section id="services-details" class="bg-gray-900 text-white py-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-28">
 
-                <div class="text-center mb-16">
-                    <h2 class="text-5xl font-extrabold text-white">Our Comprehensive Services</h2>
-                    <p class="mt-4 text-xl text-gray-400">From concept to execution, we craft every event to be a
+                <div id="details-header" class="text-center mb-16">
+                    <h2 class="text-5xl font-extrabold text-white scroll-animated-element">Our Comprehensive Services</h2>
+                    <p class="mt-4 text-xl text-gray-400 scroll-animated-element">From concept to execution, we craft every event to be a
                         masterpiece of precision and purpose.</p>
                 </div>
 
-                <div id="service-business-events" class="flex flex-col md:flex-row items-center gap-12 group">
+                <div id="service-business-events" class="service-detail-item flex flex-col md:flex-row items-center gap-12 group">
                     <img src="./assets/images/EVENTSCONSULTINGSOULUTIONS.jpg" alt="Business leaders at a conference"
-                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
-                    <div class="md:w-1/2">
+                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105 scroll-animated-img">
+                    <div class="md:w-1/2 scroll-animated-content">
                         <h3 class="text-4xl font-bold mb-4">EVENTS CONSULTING & SOLUTIONS
                         </h3>
                         <p class="text-gray-300 mb-6">At Maya Adfinity, we stand out by offering expert consultations built
@@ -278,10 +255,10 @@
                     </div>
                 </div>
 
-                <div id="Celebrations-Galore" class="flex flex-col md:flex-row-reverse items-center gap-12 group">
+                <div id="Celebrations-Galore" class="service-detail-item flex flex-col md:flex-row-reverse items-center gap-12 group">
                     <img src="./services/Celebrations.jpg" alt="A vibrant party celebration"
-                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
-                    <div class="md:w-1/2">
+                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105 scroll-animated-img">
+                    <div class="md:w-1/2 scroll-animated-content">
                         <h3 class="text-4xl font-bold mb-4">ENTERTAINMENT MANAGEMENT</h3>
                         <p class="text-gray-300 mb-6">At Maya Adfinity, we specialize in creating unforgettable
                             entertainment experiences that engage, inspire, and delight audiences. From concept development
@@ -303,11 +280,11 @@
                     </div>
                 </div>
 
-                <div id="service-launches" class="flex flex-col md:flex-row items-center gap-12 group">
+                <div id="service-launches" class="service-detail-item flex flex-col md:flex-row items-center gap-12 group">
                     <img src="./assets/images/people-taking-part-high-protocol-event.jpg"
                         alt="A product being unveiled on a stage"
-                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
-                    <div class="md:w-1/2">
+                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105 scroll-animated-img">
+                    <div class="md:w-1/2 scroll-animated-content">
                         <h3 class="text-4xl font-bold mb-4">MEETINGS & CONFERENCE PLANNING</h3>
                         <p class="text-gray-300 mb-6">At Maya Adfinity, we rely on our accumulated experience in organizing
                             conferences and meetings to fully meet our clients' needs. Our team has managed hundreds of
@@ -328,10 +305,10 @@
                     </div>
                 </div>
 
-                <div id="service-hybrid" class="flex flex-col md:flex-row-reverse items-center gap-12 group">
+                <div id="service-hybrid" class="service-detail-item flex flex-col md:flex-row-reverse items-center gap-12 group">
                     <img src="./services/Hybrid-Events.jpg" alt="People in a meeting with a large screen"
-                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
-                    <div class="md:w-1/2">
+                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105 scroll-animated-img">
+                    <div class="md:w-1/2 scroll-animated-content">
                         <h3 class="text-4xl font-bold mb-4">ORGANIZING EXHIBITION & BOOTHS</h3>
                         <p class="text-gray-300 mb-6">At Maya Adfinity, we believe we have what it takes to excel in the
                             field of exhibitions and pavilions. Our strength lies in delivering the highest standards of
@@ -353,10 +330,10 @@
                     </div>
                 </div>
 
-                <div id="service-industry" class="flex flex-col md:flex-row items-center gap-12 group">
+                <div id="service-industry" class="service-detail-item flex flex-col md:flex-row items-center gap-12 group">
                     <img src="./services/Industry-Conventions.jpg" alt="A large convention hall with attendees"
-                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
-                    <div class="md:w-1/2">
+                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105 scroll-animated-img">
+                    <div class="md:w-1/2 scroll-animated-content">
                         <h3 class="text-4xl font-bold mb-4">INTERNAL COMMUNICATION PROGRAM</h3>
                         <p class="text-gray-300 mb-6">At Maya Adfinity, we help companies and organizations achieve their
                             goals by creating engaging and motivational environments that boost employee productivity. We
@@ -378,10 +355,10 @@
                     </div>
                 </div>
 
-                <div id="service-special" class="flex flex-col md:flex-row-reverse items-center gap-12 group">
+                <div id="service-special" class="service-detail-item flex flex-col md:flex-row-reverse items-center gap-12 group">
                     <img src="./services/banquet.jpg" alt="A banquet hall set up for a gala"
-                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105">
-                    <div class="md:w-1/2">
+                        class="rounded-xl w-full md:w-1/2 shadow-2xl transform transition-transform duration-500 group-hover:scale-105 scroll-animated-img">
+                    <div class="md:w-1/2 scroll-animated-content">
                         <h3 class="text-4xl font-bold mb-4">Special Projects & One-of-a-Kind Events</h3>
                         <p class="text-gray-300 mb-6">Some visions are so unique they require a completely custom approach.
                             Our Special Projects team thrives on these challenges, providing tailored solutions for
@@ -401,21 +378,21 @@
             </div>
         </section>
 
-        <section class="py-20 relative bg-cta">
+        <section id="cta-section" class="py-20 relative bg-cta">
             <div class="absolute inset-0 bg-gray-900/80"></div>
             <div class="relative z-10 max-w-4xl mx-auto text-center px-4">
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">Let's Make Your Next Event Exceptional</h2>
-                <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 scroll-animated-element cta-title">Let's Make Your Next Event Exceptional</h2>
+                <p class="text-xl text-gray-300 mb-8 scroll-animated-element cta-text">
                     Partner with us to create memorable experiences that will leave lasting impressions on your guests and
                     exceed your expectations.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                     <a onclick="openModal()"
-                        class="cursor-pointer bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white px-8 py-3 rounded-lg transition-all font-medium text-center">
+                        class="cursor-pointer bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white px-8 py-3 rounded-lg transition-all font-medium text-center scroll-animated-element cta-button-left">
                         Plan your Event
                     </a>
                     <a href="contact.html"
-                        class="border border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-3 rounded-lg transition-all font-medium text-center">
+                        class="border border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-3 rounded-lg transition-all font-medium text-center scroll-animated-element cta-button-right">
                         Contact us
                     </a>
                 </div>
@@ -427,7 +404,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <img src="assets/images/MAYA_LOGO.png" alt="Maya Events Logo" class="h-12 w-auto mb-4">
+                    <a href="index.html">
+                        <img id="logo-footer" src="assets/images/MAYA_LOGO.png" alt="Maya Events Logo" class="h-12 w-auto mb-4">
+                    </a>
                     <p class="text-gray-400 mb-4">Creating Memorable Events in Bangalore</p>
                     <p class="text-gray-400 text-sm">
                         Your premier destination for exceptional event planning and unforgettable experiences across
@@ -486,7 +465,7 @@
             </div>
         </div>
     </footer>
-    <div id="contact-modal"
+    <!-- <div id="contact-modal"
         class="modal fixed inset-0 z-[100] bg-gray-900/70 backdrop-blur-md flex items-center justify-center opacity-0 invisible transition-opacity duration-300 ease-out"
         onclick="closeModal(event)">
 
@@ -556,28 +535,26 @@
                 class="absolute inset-0 rounded-xl pointer-events-none border border-transparent [mask-image:linear-gradient(white,transparent)] bg-gradient-to-r from-blue-500 via-teal-400 to-indigo-600 opacity-20">
             </div>
         </div>
-    </div>
+    </div> -->
 
     <script>
+        // GSAP Registration
+        gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+        // === MODAL & MENU LOGIC ===
         const modal = document.getElementById('contact-modal');
         let popupTimer;
 
-        // === MODAL POPUP AND TIMER LOGIC ===
         function openModal() {
             modal.classList.remove('invisible', 'opacity-0');
             modal.classList.add('visible', 'opacity-100');
             modal.querySelector('div').classList.replace('scale-95', 'scale-100');
             document.body.style.overflow = 'hidden';
             clearInterval(popupTimer);
-            // Ensure off-canvas menu is closed if modal is opened
-            const menu = document.getElementById('off-canvas-menu');
-            if (menu && !menu.classList.contains('hidden-menu')) {
-                closeOffCanvasMenu();
-            }
+            closeOffCanvasMenu();
         }
 
         function closeModal(event) {
-            // Check if click is outside modal content (or escape key logic handles it)
             if (event && event.target !== modal && event.target.closest('.modal > div')) return;
 
             modal.classList.remove('visible', 'opacity-100');
@@ -592,69 +569,264 @@
             popupTimer = setInterval(openModal, 20000);
         }
 
-        // === OFF-CANVAS MENU LOGIC ===
         const menu = document.getElementById('off-canvas-menu');
         const menuToggle = document.getElementById('menu-toggle-button');
         const menuClose = document.getElementById('menu-close-button');
         const menuBackdrop = document.getElementById('menu-backdrop');
+        const menuLinks = document.querySelectorAll('#off-canvas-menu a'); 
+        
+        const menuTimeline = gsap.timeline({ paused: true });
+
+        menuTimeline.from(menuLinks, { 
+            x: 50, 
+            opacity: 0, 
+            duration: 0.6, 
+            ease: "power1.out", 
+            stagger: 0.15 
+        });
 
         function openOffCanvasMenu() {
             if (!menu || !menuBackdrop) return;
-            menu.classList.remove('hidden-menu'); // Slides into view
+            menu.classList.remove('hidden-menu');
             menuBackdrop.classList.remove('opacity-0', 'invisible');
             menuBackdrop.classList.add('opacity-100', 'visible');
             document.body.style.overflow = 'hidden';
+            menuTimeline.timeScale(1).play(0); 
         }
 
         function closeOffCanvasMenu() {
             if (!menu || !menuBackdrop) return;
-            menu.classList.add('hidden-menu'); // Slides out
-            menuBackdrop.classList.remove('opacity-100', 'visible');
-            menuBackdrop.classList.add('opacity-0', 'invisible');
-            // Only restore scrolling if the modal is not open
-            if (modal.classList.contains('invisible')) {
-                document.body.style.overflow = '';
-            }
+            menuTimeline.timeScale(1.5).reverse(0.4).then(() => {
+                menu.classList.add('hidden-menu');
+                menuBackdrop.classList.remove('opacity-100', 'visible');
+                menuBackdrop.classList.add('opacity-0', 'invisible');
+                
+                const modalIsHidden = modal ? modal.classList.contains('invisible') : true;
+
+                if (modalIsHidden) {
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+        
+        menuToggle.addEventListener('click', openOffCanvasMenu);
+        menuClose.addEventListener('click', closeOffCanvasMenu);
+        menuBackdrop.addEventListener('click', closeOffCanvasMenu);
+
+
+        // === GSAP SCROLL ANIMATION LOGIC ===
+        function initGSAPAnimations() {
+            
+            // 0. Initial State Setup & Classes
+            // Use this selector to exclude hero content which is animated on load
+            const scrollAnimatedElements = document.querySelectorAll('.scroll-animated-element');
+            const serviceCards = document.querySelectorAll('.service-card');
+            
+            // Set initial state for non-hero scroll-triggered elements (fade in from bottom)
+            gsap.set(scrollAnimatedElements, { opacity: 0, y: 30 });
+            
+            // Set initial state for the service cards to be animated later via stagger
+            gsap.set(serviceCards, { opacity: 0, y: 50 }); 
+            
+            // Set initial state for the detail images/content for directional slide
+            gsap.utils.toArray(".service-detail-item").forEach(item => {
+                const isReversed = item.classList.contains('md:flex-row-reverse');
+                const img = item.querySelector('.scroll-animated-img');
+                const content = item.querySelector('.scroll-animated-content');
+                
+                // Image starts from its own side (Left for default, Right for reversed)
+                gsap.set(img, { x: isReversed ? 100 : -100, opacity: 0, scale: 0.9 });
+                // Content starts from the opposite side
+                gsap.set(content, { x: isReversed ? -100 : 100, opacity: 0 }); 
+            });
+
+
+            // 1. Initial Load Animation (Hero Section - Controls by gsap.from)
+            gsap.from("#hero-content > *", {
+                opacity: 0,
+                y: 50,
+                stagger: 0.2,
+                duration: 1,
+                delay: 0.3,
+                ease: "power3.out"
+            });
+            
+            // 1B. Hero Section Scroll Shrink Animation (Reduced height)
+            gsap.to("#home", {
+                height: "30vh", 
+                ease: "none",
+                scrollTrigger: {
+                    trigger: "#home",
+                    start: "top top", 
+                    end: "bottom top", 
+                    scrub: true,
+                }
+            });
+
+            // Optional: Animate the opacity of the content when shrinking
+            gsap.to("#hero-content", {
+                scale: 0.95,
+                opacity: 0.7,
+                y: -50,
+                duration: 1,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: "#home",
+                    start: "top top",
+                    end: "bottom top",
+                    scrub: true,
+                }
+            });
+
+
+            // 2. Service Cards Section Header Animation (Re-triggering)
+            gsap.to("#card-header h2, #card-header p", {
+                y: 0,
+                opacity: 1,
+                duration: 1.0,
+                ease: "power2.out",
+                stagger: 0.2,
+                scrollTrigger: {
+                    trigger: "#card-header",
+                    start: "top 85%", 
+                    toggleActions: "play reverse play reverse", // Re-trigger on scroll up/down
+                }
+            });
+
+            // 3. Service Cards Staggered Animation (Re-triggering)
+            gsap.to(".service-card", {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: "back.out(1.7)",
+                scrollTrigger: {
+                    trigger: "#service-cards-container",
+                    start: "top 80%",
+                    toggleActions: "play reverse play reverse", // Re-trigger on scroll up/down
+                }
+            });
+
+            // 4. Service Details Section Header Animation (Re-triggering)
+            gsap.to("#details-header h2, #details-header p", {
+                y: 0,
+                opacity: 1,
+                duration: 1.0,
+                ease: "power2.out",
+                stagger: 0.2,
+                scrollTrigger: {
+                    trigger: "#details-header",
+                    start: "top 85%",
+                    toggleActions: "play reverse play reverse",
+                }
+            });
+
+            // 5. Service Detail Items Animation (Directional Slides + Re-triggering)
+            gsap.utils.toArray(".service-detail-item").forEach((item, i) => {
+                const isReversed = item.classList.contains('md:flex-row-reverse');
+                const image = item.querySelector('.scroll-animated-img');
+                const content = item.querySelector('.scroll-animated-content');
+                
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: item,
+                        start: "top 75%",
+                        // Re-trigger on scroll up/down
+                        toggleActions: "play reverse play reverse", 
+                    }
+                });
+
+                // Animation 1: Image slides in to final position (x: 0, opacity: 1, scale: 1)
+                tl.to(image, {
+                    x: 0, 
+                    opacity: 1,
+                    scale: 1,
+                    duration: 1.2,
+                    ease: "power2.out",
+                }, 0); 
+
+                // Animation 2: Content slides in to final position (x: 0, opacity: 1)
+                tl.to(content, { 
+                    x: 0, 
+                    opacity: 1,
+                    duration: 1.2,
+                    ease: "power2.out",
+                }, 0.3); // Starts slightly after image starts
+            });
+
+            // 6. Call to Action (CTA) Section Animation (Re-triggering)
+            gsap.to(".cta-title, .cta-text", {
+                y: 0,
+                opacity: 1,
+                duration: 1.0,
+                ease: "power2.out",
+                stagger: 0.3,
+                scrollTrigger: {
+                    trigger: ".bg-cta",
+                    start: "top 75%",
+                    toggleActions: "play reverse play reverse",
+                }
+            });
+
+            const ctaButtonsTimeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: ".bg-cta .flex-col",
+                    start: "top 85%",
+                    toggleActions: "play reverse play reverse",
+                }
+            });
+
+            // Animate buttons from outside (x: -50 and x: 50) to x: 0
+            ctaButtonsTimeline.to(".cta-button-left", { x: 0, opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 0);
+            ctaButtonsTimeline.to(".cta-button-right", { x: 0, opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 0.2);
+
+
+            // 7. Looping Animation (Logo Subtle Pulse/Rotate)
+            gsap.to(["#logo-main", "#logo-footer"], {
+                rotation: 1,
+                scale: 1.01,
+                duration: 3,
+                ease: "sine.inOut",
+                repeat: -1,
+                yoyo: true
+            });
         }
 
-        // === INITIALIZATION AND EVENT LISTENERS ===
+
         document.addEventListener('DOMContentLoaded', function () {
+            // Initialize GSAP animations
+            initGSAPAnimations();
+
             // Initial call to start popup timer
             startPopupTimer();
 
-            // Modal listeners
-            modal.addEventListener('click', (e) => e.target === modal && closeModal());
+            // Modal listeners (ensure modal element exists before adding listeners)
+            if (modal) {
+                modal.addEventListener('click', (e) => e.target === modal && closeModal());
+            }
+
             document.addEventListener('keydown', e => {
                 if (e.key === 'Escape') {
-                    if (modal.classList.contains('visible')) closeModal();
+                    if (modal && modal.classList.contains('visible')) closeModal();
                     if (menu && !menu.classList.contains('hidden-menu')) closeOffCanvasMenu();
                 }
             });
 
-            // Off-Canvas Menu Listeners
-            if (menuToggle) {
-                menuToggle.addEventListener('click', openOffCanvasMenu);
-            }
-            if (menuClose) {
-                menuClose.addEventListener('click', closeOffCanvasMenu);
-            }
-            if (menuBackdrop) {
-                menuBackdrop.addEventListener('click', closeOffCanvasMenu);
-            }
-            // Close menu when a navigation link is clicked
-            document.querySelectorAll('#off-canvas-menu a').forEach(link => {
-                link.addEventListener('click', closeOffCanvasMenu);
-            });
-
-            // Smooth scrolling for anchor links 
+            // Smooth scrolling for anchor links (using GSAP ScrollToPlugin)
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        gsap.to(window, {
+                            duration: 1,
+                            scrollTo: {
+                                y: targetId,
+                                offsetY: 80 // Offset for the fixed header
+                            },
+                            ease: "power2.inOut"
                         });
                     }
                 });
