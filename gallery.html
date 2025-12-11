@@ -7,6 +7,11 @@
     <title>Maya Events - Gallery</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script> 
+    
     <script>
         tailwind.config = {
             theme: {
@@ -24,16 +29,19 @@
     </script>
     <style>
         .bg-hero {
-            /* Note: Ensure this image has dark contrast at the top left, or the header text will be hard to read. */
+            /* NOTE: Using original local file path */
             background-image: url('./services/bgwrkimg.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            /* Set height to full viewport height for the Hero section */
-            height: 100vh;
+            
+            /* MODIFIED: Reduced height to 60vh */
+            height: 60vh; 
+            min-height: 400px; /* Ensures minimum visibility */
         }
 
         .bg-cta {
+            /* NOTE: Using original local file path */
             background-image: url('./services/bgwrkimg.jpg');
             background-size: cover;
             background-position: center;
@@ -41,19 +49,19 @@
 
         /* NEW/UPDATED: Category Button Styling */
         .category-button {
-    transition: 0.3s ease;
-}
+            transition: 0.3s ease;
+        }
 
-.category-button:hover {
-    border-color: #e63946;
-    color: #e63946;
-}
+        .category-button:hover {
+            border-color: #e63946;
+            color: #e63946;
+        }
 
-.category-button.active {
-    background-color: #e63946;
-    color: white;
-    border-color: #e63946;
-}
+        .category-button.active {
+            background-color: #e63946;
+            color: white;
+            border-color: #e63946;
+        }
 
         /* NEW: Image Grid Styling for attractive hover */
         .gallery-thumbnail {
@@ -66,6 +74,8 @@
             aspect-ratio: 4/3;
             /* Maintain aspect ratio */
             display: block; /* Default visibility */
+            max-height: 500px; /* Max height when visible */
+            width: 100%;
         }
 
         .gallery-thumbnail.hidden {
@@ -83,6 +93,12 @@
             height: 100%;
             object-fit: cover;
             transition: transform 0.5s ease;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .gallery-thumbnail:hover img {
@@ -112,7 +128,7 @@
             max-width: 90vw;
             max-height: 90vh;
             border-radius: 1rem;
-            background-color: white;
+            background-color: #0f172a;
             box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
             position: relative;
         }
@@ -152,6 +168,11 @@
         #off-canvas-menu.hidden-menu {
             transform: translateX(100%);
         }
+
+        /* GSAP Initial State Class */
+        .scroll-animated-element {
+            opacity: 0;
+        }
     </style>
 </head>
 
@@ -160,7 +181,9 @@
     <header class="fixed top-0 w-full z-50 bg-transparent py-3">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
             <div class="flex items-center">
-                <img src="assets/images/MAYA_LOGO.png" alt="Maya Adfinity Logo" class="h-16 w-auto">
+                <a href="index.html">
+                    <img id="logo-main" src="assets/images/MAYA_LOGO.png" alt="Maya Adfinity Logo" class="h-16 w-auto">
+                </a>
             </div>
 
             <div>
@@ -184,29 +207,29 @@
         </div>
 
         <nav class="space-y-6 text-xl">
-            <a href="index.html" class="block text-white hover:text-maya-teal transition-colors border-b border-white/10 pb-3">
+            <a href="index.html" class="block text-white hover:text-maya-teal transition-colors border-b border-white/10 pb-3 menu-link">
                 <i class="fas fa-home w-6 mr-3"></i> Home
             </a>
-            <a href="about.html" class="block text-white hover:text-maya-teal transition-colors border-b border-white/10 pb-3">
+            <a href="about.html" class="block text-white hover:text-maya-teal transition-colors border-b border-white/10 pb-3 menu-link">
                 <i class="fas fa-info-circle w-6 mr-3"></i> About
             </a>
-            <a href="services.html" class="block text-white hover:text-maya-teal transition-colors border-b border-white/10 pb-3">
+            <a href="services.html" class="block text-white hover:text-maya-teal transition-colors border-b border-white/10 pb-3 menu-link">
                 <i class="fas fa-briefcase w-6 mr-3"></i> Services
             </a>
-            <a href="gallery.html" class="block text-white hover:text-maya-teal transition-colors border-b border-white/10 pb-3">
+            <a href="gallery.html" class="block text-white hover:text-maya-teal transition-colors border-b border-white/10 pb-3 menu-link">
                 <i class="fas fa-images w-6 mr-3"></i> Gallery
             </a>
-            <a href="testimonials.html" class="block text-white hover:text-maya-teal transition-colors border-b border-white/10 pb-3">
+            <a href="testimonials.html" class="block text-white hover:text-maya-teal transition-colors border-b border-white/10 pb-3 menu-link">
                 <i class="fas fa-comment-alt w-6 mr-3"></i> Testimonials
             </a>
-            <a href="contact.html" class="block text-white hover:text-maya-teal transition-colors">
+            <a href="contact.html" class="block text-white hover:text-maya-teal transition-colors menu-link">
                 <i class="fas fa-envelope w-6 mr-3"></i> Contact
             </a>
         </nav>
 
         <div class="mt-12 pt-6 border-t border-white/10">
             <h4 class="text-lg font-semibold mb-3 text-maya-blue">Request a Quote</h4>
-            <a onclick="openModal()"
+            <a href="contact.html"
                 class="cursor-pointer w-full inline-block text-center px-6 py-3 text-white bg-gradient-to-r from-blue-600 to-teal-600 rounded-lg transition-all hover:opacity-90">
                 Plan Your Event
             </a>
@@ -217,16 +240,16 @@
 
 
     <main>
-        <section id="home" class="bg-hero min-h-screen relative flex items-center">
+        <section id="home" class="bg-hero relative flex items-center justify-center">
             <div class="absolute inset-0 bg-black/60"></div>
-            <div class="relative max-w-4xl mx-auto px-4 text-center">
+            <div id="hero-content" class="relative max-w-4xl mx-auto px-4 text-center py-8">
                 <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">Through Our Work</h1>
                 <p class="mt-4 text-lg text-gray-200 max-w-2xl mx-auto">
                     From corporate gatherings to grand celebrations, we capture every special moment and bring your
                     vision to life.
                 </p>
                 <div class="mt-6">
-                    <a onclick="openModal()"
+                    <a href="contact.html"
                         class="cursor-pointer inline-block bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white text-lg font-semibold py-3 px-8 rounded-full transition-all transform hover:scale-105">
                         Get a Free Quote
                     </a>
@@ -236,99 +259,87 @@
         
         <section id="gallery-grid" class="py-20 bg-gray-850">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="text-4xl font-bold mt-2 mb-10 text-maya-teal">
+                <h2 id="gallery-title" class="text-4xl font-bold mt-2 mb-10 text-maya-teal scroll-animated-element">
                     Event Highlights & Experiences
                 </h2>
                 
-                <div id="category-filters" class="flex flex-wrap justify-center gap-4 mb-12">
-    <button class="category-button active border border-gray-300 px-4 py-2 rounded-lg" data-filter="all">All Events</button>
-    <button class="category-button border border-gray-300 px-4 py-2 rounded-lg" data-filter="corporate">Corporate & Conferences</button>
-    <button class="category-button border border-gray-300 px-4 py-2 rounded-lg" data-filter="celebration">Promotions and Launches</button>
-    <button class="category-button border border-gray-300 px-4 py-2 rounded-lg" data-filter="technical">Stage & Technical</button>
-    <button class="category-button border border-gray-300 px-4 py-2 rounded-lg" data-filter="other">Office Flower Decoration </button>
-</div>
+                <div id="category-filters" class="flex flex-wrap justify-center gap-4 mb-12 text-sm md:text-base scroll-animated-element">
+                    <button class="category-button active border border-gray-300 px-4 py-2 rounded-full" data-filter="all">All Events</button>
+                    <button class="category-button border border-gray-300 px-4 py-2 rounded-full" data-filter="corporate">Corporate & Conferences</button>
+                    <button class="category-button border border-gray-300 px-4 py-2 rounded-full" data-filter="celebration">Promotions and Launches</button>
+                    <button class="category-button border border-gray-300 px-4 py-2 rounded-full" data-filter="technical">Stage & Technical</button>
+                    <button class="category-button border border-gray-300 px-4 py-2 rounded-full" data-filter="other">Office Decoration</button>
+                </div>
 
                 
                 <div id="gallery-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     
-                    <div class="gallery-thumbnail" onclick="openLightbox(this)" data-category="corporate">
-                        <img src="./services/1img.jpg" alt="Corporate event setup" data-event-name="" />
-                        
+                    <div class="gallery-thumbnail scroll-animated-element" onclick="openLightbox(this)" data-category="corporate" data-max-height="500">
+                        <img src="./services/1img.jpg" alt="" data-event-name="" />
                     </div>
                     
-                    <div class="gallery-thumbnail" onclick="openLightbox(this)" data-category="celebration">
-                        <img src="./services/img2.jpg" alt="Wedding ceremony" data-event-name="" />
-                        
+                    <div class="gallery-thumbnail scroll-animated-element" onclick="openLightbox(this)" data-category="celebration" data-max-height="500">
+                        <img src="./services/img2.jpg" alt="" data-event-name="" />
                     </div>
                     
-                    <div class="gallery-thumbnail" onclick="openLightbox(this)" data-category="technical">
-                        <img src="./services/img3.jpg" alt="Music concert stage" data-event-name="" />
-                        
+                    <div class="gallery-thumbnail scroll-animated-element" onclick="openLightbox(this)" data-category="technical" data-max-height="500">
+                        <img src="./services/img3.jpg" alt="" data-event-name="" />
                     </div>
                     
-                    <div class="gallery-thumbnail" onclick="openLightbox(this)" data-category="corporate">
-                        <img src="./services/img4.jpg" alt="Business meeting" data-event-name="" />
-                        
+                    <div class="gallery-thumbnail scroll-animated-element" onclick="openLightbox(this)" data-category="corporate" data-max-height="500">
+                        <img src="./services/img4.jpg" alt="" data-event-name="" />
                     </div>
 
-                    <div class="gallery-thumbnail" onclick="openLightbox(this)" data-category="corporate">
-                        <img src="./services/img5.jpg" alt="Hybrid Event Studio" data-event-name="" />
-                        
+                    <div class="gallery-thumbnail scroll-animated-element" onclick="openLightbox(this)" data-category="corporate" data-max-height="500">
+                        <img src="./services/img5.jpg" alt="" data-event-name="" />
                     </div>
 
-                    <div class="gallery-thumbnail" onclick="openLightbox(this)" data-category="celebration">
-                        <img src="./services/img6.jpg" alt="Outdoor Celebration" data-event-name="" />
-                        
+                    <div class="gallery-thumbnail scroll-animated-element" onclick="openLightbox(this)" data-category="celebration" data-max-height="500">
+                        <img src="./services/img6.jpg" alt="" data-event-name="" />
                     </div>
                     
-                    <div class="gallery-thumbnail" onclick="openLightbox(this)" data-category="celebration">
-                        <img src="./services/img7.jpg" alt="Banquet Hall Setup" data-event-name="" />
-                        
+                    <div class="gallery-thumbnail scroll-animated-element" onclick="openLightbox(this)" data-category="celebration" data-max-height="500">
+                        <img src="./services/img7.jpg" alt="" data-event-name="" />
                     </div>
                     
-                    <div class="gallery-thumbnail" onclick="openLightbox(this)" data-category="celebration">
-                        <img src="./services/img8.jpg" alt="Birthday party" data-event-name="" />
-                        
+                    <div class="gallery-thumbnail scroll-animated-element" onclick="openLightbox(this)" data-category="celebration" data-max-height="500">
+                        <img src="./services/img8.jpg" alt="" data-event-name="" />
                     </div>
                     
-                    <div class="gallery-thumbnail" onclick="openLightbox(this)" data-category="celebration">
-                        <img src="./services/img9.jpg" alt="Outdoor ceremony" data-event-name="" />
-                        
+                    <div class="gallery-thumbnail scroll-animated-element" onclick="openLightbox(this)" data-category="celebration" data-max-height="500">
+                        <img src="./services/img9.jpg" alt="Outdoor ceremony" data-event-name="Exclusive Outdoor Ceremony" />
                     </div>
                     
-                    <div class="gallery-thumbnail" onclick="openLightbox(this)" data-category="other">
-                        <img src="./services/img12.jpg" alt="Exhibition Booth" data-event-name="Custom Exhibition Booth" />
-                        
+                    <div class="gallery-thumbnail scroll-animated-element" onclick="openLightbox(this)" data-category="other" data-max-height="500">
+                        <img src="./services/img12.jpg" alt="" data-event-name="" />
                     </div>
                     
-                    <div class="gallery-thumbnail" onclick="openLightbox(this)" data-category="technical">
-                        <img src="./services/img11.jpg" alt="Fashion Show Runway" data-event-name="Fashion Show Runway" />
-                        
+                    <div class="gallery-thumbnail scroll-animated-element" onclick="openLightbox(this)" data-category="technical" data-max-height="500">
+                        <img src="./services/img11.jpg" alt="" data-event-name="" />
                     </div>
                     
-                    <div class="gallery-thumbnail" onclick="openLightbox(this)" data-category="technical">
-                        <img src="./services/img10.jpg" alt="Lighting Rigging" data-event-name="Stage Lighting Rigging" />
-                        
+                    <div class="gallery-thumbnail scroll-animated-element" onclick="openLightbox(this)" data-category="technical" data-max-height="500">
+                        <img src="./services/img10.jpg" alt="" data-event-name="" />
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="py-20 relative bg-cta">
+        <section id="cta-section" class="py-20 relative bg-cta">
             <div class="absolute inset-0 bg-gray-900/80"></div>
             <div class="relative z-10 max-w-4xl mx-auto text-center px-4">
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">Let's Make Your Next Event Exceptional</h2>
-                <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 scroll-animated-element cta-title">Let's Make Your Next Event Exceptional</h2>
+                <p class="text-xl text-gray-300 mb-8 scroll-animated-element cta-text">
                     Partner with us to create memorable experiences that will leave lasting impressions on your guests and
                     exceed your expectations.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a onclick="openModal()"
-                        class="cursor-pointer bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white px-8 py-3 rounded-lg transition-all font-medium text-center">
+                    <a href="contact.html"
+                        class="cursor-pointer bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white px-8 py-3 rounded-lg transition-all font-medium text-center scroll-animated-element cta-button-left">
                         Plan your Event
                     </a>
                     <a href="contact.html"
-                        class="border border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-3 rounded-lg transition-all font-medium text-center">
+                        class="border border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-3 rounded-lg transition-all font-medium text-center scroll-animated-element cta-button-right">
                         Contact us
                     </a>
                 </div>
@@ -340,7 +351,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <img src="assets/images/MAYA_LOGO.png" alt="Maya Events Logo" class="h-12 w-auto mb-4">
+                    <a href="index.html">
+                        <img id="logo-footer" src="assets/images/MAYA_LOGO.png" alt="Maya Events Logo" class="h-12 w-auto mb-4">
+                    </a>
                     <p class="text-gray-400 mb-4">Creating Memorable Events in Bangalore</p>
                     <p class="text-gray-400 text-sm">
                         Your premier destination for exceptional event planning and unforgettable experiences across
@@ -400,77 +413,6 @@
         </div>
     </footer>
     
-    <div id="contact-modal"
-        class="modal fixed inset-0 z-[100] bg-gray-900/70 backdrop-blur-md flex items-center justify-center opacity-0 invisible transition-opacity duration-300 ease-out"
-        onclick="closeModal(event)">
-
-        <div class="relative bg-gray-800/90 backdrop-blur-xl text-white rounded-xl shadow-[0_0_20px_rgba(0,255,255,0.15)] w-full max-w-md m-3 transform scale-95 transition-transform duration-300 hover:scale-100"
-            onclick="event.stopPropagation()">
-
-            <div
-                class="p-4 bg-gradient-to-r from-indigo-600 via-blue-500 to-teal-500 rounded-t-xl flex justify-between items-center">
-                <h3 class="text-xl font-bold">Request a Quote</h3>
-                <button onclick="closeModal()" class="text-white hover:scale-110 transition-transform">
-                    <i class="fas fa-times text-lg"></i>
-                </button>
-            </div>
-
-            <form class="p-5 space-y-3 text-sm">
-                <p class="text-gray-300">Tell us about your event. We'll respond within 24 hours.</p>
-
-                <div>
-                    <label for="modal-name" class="block text-xs font-medium text-maya-teal mb-1">Full Name</label>
-                    <input type="text" id="modal-name" placeholder="Your Name"
-                        class="w-full px-3 py-2 bg-gray-700/70 border border-gray-600 rounded-lg focus:ring-2 focus:ring-maya-teal focus:border-transparent outline-none transition"
-                        required>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label for="modal-email" class="block text-xs font-medium text-maya-teal mb-1">Email</label>
-                        <input type="email" id="modal-email" placeholder="you@gmail.com"
-                            class="w-full px-3 py-2 bg-gray-700/70 border border-gray-600 rounded-lg focus:ring-2 focus:ring-maya-teal focus:border-transparent outline-none transition"
-                            required>
-                    </div>
-                    <div>
-                        <label for="modal-phone" class="block text-xs font-medium text-maya-teal mb-1">Phone</label>
-                        <input type="tel" id="modal-phone" placeholder="+91 "
-                            class="w-full px-3 py-2 bg-gray-700/70 border border-gray-600 rounded-lg focus:ring-2 focus:ring-maya-teal focus:border-transparent outline-none transition"
-                            required>
-                    </div>
-                </div>
-
-                <div>
-                    <label for="modal-event" class="block text-xs font-medium text-maya-teal mb-1">Type of Event</label>
-                    <select id="modal-event"
-                        class="w-full px-3 py-2 bg-gray-700/70 border border-gray-600 rounded-lg focus:ring-2 focus:ring-maya-teal focus:border-transparent outline-none transition"
-                        required>
-                        <option value="">Select an Option</option>
-                        <option value="corporate">Corporate</option>
-                        <option value="wedding">Wedding</option>
-                        <option value="social">Party</option>
-                        <option value="custom">Custom Event</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label for="modal-details" class="block text-xs font-medium text-maya-teal mb-1">Event
-                        Details</label>
-                    <textarea id="modal-details" rows="2" placeholder="Date, location, estimated guests..."
-                        class="w-full px-3 py-2 bg-gray-700/70 border border-gray-600 rounded-lg focus:ring-2 focus:ring-maya-teal focus:border-transparent outline-none transition"></textarea>
-                </div>
-
-                <button type="submit"
-                    class="w-full bg-gradient-to-r from-teal-400 via-blue-500 to-indigo-500 hover:from-teal-500 hover:to-indigo-600 text-white font-semibold py-2.5 rounded-lg text-sm transition-all duration-300 shadow-md shadow-teal-500/30 hover:shadow-indigo-500/40">
-                    Send Request
-                </button>
-            </form>
-
-            <div
-                class="absolute inset-0 rounded-xl pointer-events-none border border-transparent [mask-image:linear-gradient(white,transparent)] bg-gradient-to-r from-blue-500 via-teal-400 to-indigo-600 opacity-20">
-            </div>
-        </div>
-    </div>
     
     <div id="lightbox" class="fixed inset-0 bg-black/90 z-[110] flex items-center justify-center opacity-0 invisible" onclick="closeLightbox()">
         <div class="lightbox-content flex flex-col p-4 bg-gray-900" onclick="event.stopPropagation()">
@@ -486,19 +428,29 @@
 
 
     <script>
-        const modal = document.getElementById('contact-modal');
+        // GSAP Registration
+        gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+        // Note: modal HTML was removed, so we only handle lightbox and menu.
         const lightbox = document.getElementById('lightbox');
         const lightboxImage = document.getElementById('lightbox-image');
         const lightboxTitle = document.getElementById('lightbox-title');
         let popupTimer;
         const galleryItems = document.querySelectorAll('.gallery-thumbnail');
         const filterButtons = document.querySelectorAll('.category-button');
+        
+        // Define dummy open/close functions for removed modal/timer logic
+        window.openModal = () => { window.location.href = 'contact.html'; }; 
+        window.closeModal = () => {}; 
+        window.openLightbox = openLightbox;
+        window.closeLightbox = closeLightbox;
 
 
         // === LIGHTBOX LOGIC ===
         function openLightbox(thumbnail) {
-            const imgSrc = thumbnail.querySelector('img').src;
-            const eventName = thumbnail.querySelector('img').getAttribute('data-event-name');
+            const imgElement = thumbnail.querySelector('img');
+            const imgSrc = imgElement.src;
+            const eventName = imgElement.getAttribute('data-event-name');
 
             lightboxImage.src = imgSrc;
             lightboxImage.alt = eventName;
@@ -508,14 +460,17 @@
             lightbox.classList.add('visible', 'opacity-100');
             document.body.style.overflow = 'hidden';
             clearInterval(popupTimer);
-            closeOffCanvasMenu(); // Close menu if open
+            closeOffCanvasMenu(); 
         }
 
         function closeLightbox() {
             lightbox.classList.remove('visible', 'opacity-100');
             lightbox.classList.add('invisible', 'opacity-0');
-            document.body.style.overflow = ''; // Restore scrolling
-            startPopupTimer(); // Restart marketing timer
+            const menu = document.getElementById('off-canvas-menu');
+            if (menu && menu.classList.contains('hidden-menu')) {
+                 document.body.style.overflow = ''; 
+            }
+            // startPopupTimer(); // Disabled
         }
         
         // === FILTER LOGIC ===
@@ -527,49 +482,51 @@
                 }
             });
 
+            const visibleItems = [];
+            const hiddenItems = [];
+
             galleryItems.forEach(item => {
                 const itemCategory = item.getAttribute('data-category');
                 
                 if (category === 'all' || itemCategory === category) {
-                    // Show item
-                    item.classList.remove('hidden');
-                    // Add a slight delay to ensure the display change happens first before opacity transition starts
-                    setTimeout(() => {
-                        item.style.opacity = '1';
-                    }, 10);
+                    visibleItems.push(item);
+                    item.classList.remove('hidden'); 
+                    item.style.maxHeight = '500px'; 
+                    item.style.opacity = '1';
+                    item.style.margin = '0 0 1.5rem 0'; 
+                    item.style.padding = '0'; 
+
                 } else {
-                    // Hide item (use opacity first for smooth transition)
-                    item.style.opacity = '0';
-                    setTimeout(() => {
-                        item.classList.add('hidden');
-                    }, 500); // Should match CSS transition duration
+                    hiddenItems.push(item);
                 }
             });
-        }
 
-        // === MODAL POPUP AND TIMER LOGIC ===
-        function openModal() {
-            modal.classList.remove('invisible', 'opacity-0');
-            modal.classList.add('visible', 'opacity-100');
-            modal.querySelector('div').classList.replace('scale-95', 'scale-100');
-            document.body.style.overflow = 'hidden';
-            clearInterval(popupTimer);
-            closeOffCanvasMenu(); // Ensure off-canvas menu is closed if modal is opened
-        }
+            // 1. Animate hidden items out (fade + collapse)
+            gsap.to(hiddenItems, {
+                opacity: 0,
+                scale: 0.9,
+                stagger: 0.05,
+                duration: 0.3,
+                onComplete: () => {
+                    hiddenItems.forEach(item => {
+                        item.classList.add('hidden');
+                        item.style.maxHeight = '0';
+                    });
+                }
+            });
 
-        function closeModal(event) {
-            if (event && event.target !== modal && event.target.closest('.modal > div')) return;
-
-            modal.classList.remove('visible', 'opacity-100');
-            modal.classList.add('invisible', 'opacity-0');
-            modal.querySelector('div').classList.replace('scale-100', 'scale-95');
-            document.body.style.overflow = '';
-            startPopupTimer();
-        }
-
-        function startPopupTimer() {
-            clearInterval(popupTimer);
-            popupTimer = setInterval(openModal, 20000);
+            // 2. Animate visible items in (fade + slide up)
+            gsap.fromTo(visibleItems, {
+                opacity: 0,
+                y: 50 // Start far below
+            }, {
+                opacity: 1,
+                y: 0,
+                stagger: 0.1,
+                duration: 0.6,
+                ease: "power2.out",
+                delay: 0.2 
+            });
         }
 
         // === OFF-CANVAS MENU LOGIC ===
@@ -577,30 +534,128 @@
         const menuToggle = document.getElementById('menu-toggle-button');
         const menuClose = document.getElementById('menu-close-button');
         const menuBackdrop = document.getElementById('menu-backdrop');
+        const menuLinks = document.querySelectorAll('#off-canvas-menu a'); 
+        
+        // GSAP Timeline for Menu Links (Slide from Right)
+        const menuTimeline = gsap.timeline({ paused: true });
+
+        menuTimeline.from(menuLinks, { 
+            x: 50, // Links start 50px off-screen to the right
+            opacity: 0, 
+            duration: 0.6, 
+            ease: "power1.out", 
+            stagger: 0.15 
+        });
 
         function openOffCanvasMenu() {
             if (!menu || !menuBackdrop) return;
-            menu.classList.remove('hidden-menu'); // Slides into view
+            menu.classList.remove('hidden-menu');
             menuBackdrop.classList.remove('opacity-0', 'invisible');
             menuBackdrop.classList.add('opacity-100', 'visible');
             document.body.style.overflow = 'hidden';
+            menuTimeline.timeScale(1).play(0); // Play animation from start
         }
 
         function closeOffCanvasMenu() {
             if (!menu || !menuBackdrop) return;
-            menu.classList.add('hidden-menu'); // Slides out
-            menuBackdrop.classList.remove('opacity-100', 'visible');
-            menuBackdrop.classList.add('opacity-0', 'invisible');
-            // Only restore scrolling if the modal/lightbox is not open
-            if (modal.classList.contains('invisible') && lightbox.classList.contains('invisible')) {
-                document.body.style.overflow = '';
-            }
+            // Reverse the animation before closing the menu element
+            menuTimeline.timeScale(1.5).reverse(0.4).then(() => {
+                menu.classList.add('hidden-menu');
+                menuBackdrop.classList.remove('opacity-100', 'visible');
+                menuBackdrop.classList.add('opacity-0', 'invisible');
+                // Restore scroll if lightbox is not visible
+                if (!lightbox || lightbox.classList.contains('invisible')) {
+                    document.body.style.overflow = '';
+                }
+            });
         }
+
+        // === GSAP SCROLL ANIMATION LOGIC ===
+        function initGSAPAnimations() {
+             // 0. Initial State Setup
+            const generalAnimatedElements = document.querySelectorAll('.scroll-animated-element');
+            
+            // Set initial state for scroll-triggered elements (fade in from bottom)
+            gsap.set(generalAnimatedElements, { opacity: 0, y: 30 });
+            
+            // Set initial state for hero content (Standard fade up)
+            gsap.from("#home > div > *", {
+                opacity: 0,
+                y: 30,
+                stagger: 0.15,
+                duration: 1,
+                delay: 0.3,
+                ease: "power2.out"
+            });
+            
+            // --- SCROLL TRIGGER: Gallery Header & Filters (Re-triggering) ---
+            gsap.to(["#gallery-title", "#category-filters"], {
+                y: 0,
+                opacity: 1,
+                stagger: 0.2,
+                duration: 0.8,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: "#gallery-grid",
+                    start: "top 85%",
+                    toggleActions: "play reverse play reverse", 
+                }
+            });
+            
+            // --- SCROLL TRIGGER: Gallery Thumbnails (Slide from Bottom & Re-triggering) ---
+            gsap.utils.toArray(".gallery-thumbnail").forEach((item, i) => {
+                // Ensure initial position is set 
+                gsap.set(item, { opacity: 0, y: 50 }); 
+                
+                // We use gsap.to to animate the element into its final state (y: 0, opacity: 1)
+                gsap.to(item, {
+                    y: 0, 
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.8,
+                    ease: "back.out(1.2)",
+                    scrollTrigger: {
+                        trigger: item,
+                        start: "top 95%", // Start animation just as it enters the bottom
+                        toggleActions: "play reverse play reverse", // Re-trigger
+                    }
+                });
+            });
+
+            
+            // --- SCROLL TRIGGER: CTA Section (Re-triggering) ---
+            const ctaTimeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#cta-section",
+                    start: "top 75%",
+                    toggleActions: "play reverse play reverse",
+                }
+            });
+
+            ctaTimeline.to(".cta-title", { opacity: 1, y: 0, duration: 0.8 }, 0);
+            ctaTimeline.to(".cta-text", { opacity: 1, y: 0, duration: 0.8 }, 0.2);
+            ctaTimeline.to(".cta-button-left", { opacity: 1, y: 0, duration: 0.8 }, 0.4);
+            ctaTimeline.to(".cta-button-right", { opacity: 1, y: 0, duration: 0.8 }, 0.6);
+
+            // Looping Animation for Logo
+            gsap.to(["#logo-main", "#logo-footer"], {
+                rotation: 1,
+                scale: 1.01,
+                duration: 3,
+                ease: "sine.inOut",
+                repeat: -1,
+                yoyo: true
+            });
+        }
+
 
         // === INITIALIZATION AND EVENT LISTENERS ===
         document.addEventListener('DOMContentLoaded', function () {
-            startPopupTimer();
-            filterGallery('all'); // Initial load shows all
+            // Initialize GSAP animations
+            initGSAPAnimations();
+            
+            // Removed startPopupTimer() call
+            filterGallery('all'); 
 
             // Event listener for category buttons
             filterButtons.forEach(button => {
@@ -610,14 +665,10 @@
                 });
             });
 
-            // Modal listeners
-            modal.addEventListener('click', (e) => e.target === modal && closeModal());
-            
             // Global Escape key listener
             document.addEventListener('keydown', e => {
                 if (e.key === 'Escape') {
-                    if (lightbox.classList.contains('visible')) closeLightbox();
-                    else if (modal.classList.contains('visible')) closeModal();
+                    if (lightbox && lightbox.classList.contains('visible')) closeLightbox();
                     else if (menu && !menu.classList.contains('hidden-menu')) closeOffCanvasMenu();
                 }
             });
@@ -643,9 +694,14 @@
                     e.preventDefault();
                     const target = document.querySelector(this.getAttribute('href'));
                     if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
+                        // Use GSAP ScrollToPlugin
+                         gsap.to(window, {
+                            duration: 1,
+                            scrollTo: {
+                                y: target,
+                                offsetY: 80 // Offset for the fixed header
+                            },
+                            ease: "power2.inOut"
                         });
                     }
                 });
