@@ -7,7 +7,7 @@
     <title>Maya Adfinity - Event & Brand Experience Agency (Home)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script>
@@ -22,22 +22,38 @@
                     },
                     animation: {
                         'contactOverlayZoom': 'contactOverlayZoom 1.5s ease-out 1.5s forwards',
-                        'scroll-loop': 'scroll-loop 60s linear infinite', 
-                        'slideInFromTop': 'slideInFromTop 1.2s ease-out forwards', 
+                        'scroll-loop': 'scroll-loop 60s linear infinite',
+                        'slideInFromTop': 'slideInFromTop 1.2s ease-out forwards',
                     },
                     keyframes: {
                         slideInFromTop: {
-                            '0%': { transform: 'translateY(-50px)', opacity: '0' },
-                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                            '0%': {
+                                transform: 'translateY(-50px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateY(0)',
+                                opacity: '1'
+                            },
                         },
                         contactOverlayZoom: {
-                            '0%': { transform: 'translate(-50%, -50%) scale(0.8)', opacity: '0' },
-                            '100%': { transform: 'translate(-50%, -50%) scale(1)', opacity: '1' },
+                            '0%': {
+                                transform: 'translate(-50%, -50%) scale(0.8)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translate(-50%, -50%) scale(1)',
+                                opacity: '1'
+                            },
                         },
                         // Keyframe for the infinite Portfolio scroll
                         'horizontal-grid-scroll': {
-                             '0%': { transform: 'translateX(0)' },
-                             '100%': { transform: 'translateX(-50%)' }
+                            '0%': {
+                                transform: 'translateX(0)'
+                            },
+                            '100%': {
+                                transform: 'translateX(-50%)'
+                            }
                         }
                     }
                 }
@@ -49,10 +65,10 @@
         body {
             transition: overflow 0.3s;
         }
-        
+
         /* Styles to match the provided menu image look */
         #off-canvas-menu {
-            background-color: #121926; 
+            background-color: #121926;
             transition: transform 0.7s ease-out;
         }
 
@@ -63,8 +79,8 @@
         #off-canvas-nav a {
             /* Ensures proper spacing and the light divider line */
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 12px !important; 
-            padding-top: 12px !important; 
+            padding-bottom: 12px !important;
+            padding-top: 12px !important;
         }
 
         /* --- Video/Hero/Image Styles --- */
@@ -81,81 +97,166 @@
             background-position: center;
         }
 
-        .video-hero { position: relative; overflow: hidden; height: 100vh; }
-        .video-hero video { min-width: 100%; min-height: 100%; width: auto; height: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-
-        @media (max-aspect-ratio: 16/9) { .video-hero video { width: 100%; height: auto; } }
-        @media (min-aspect-ratio: 16/9) { .video-hero video { width: auto; height: 100%; } }
-
-        .event-image-stack-item {
-            top: 50%; left: 50%; background-color: white; padding: 8px; border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, z-index 0.3s ease-in-out;
-            aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center;
+        .video-hero {
+            position: relative;
+            overflow: hidden;
+            height: 100vh;
         }
-        .event-image-stack-item img { border-radius: 8px; }
-        .event-image-stack-item:nth-child(1) { transform: translate(-50%, -50%) rotate(10deg) translate(15px, 15px); z-index: 10; }
-        .event-image-stack-item:nth-child(2) { transform: translate(-50%, -50%) rotate(0deg); z-index: 20; }
-        .event-image-stack-item:nth-child(3) { transform: translate(-50%, -50%) rotate(-10deg) translate(-15px, -15px); z-index: 30; }
+
+        .video-hero video {
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @media (max-aspect-ratio: 16/9) {
+            .video-hero video {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        @media (min-aspect-ratio: 16/9) {
+            .video-hero video {
+                width: auto;
+                height: 100%;
+            }
+        }
+
+        /* FIX 3: Adjusted image stack item styles for better scaling */
+        .event-image-stack-item {
+            top: 50%;
+            left: 50%;
+            background-color: white;
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, z-index 0.3s ease-in-out;
+            aspect-ratio: 3/4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .event-image-stack-item img {
+            border-radius: 8px;
+        }
+
+        /* Reset transform origin to center */
+        .event-image-stack-item:nth-child(1) {
+            transform: translate(-50%, -50%) rotate(10deg) translate(15px, 15px);
+            z-index: 10;
+        }
+
+        .event-image-stack-item:nth-child(2) {
+            transform: translate(-50%, -50%) rotate(0deg);
+            z-index: 20;
+        }
+
+        .event-image-stack-item:nth-child(3) {
+            transform: translate(-50%, -50%) rotate(-10deg) translate(-15px, -15px);
+            z-index: 30;
+        }
+
         .event-image-stack-item:hover {
             transform: translate(-50%, -50%) scale(1.05) rotate(0deg) !important;
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6); z-index: 40;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6);
+            z-index: 40;
         }
 
         .custom-hamburger {
-            width: 60px; height: 60px; background-color: white; display: flex; align-items: center;
-            justify-content: center; border-radius: 50%; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); transition: background-color 0.3s;
+            width: 60px;
+            height: 60px;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s;
         }
-        .custom-hamburger .bar { background-color: black; }
-        
+
+        .custom-hamburger .bar {
+            background-color: black;
+        }
+
         /* FIX: Applying direct CSS animation properties to the Portfolio track to guarantee infinite loop */
         .image-scroll-track {
             display: flex;
             width: max-content;
-            animation: horizontal-grid-scroll 45s linear infinite; 
+            animation: horizontal-grid-scroll 45s linear infinite;
             will-change: transform;
         }
-        .image-scroll-track:hover { animation-play-state: paused; }
+
+        .image-scroll-track:hover {
+            animation-play-state: paused;
+        }
+
         #featured-scroll-grid-container {
-            position: relative; height: 350px; overflow: hidden; padding: 10px 0;
+            position: relative;
+            height: 350px;
+            overflow: hidden;
+            padding: 10px 0;
         }
-        .image-scroll-group { display: flex; flex-shrink: 0; }
+
+        .image-scroll-group {
+            display: flex;
+            flex-shrink: 0;
+        }
+
         .image-scroll-item {
-            position: relative; overflow: hidden; width: 320px; height: 300px;
-            border-radius: 8px; margin-right: 20px;
+            position: relative;
+            overflow: hidden;
+            width: 320px;
+            height: 300px;
+            border-radius: 8px;
+            margin-right: 20px;
         }
-        .image-scroll-item img { width: 100%; height: 100%; object-fit: cover; }
+
+        .image-scroll-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
         /* Testimonial Scroll */
-        /* IMPORTANT: Setting overflow-x: scroll and snap properties allows manual JS control */
-        .horizontal-scroll-container { 
-            overflow-x: scroll;
-            scrollbar-width: none; 
-            -ms-overflow-style: none; 
+        .horizontal-scroll-container {
+            /* Removed overflow-x: scroll for JS control/CSS infinite scroll */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
             padding-bottom: 1rem;
-            scroll-behavior: smooth; /* Smooth scrolling for arrows */
-            /* Using flex-wrap: nowrap; and overflow-x: hidden for CSS infinite scroll */
-            overflow-x: hidden; 
+            scroll-behavior: smooth;
+            overflow-x: hidden;
         }
-        .horizontal-scroll-container::-webkit-scrollbar { display: none; }
-        
+
+        .horizontal-scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
         /* NEW: Testimonial Inner Track for CSS Infinite Scroll */
         #testimonial-track-inner {
             display: flex;
-            width: max-content; 
+            width: max-content;
             animation: testimonial-scroll 40s linear infinite;
             will-change: transform;
         }
+
         .testimonial-scroll-track:hover #testimonial-track-inner {
-            animation-play-state: paused; 
+            animation-play-state: paused;
         }
 
-        .testimonial-card { 
-            min-width: 80vw; 
-            max-width: 450px; 
-            margin-right: 24px; 
+        .testimonial-card {
+            min-width: 80vw;
+            max-width: 450px;
+            margin-right: 24px;
             padding: 24px;
-            background-color: #1f2937; 
-            border-radius: 12px; 
+            background-color: #1f2937;
+            border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             flex-shrink: 0;
         }
@@ -185,7 +286,7 @@
     </header>
 
     <div id="off-canvas-menu"
-        class="fixed inset-y-0 right-0 w-80 sm:w-96 bg-maya-dark backdrop-blur-xl z-[90] shadow-2xl p-6 hidden-menu">
+        class="fixed inset-y-0 right-0 w-64 max-w-[85%] sm:w-96 bg-maya-dark backdrop-blur-xl z-[90] shadow-2xl p-6 hidden-menu">
         <div class="flex justify-end mb-10">
             <button id="menu-close-button" class="text-white hover:text-teal-400 transition-colors">
                 <i class="fas fa-times text-2xl"></i>
@@ -193,27 +294,23 @@
         </div>
 
         <nav id="off-canvas-nav" class="space-y-1 text-xl">
-            <a href="index.html"
-                class="text-white hover:text-teal-400 transition-colors pb-3 pt-3 menu-link block">
+            <a href="index.html" class="text-white hover:text-teal-400 transition-colors pb-3 pt-3 menu-link block">
                 <i class="fas fa-home w-6 mr-3"></i> Home
             </a>
-            <a href="about.html"
-                class="text-white hover:text-teal-400 transition-colors pb-3 pt-3 menu-link block">
+            <a href="about.html" class="text-white hover:text-teal-400 transition-colors pb-3 pt-3 menu-link block">
                 <i class="fas fa-info-circle w-6 mr-3"></i> About
             </a>
-            <a href="services.html"
-                class="text-white hover:text-teal-400 transition-colors pb-3 pt-3 menu-link block">
+            <a href="services.html" class="text-white hover:text-teal-400 transition-colors pb-3 pt-3 menu-link block">
                 <i class="fas fa-briefcase w-6 mr-3"></i> Services
             </a>
-            <a href="gallery.html"
-                class="text-white hover:text-teal-400 transition-colors pb-3 pt-3 menu-link block">
+            <a href="gallery.html" class="text-white hover:text-teal-400 transition-colors pb-3 pt-3 menu-link block">
                 <i class="fas fa-image w-6 mr-3"></i> Gallery
             </a>
-           
+
             <a href="contact.html" class="text-white hover:text-teal-400 transition-colors pt-3 menu-link block">
                 <i class="fas fa-envelope w-6 mr-3"></i> Contact
             </a>
-            <div class="border-t border-white/10 mt-8 pt-4"></div> 
+            <div class="border-t border-white/10 mt-8 pt-4"></div>
         </nav>
 
         <div class="mt-4 pt-4">
@@ -235,15 +332,18 @@
             <source src="https://cdn.pixabay.com/video/2017/08/30/18071-230473561_large.mp4" type="video/mp4">
         </video>
         <div id="fallback-bg" class="absolute inset-0 bg-hero z-0" style="display: none;"></div>
-        
-        <div class="relative z-10 text-center max-w-4xl mx-auto px-4 text-white">
-            <h1 class="text-5xl sm:text-7xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-400 opacity-0" id="hero-title">
+
+        <div class="relative z-10 text-center max-w-4xl mx-auto px-4 text-white pt-20">
+            <h1 class="text-5xl sm:text-7xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-400 opacity-0"
+                id="hero-title">
                 The Creative Powerhouse
             </h1>
             <p class="text-xl font-medium max-w-3xl mx-auto mb-8 opacity-0" id="hero-subtitle">
                 Crafting technologically superior and strategically impactful brand experiences.
             </p>
-            <a onclick="openModal()" class="cursor-pointer inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full transition transform hover:scale-105 opacity-0" id="hero-cta">
+            <a onclick="openModal()"
+                class="cursor-pointer inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full transition transform hover:scale-105 opacity-0"
+                id="hero-cta">
                 Plan Your Event <i class="fas fa-arrow-right ml-2"></i>
             </a>
         </div>
@@ -292,7 +392,8 @@
                     </div>
                 </div>
 
-                <div class="relative h-[350px] md:h-[450px] lg:h-[550px] flex items-center justify-center py-8 scroll-animated-element about-image-stack">
+                <div
+                    class="relative h-[350px] md:h-[450px] lg:h-[550px] flex items-center justify-center py-8 pt-20 md:pt-0 scroll-animated-element about-image-stack">
                     <div class="event-image-stack-item absolute w-[70%] sm:w-[60%] md:w-[70%] z-10">
                         <img src="./services/Hybrid-Events.jpg" alt="Corporate Event"
                             class="w-full h-full object-cover rounded-md">
@@ -311,7 +412,9 @@
 
     <section id="service-showcase" class="bg-gray-900 py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-center text-4xl md:text-5xl font-bold mb-16 text-teal-400 scroll-animated-element service-showcase-title">Our Specializations</h2>
+            <h2
+                class="text-center text-4xl md:text-5xl font-bold mb-16 text-teal-400 scroll-animated-element service-showcase-title">
+                Our Specializations</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 service-cards-container">
 
                 <div
@@ -364,7 +467,8 @@
 
     <section class="bg-gray-950 py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-20 scroll-animated-element commitment-title">Our Commitment to Excellence</h2>
+            <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-20 scroll-animated-element commitment-title">Our
+                Commitment to Excellence</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-24 commitment-features-container">
                 <div class="space-y-4 scroll-animated-element commitment-feature">
@@ -403,7 +507,8 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 offerings-cards-container">
-                <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow group scroll-animated-element offering-card-item">
+                <div
+                    class="bg-gray-900 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow group scroll-animated-element offering-card-item">
                     <img src="./assets/images/EVENTSCONSULTINGSOULUTIONS.jpg" alt="Consulting"
                         class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
                     <div class="p-6">
@@ -415,7 +520,8 @@
                     </div>
                 </div>
 
-                <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow group scroll-animated-element offering-card-item">
+                <div
+                    class="bg-gray-900 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow group scroll-animated-element offering-card-item">
                     <img src="https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=600"
                         alt="Entertainment"
                         class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
@@ -427,7 +533,8 @@
                     </div>
                 </div>
 
-                <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow group scroll-animated-element offering-card-item">
+                <div
+                    class="bg-gray-900 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow group scroll-animated-element offering-card-item">
                     <img src="./assets/images/people-taking-part-high-protocol-event.jpg" alt="Conference"
                         class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
                     <div class="p-6">
@@ -548,7 +655,7 @@
                                 alt="Corporate Awards Ceremony Duplicate">
                         </div>
                     </div>
-                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -562,17 +669,19 @@
                     clients say.
                 </p>
                 <div class="testimonial-navigation-wrapper mt-8 flex justify-center space-x-4">
-                    <button id="prev-testimonial" class="p-3 rounded-full bg-gray-900 text-teal-400 hover:bg-gray-700 transition">
+                    <button id="prev-testimonial"
+                        class="p-3 rounded-full bg-gray-900 text-teal-400 hover:bg-gray-700 transition">
                         <i class="fas fa-arrow-left"></i>
                     </button>
-                    <button id="next-testimonial" class="p-3 rounded-full bg-gray-900 text-teal-400 hover:bg-gray-700 transition">
+                    <button id="next-testimonial"
+                        class="p-3 rounded-full bg-gray-900 text-teal-400 hover:bg-gray-700 transition">
                         <i class="fas fa-arrow-right"></i>
                     </button>
                 </div>
             </div>
 
             <div class="horizontal-scroll-container testimonial-scroll-track">
-                <div id="testimonial-track-inner"> 
+                <div id="testimonial-track-inner">
                     <div class="testimonial-card snap-center text-center bg-gray-900 shadow-xl scroll-animated-element testimonial-item">
                         <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=400"
                             alt="Anita Sharma"
@@ -633,8 +742,8 @@
                                 class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
                         </div>
                         <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
-                            "The sheer scale and technical brilliance of the stage design were breathtaking. Maya Adfinity is
-                            the only choice for large-scale, immersive brand experiences."
+                            "The sheer scale and technical brilliance of the stage design were breathtaking. Maya Adfinity
+                            is the only choice for large-scale, immersive brand experiences."
                         </p>
                         <h4 class="text-lg font-bold text-white">Deepa Varma</h4>
                         <p class="text-blue-400">Head of Marketing, GlobalTech</p>
@@ -656,7 +765,7 @@
                         <h4 class="text-lg font-bold text-white">Anita Sharma</h4>
                         <p class="text-blue-400">CEO at InnovateX</p>
                     </div>
-                    
+
                     <div class="testimonial-card snap-center text-center bg-gray-900 shadow-xl scroll-animated-element testimonial-item">
                         <img src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400"
                             alt="Vikram Singh"
@@ -682,7 +791,8 @@
     <section class="py-20 relative bg-cta">
         <div class="absolute inset-0 bg-gray-900/80"></div>
         <div class="relative z-10 max-w-4xl mx-auto text-center px-4">
-            <h2 class="text-4xl md:text-5xl font-bold mb-6 scroll-animated-element cta-title">Ready to Push Boundaries?</h2>
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 scroll-animated-element cta-title">Ready to Push Boundaries?
+            </h2>
             <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto scroll-animated-element cta-text">
                 Partner with Maya Adfinity to transform your next idea into an emotionally powerful and perfectly
                 executed reality.
@@ -721,7 +831,8 @@
                         </li>
                         <li><a href="service.html"
                                 class="text-gray-400 hover:text-blue-400 transition-colors">Services</a></li>
-                        <li><a href="gallery.html" class="text-gray-400 hover:text-blue-400 transition-colors">Portfolio</a></li>
+                        <li><a href="gallery.html"
+                                class="text-gray-400 hover:text-blue-400 transition-colors">Portfolio</a></li>
                         <li><a href="contact.html"
                                 class="text-gray-400 hover:text-blue-400 transition-colors">Contact</a></li>
                     </ul>
@@ -765,7 +876,7 @@
 
     <div id="contact-modal"
         class="modal fixed inset-0 z-[100] bg-gray-900/70 backdrop-blur-md flex items-center justify-center opacity-0 invisible transition-opacity duration-300 ease-out">
-    </div>
+        </div>
 
 
     <script>
@@ -773,14 +884,16 @@
         function animateCount(targetId, targetValue, duration = 2, suffix = '') {
             const element = document.getElementById(targetId);
             if (!element) return;
-            gsap.to({ value: 0 }, {
+            gsap.to({
+                value: 0
+            }, {
                 value: targetValue,
                 duration: duration,
                 ease: 'power1.out',
-                onUpdate: function() {
+                onUpdate: function () {
                     element.textContent = Math.floor(this.targets()[0].value).toLocaleString() + suffix;
                 },
-                onComplete: function() {
+                onComplete: function () {
                     element.textContent = targetValue.toLocaleString() + suffix;
                 }
             });
@@ -797,7 +910,7 @@
             }
             document.body.style.overflow = 'hidden';
             clearInterval(popupTimer);
-            closeOffCanvasMenu(); 
+            closeOffCanvasMenu();
         }
 
         function closeModal(event) {
@@ -819,18 +932,20 @@
         const menuToggle = document.getElementById('menu-toggle-button');
         const menuClose = document.getElementById('menu-close-button');
         const menuBackdrop = document.getElementById('menu-backdrop');
-        const menuLinks = document.querySelectorAll('#off-canvas-nav .menu-link'); 
-        
+        const menuLinks = document.querySelectorAll('#off-canvas-nav .menu-link');
+
         // GSAP Timeline for Menu Links
-        const menuTimeline = gsap.timeline({ paused: true });
+        const menuTimeline = gsap.timeline({
+            paused: true
+        });
 
         // Initialize Menu Links: SLIDE FROM RIGHT (x: 50) and slower duration
-        menuTimeline.from(menuLinks, { 
-            x: 50, 
-            opacity: 0, 
-            duration: 0.6, 
-            ease: "power1.out", 
-            stagger: 0.15 
+        menuTimeline.from(menuLinks, {
+            x: 50,
+            opacity: 0,
+            duration: 0.6,
+            ease: "power1.out",
+            stagger: 0.15
         });
 
 
@@ -839,76 +954,88 @@
             menuBackdrop.classList.remove('opacity-0', 'invisible');
             menuBackdrop.classList.add('opacity-100', 'visible');
             document.body.style.overflow = 'hidden';
-            
+
             // Play the menu animation timeline from the beginning
-            menuTimeline.timeScale(1).play(0); 
+            menuTimeline.timeScale(1).play(0);
         }
 
         function closeOffCanvasMenu() {
             // Reverse the animation before closing the menu
             menuTimeline.timeScale(1.5).reverse(0.4).then(() => {
-                 menu.classList.add('hidden-menu');
-                 menuBackdrop.classList.remove('opacity-100', 'visible');
-                 menuBackdrop.classList.add('opacity-0', 'invisible');
-                 
-                 // FIX: Ensure body overflow is restored only if the modal is not visible 
-                 const modalIsHidden = modal ? modal.classList.contains('invisible') : true;
+                menu.classList.add('hidden-menu');
+                menuBackdrop.classList.remove('opacity-100', 'visible');
+                menuBackdrop.classList.add('opacity-0', 'invisible');
 
-                 if (modalIsHidden) {
-                     document.body.style.overflow = '';
-                 }
+                // FIX: Ensure body overflow is restored only if the modal is not visible 
+                const modalIsHidden = modal ? modal.classList.contains('invisible') : true;
+
+                if (modalIsHidden) {
+                    document.body.style.overflow = '';
+                }
             });
-           
+
         }
 
-        // === TESTIMONIAL SCROLL ARROW LOGIC ===
+        // === TESTIMONIAL SCROLL ARROW LOGIC (FIXED) ===
         const testimonialTrackInner = document.getElementById('testimonial-track-inner');
         const testimonialContainer = document.querySelector('.testimonial-scroll-track');
         const prevButton = document.getElementById('prev-testimonial');
         const nextButton = document.getElementById('next-testimonial');
 
         function scrollTestimonials(direction) {
-            if (!testimonialContainer) return;
-            
-            // Pause the CSS animation temporarily
-            testimonialTrackInner.style.animationPlayState = 'paused';
+            if (!testimonialContainer || !testimonialTrackInner) return;
 
-            // Calculate the width of one card plus margin
+            // Find the active element to calculate precise scroll position
             const firstCard = testimonialTrackInner.querySelector('.testimonial-card');
             if (!firstCard) return;
 
-            // Use card width + margin for reliable scroll distance
-            const scrollDistance = firstCard.clientWidth + 24; 
-            
-            // Scroll the container manually
-            testimonialContainer.scroll({
-                left: testimonialContainer.scrollLeft + (direction * scrollDistance),
-                behavior: 'smooth'
+            // Calculate the exact width of one card including its right margin
+            const cardStyle = window.getComputedStyle(firstCard);
+            const cardWidth = firstCard.offsetWidth;
+            const cardMarginRight = parseFloat(cardStyle.marginRight);
+            const scrollDistance = cardWidth + cardMarginRight;
+
+            // Temporarily pause the CSS animation for manual scroll
+            testimonialTrackInner.style.animationPlayState = 'paused';
+
+            // Calculate the target scroll position
+            const targetScrollLeft = testimonialContainer.scrollLeft + (direction * scrollDistance);
+
+            // Use GSAP for smooth scrolling, as the browser's scroll behavior is hidden/overridden by GSAP/CSS
+            gsap.to(testimonialContainer, {
+                scrollLeft: targetScrollLeft,
+                duration: 0.5,
+                ease: "power2.out",
+                onComplete: () => {
+                    // Resume CSS animation after scrolling completes
+                    testimonialTrackInner.style.animationPlayState = 'running';
+                }
             });
-            
-            // Resume CSS animation after a short delay (optional, can be tricky with user interaction)
-            setTimeout(() => {
-                testimonialTrackInner.style.animationPlayState = 'running';
-            }, 500); 
+
         }
-        
+
         if (prevButton) prevButton.addEventListener('click', () => scrollTestimonials(-1));
         if (nextButton) nextButton.addEventListener('click', () => scrollTestimonials(1));
 
 
         // === INITIALIZATION AND EVENT LISTENERS ===
         document.addEventListener('DOMContentLoaded', function () {
-            startPopupTimer(); 
+            startPopupTimer();
             gsap.registerPlugin(ScrollTrigger);
 
             // 1. Initial State Setup 
             const animElements = document.querySelectorAll('.scroll-animated-element');
-            
+
             // Set initial state for all scroll-triggered elements (Fade Up default)
-            gsap.set(animElements, { opacity: 0, y: 30 });
-            
+            gsap.set(animElements, {
+                opacity: 0,
+                y: 30
+            });
+
             // Set initial state for menu links
-            gsap.set(menuLinks, { opacity: 0 }); 
+            gsap.set(menuLinks, {
+                opacity: 0
+            });
 
 
             // --- Helper function for quick FadeUp animation ---
@@ -922,16 +1049,31 @@
                     scrollTrigger: {
                         trigger: selector,
                         start: startOffset,
-                        toggleActions: "play reverse play reverse", 
+                        toggleActions: "play reverse play reverse",
                     }
                 });
             }
 
 
             // --- HERO SECTION ANIMATION (Runs once on load) ---
-            gsap.from("#hero-title", { opacity: 0, y: -30, duration: 1, delay: 0.5 });
-            gsap.from("#hero-subtitle", { opacity: 0, y: -30, duration: 1, delay: 0.8 });
-            gsap.from("#hero-cta", { opacity: 0, y: 30, duration: 0.8, delay: 1.1 });
+            gsap.from("#hero-title", {
+                opacity: 0,
+                y: -30,
+                duration: 1,
+                delay: 0.5
+            });
+            gsap.from("#hero-subtitle", {
+                opacity: 0,
+                y: -30,
+                duration: 1,
+                delay: 0.8
+            });
+            gsap.from("#hero-cta", {
+                opacity: 0,
+                y: 30,
+                duration: 0.8,
+                delay: 1.1
+            });
 
 
             // --- ABOUT SECTION (Split-Screen Slide & Text) ---
@@ -940,28 +1082,53 @@
                     trigger: "#about",
                     start: "top 70%",
                     end: "bottom top",
-                    toggleActions: "play reverse play reverse", 
+                    toggleActions: "play reverse play reverse",
                 }
             });
 
             // Explicitly set initial x-positions for the left/right slide
-            gsap.set(".about-text-content", { x: -100, opacity: 0, y: 30 });
-            gsap.set(".about-image-stack", { x: 100, opacity: 0, y: 30 });
+            gsap.set(".about-text-content", {
+                x: -100,
+                opacity: 0,
+                y: 30
+            });
+            gsap.set(".about-image-stack", {
+                x: 100,
+                opacity: 0,
+                y: 30
+            });
 
 
-            aboutTimeline.to(".about-title-block", { opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, 0); 
-            aboutTimeline.to(".about-text-content", { x: 0, opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, 0.2); 
-            aboutTimeline.to(".about-image-stack", { x: 0, opacity: 1, y: 0, duration: 1.0, ease: "power2.out" }, 0.2); 
-            
+            aboutTimeline.to(".about-title-block", {
+                opacity: 1,
+                y: 0,
+                duration: 1.0,
+                ease: "power2.out"
+            }, 0);
+            aboutTimeline.to(".about-text-content", {
+                x: 0,
+                opacity: 1,
+                y: 0,
+                duration: 1.0,
+                ease: "power2.out"
+            }, 0.2);
+            aboutTimeline.to(".about-image-stack", {
+                x: 0,
+                opacity: 1,
+                y: 0,
+                duration: 1.0,
+                ease: "power2.out"
+            }, 0.2);
+
             // Image stack animation (Subtle parallax on the container)
             gsap.to(".about-image-stack", {
-                y: 50, 
+                y: 50,
                 ease: "none",
                 scrollTrigger: {
                     trigger: "#about",
                     start: "top bottom",
                     end: "bottom top",
-                    scrub: 1, 
+                    scrub: 1,
                 }
             });
 
@@ -973,10 +1140,10 @@
                 y: 0,
                 duration: 1.0,
                 stagger: 0.2,
-                scrollTrigger: { 
-                    trigger: ".service-cards-container", 
-                    start: "top 80%", 
-                    toggleActions: "play reverse play reverse" 
+                scrollTrigger: {
+                    trigger: ".service-cards-container",
+                    start: "top 80%",
+                    toggleActions: "play reverse play reverse"
                 }
             });
 
@@ -988,10 +1155,10 @@
                 y: 0,
                 duration: 1.0,
                 stagger: 0.2,
-                scrollTrigger: { 
-                    trigger: ".commitment-features-container", 
-                    start: "top 80%", 
-                    toggleActions: "play reverse play reverse" 
+                scrollTrigger: {
+                    trigger: ".commitment-features-container",
+                    start: "top 80%",
+                    toggleActions: "play reverse play reverse"
                 }
             });
             createFadeUpTrigger(".commitment-cta", "bottom 95%");
@@ -1004,10 +1171,10 @@
                 y: 0,
                 duration: 1.0,
                 stagger: 0.2,
-                scrollTrigger: { 
-                    trigger: ".offerings-cards-container", 
-                    start: "top 80%", 
-                    toggleActions: "play reverse play reverse" 
+                scrollTrigger: {
+                    trigger: ".offerings-cards-container",
+                    start: "top 80%",
+                    toggleActions: "play reverse play reverse"
                 }
             });
             createFadeUpTrigger(".offerings-cta", "bottom 95%");
@@ -1017,17 +1184,17 @@
             createFadeUpTrigger(".portfolio-title", "top 85%");
             createFadeUpTrigger(".portfolio-subtitle", "top 80%");
             createFadeUpTrigger(".testimonials-title-block", "top 85%");
-            
+
             // Stagger Testimonial Cards
             gsap.to(".testimonial-item", {
                 opacity: 1,
                 y: 0,
                 duration: 1.0,
                 stagger: 0.2,
-                scrollTrigger: { 
-                    trigger: ".testimonial-scroll-track", 
-                    start: "top 85%", 
-                    toggleActions: "play reverse play reverse" 
+                scrollTrigger: {
+                    trigger: ".testimonial-scroll-track",
+                    start: "top 85%",
+                    toggleActions: "play reverse play reverse"
                 }
             });
 
@@ -1045,17 +1212,43 @@
             });
 
             // Explicitly set x-position for sliding buttons BEFORE the timeline starts
-            gsap.set(".cta-button-left", { x: -50, opacity: 0, y: 30 });
-            gsap.set(".cta-button-right", { x: 50, opacity: 0, y: 30 });
+            gsap.set(".cta-button-left", {
+                x: -50,
+                opacity: 0,
+                y: 30
+            });
+            gsap.set(".cta-button-right", {
+                x: 50,
+                opacity: 0,
+                y: 30
+            });
 
-            ctaButtonsTimeline.to(".cta-button-left", { x: 0, opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 0);
-            ctaButtonsTimeline.to(".cta-button-right", { x: 0, opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 0.2);
+            ctaButtonsTimeline.to(".cta-button-left", {
+                x: 0,
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power2.out"
+            }, 0);
+            ctaButtonsTimeline.to(".cta-button-right", {
+                x: 0,
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power2.out"
+            }, 0.2);
 
 
             // Assign menu event listeners
-            if (menuToggle) { menuToggle.addEventListener('click', openOffCanvasMenu); }
-            if (menuClose) { menuClose.addEventListener('click', closeOffCanvasMenu); }
-            if (menuBackdrop) { menuBackdrop.addEventListener('click', closeOffCanvasMenu); }
+            if (menuToggle) {
+                menuToggle.addEventListener('click', openOffCanvasMenu);
+            }
+            if (menuClose) {
+                menuClose.addEventListener('click', closeOffCanvasMenu);
+            }
+            if (menuBackdrop) {
+                menuBackdrop.addEventListener('click', closeOffCanvasMenu);
+            }
         });
     </script>
 </body>
