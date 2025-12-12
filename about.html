@@ -45,6 +45,23 @@
         }
     </script>
     <style>
+        /* Global Reset for better responsiveness and to prevent horizontal overflow */
+        html,
+        body {
+            width: 100%;
+            min-width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Crucial for preventing horizontal scroll on mobile */
+            box-sizing: border-box;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: inherit;
+        }
+
         /* --- General Styles --- */
         body {
             transition: overflow 0.3s;
@@ -78,7 +95,7 @@
                 linear-gradient(to right, #10b981, #f97316) border-box;
         }
 
-        /* --- Ashwah Image Grid (Mobile-First) --- */
+        /* --- Ashwah Image Grid --- */
         .ashwah-image-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -87,28 +104,25 @@
             position: relative;
         }
 
-        /* Apply 2-column layout only on large screens */
-        @media (min-width: 1024px) {
-            .ashwah-image-grid {
-                grid-template-columns: 1fr 1fr;
-                grid-template-rows: 1fr 1fr;
-            }
-        }
-
         .ashwah-image-grid>img {
             width: 100%;
             object-fit: cover;
             border-radius: 0.75rem;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             transition: transform 0.3s;
-            /* Ensure height is managed by the grid or explicit class */
             height: 200px; /* Consistent height for small screens */
         }
-        
+
         @media (min-width: 1024px) {
-             .ashwah-image-grid>img {
-                height: 100%; /* Let the grid handle height on desktop */
-             }
+            .ashwah-image-grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr 1fr;
+                height: 500px; /* Define explicit desktop grid height */
+            }
+
+            .ashwah-image-grid>img {
+                height: 100%; /* Let grid template handle height */
+            }
         }
 
 
@@ -143,16 +157,16 @@
             background-color: #8c4e5c;
             transform: translate(-50%, -50%) scale(1.08);
         }
-        
-        /* FIX 3: Updated grid column span logic to work with mobile-first grid */
+
+        /* Responsive Grid Spanning */
         .ashwah-image-grid .img-top {
             grid-column: span 1 / span 1; /* Default to 1 column on mobile */
             height: 200px; /* Consistent height */
         }
-        
+
         @media (min-width: 1024px) {
             .ashwah-image-grid .img-top {
-                grid-column: span 2 / span 2; /* Full width on desktop */
+                grid-column: span 2 / span 2; /* Full width on desktop (spans both columns) */
                 height: 250px;
             }
         }
@@ -328,7 +342,7 @@
 
                 <div class="scroll-animated-element ashwah-text-content order-1 lg:order-2">
                     <p class="text-sm font-semibold text-teal-400 uppercase tracking-wider mb-2">ABOUT ASHWAH EVENTS AND
-                        PRODUCTIONS</p>
+                        PRODUCTION</p>
                     <h3 class="text-3xl font-bold text-white mb-6">
                         Bringing Your Events to Life with Creativity & Precision
                     </h3>
@@ -661,7 +675,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             startPopupTimer();
 
-            // 1. Initial State Setup 
+            // 1. Initial State Setup 
             const animElements = document.querySelectorAll('.scroll-animated-element');
 
             // Apply initial visual state for scroll-triggered elements
@@ -801,7 +815,10 @@
                 }
             });
 
-            // Use the explicit x sets from Step 1's general setup
+            // Reset x state for non-mobile layout
+            gsap.set(".who-we-are-left", { x: -100, opacity: 0, y: 30 });
+            gsap.set(".who-we-are-right", { x: 100, opacity: 0, y: 30 });
+            
             partnerTimeline.to(".who-we-are-left", {
                 x: 0,
                 opacity: 1,

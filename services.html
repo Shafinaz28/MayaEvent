@@ -25,9 +25,26 @@
         }
     </script>
     <style>
+        /* Global Reset for robust responsiveness */
+        html,
+        body {
+            width: 100%;
+            min-width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Crucial for preventing horizontal scroll on mobile */
+            box-sizing: border-box;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: inherit;
+        }
+
         .bg-hero {
             /* FIX 3: Changed to min-height for better fluid scaling */
-            background-image: url('https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg?auto=compress&cs=tinysrgb&w=1260');
+            background-image: url('./services/bg1.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -137,7 +154,30 @@
 
     <div id="menu-backdrop" class="fixed inset-0 bg-black/50 z-40 opacity-0 invisible transition-opacity duration-300">
     </div>
-
+    
+    <div id="contact-modal"
+        class="modal fixed inset-0 z-[100] bg-gray-900/70 backdrop-blur-md flex items-center justify-center opacity-0 invisible transition-opacity duration-300 ease-out">
+        <div id="modal-content"
+            class="bg-gray-800 p-8 rounded-xl shadow-2xl w-11/12 max-w-lg text-center relative transition-transform duration-300 scale-95">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            <h3 class="text-3xl font-bold text-teal-400 mb-4">Start Your Project</h3>
+            <p class="text-gray-300 mb-6">Tell us about your event or brand challenge.</p>
+            <form class="space-y-4">
+                <input type="text" placeholder="Your Name" required
+                    class="w-full p-3 bg-gray-900 text-white rounded border border-gray-700 focus:border-blue-500 focus:outline-none">
+                <input type="email" placeholder="Your Email" required
+                    class="w-full p-3 bg-gray-900 text-white rounded border border-gray-700 focus:border-blue-500 focus:outline-none">
+                <textarea placeholder="Event Details / Project Scope" rows="4" required
+                    class="w-full p-3 bg-gray-900 text-white rounded border border-gray-700 focus:border-blue-500 focus:outline-none"></textarea>
+                <button type="submit"
+                    class="w-full bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white px-8 py-3 rounded-lg transition-all font-medium">
+                    Submit Project Brief
+                </button>
+            </form>
+        </div>
+    </div>
     <main>
         <section id="home" class="bg-hero relative flex items-center min-h-[60vh] md:min-h-0">
             <div id="hero-overlay" class="absolute inset-0 bg-black/60"></div>
@@ -254,8 +294,7 @@
                             on years of experience and practical solutions. We are proud to have a team of highly skilled
                             professionals specializing in event management and digital communication. We maintain an open
                             channel of communication with our clients throughout the planning process to ensure
-                            transparency, collaboration, and the best possible results for every project.
-                        <p>
+                            transparency, collaboration, and the best possible results for every project.</p>
                         <ul class="text-gray-400 space-y-3 list-disc list-inside">
                             <li class="transform transition-transform duration-300 group-hover:translate-x-2">
                                 Full-Service Event Production & Management</li>
@@ -280,7 +319,8 @@
                             Our entertainment management services cover live performances, cultural shows, music concerts,
                             celebrity appearances, theater productions, and interactive audience experiences.
                             With a creative approach and a dedicated team of professionals, we design and deliver
-                            entertainment programs that perfectly match the theme and purpose of your event.
+                            entertainment
+                            programs that perfectly match the theme and purpose of your event.
                             By combining creativity, innovation, and seamless management, we make sure every
                             entertainment
                             element adds value, energy, and excitement to your event.</p>
@@ -309,8 +349,7 @@
                             international standards.
                             We also support the fast-growing digital transformation by providing advanced solutions for
                             virtual meetings and webinars. With our skilled technical team and the latest tools, we ensure
-                            high-quality, seamless experiences that match our clients' goals and ambitions.
-                        <p>
+                            high-quality, seamless experiences that match our clients' goals and ambitions.</p>
                         <ul class="text-gray-400 space-y-3 list-disc list-inside">
                             <li class="transform transition-transform duration-300 group-hover:translate-x-2">Interactive
                                 Product Demonstrations</li>
@@ -490,10 +529,7 @@
             </div>
         </div>
     </footer>
-    <div id="contact-modal"
-        class="modal fixed inset-0 z-[100] bg-gray-900/70 backdrop-blur-md flex items-center justify-center opacity-0 invisible transition-opacity duration-300 ease-out">
-    </div>
-
+    
     <script>
         // GSAP Registration
         gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -502,14 +538,15 @@
         const modal = document.getElementById('contact-modal');
         let popupTimer;
 
-        // NOTE: openModal and closeModal assume the modal structure (commented out in user code) exists.
+        // NOTE: openModal and closeModal assume the modal inner structure exists.
 
         function openModal() {
             if (!modal) return; // Prevent error if modal is missing
             modal.classList.remove('invisible', 'opacity-0');
             modal.classList.add('visible', 'opacity-100');
             // Check if modal has content to prevent error
-            if (modal.querySelector('div')) modal.querySelector('div').classList.replace('scale-95', 'scale-100');
+            const modalContent = modal.querySelector('#modal-content');
+            if (modalContent) modalContent.classList.replace('scale-95', 'scale-100');
             document.body.style.overflow = 'hidden';
             clearInterval(popupTimer);
             closeOffCanvasMenu();
@@ -517,13 +554,14 @@
 
         function closeModal(event) {
             if (!modal) return; // Prevent error if modal is missing
-            // This is complex logic that requires the modal inner div structure to be present
-            // if (event && event.target !== modal && event.target.closest('.modal > div')) return; 
+            
+            // Check if click is inside the modal content to prevent closing on inner clicks
+            if (event && event.target !== modal && event.target.closest('#modal-content')) return; 
 
             modal.classList.remove('visible', 'opacity-100');
             modal.classList.add('invisible', 'opacity-0');
-            // Check if modal has content to prevent error
-            if (modal.querySelector('div')) modal.querySelector('div').classList.replace('scale-100', 'scale-95');
+            const modalContent = modal.querySelector('#modal-content');
+            if (modalContent) modalContent.classList.replace('scale-100', 'scale-95');
             document.body.style.overflow = '';
             startPopupTimer();
         }
@@ -800,7 +838,8 @@
 
             // Modal listeners (ensure modal element exists before adding listeners)
             if (modal) {
-                modal.addEventListener('click', (e) => e.target === modal && closeModal());
+                // Clicking the backdrop closes the modal
+                modal.addEventListener('click', (e) => e.target === modal && closeModal(e));
             }
 
             document.addEventListener('keydown', e => {
@@ -815,10 +854,9 @@
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
                     const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
 
-                    // Only scroll if the link targets a section ID
-                    if (targetId.startsWith('#service')) {
+                    // Only scroll if the link targets a service ID or a section
+                    if (targetId.startsWith('#service') || targetId === '#services-details' || targetId === '#services-cards') {
                         gsap.to(window, {
                             duration: 1,
                             scrollTo: {

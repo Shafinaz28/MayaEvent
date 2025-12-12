@@ -17,13 +17,13 @@
                     colors: {
                         'gray-850': '#1f2937',
                         'gray-950': '#0f172a',
-                        // Dark navy color to match the off-canvas menu image
                         'maya-dark': '#121926',
                     },
                     animation: {
                         'contactOverlayZoom': 'contactOverlayZoom 1.5s ease-out 1.5s forwards',
-                        'scroll-loop': 'scroll-loop 60s linear infinite',
                         'slideInFromTop': 'slideInFromTop 1.2s ease-out forwards',
+                        /* Marquee animation speed defined here */
+                        'scrolling-marquee': 'scrolling-carousel 45s linear infinite',
                     },
                     keyframes: {
                         slideInFromTop: {
@@ -46,12 +46,13 @@
                                 opacity: '1'
                             },
                         },
-                        // Keyframe for the infinite Portfolio scroll
-                        'horizontal-grid-scroll': {
+                        'scrolling-carousel': {
                             '0%': {
                                 transform: 'translateX(0)'
                             },
                             '100%': {
+                                /* The content consists of Group 1 + Group 2 (identical copy).
+                                                                   Translating -50% moves exactly one copy of the content, creating a seamless loop. */
                                 transform: 'translateX(-50%)'
                             }
                         }
@@ -61,12 +62,29 @@
         }
     </script>
     <style>
+        /* FIX 1: Aggressive Mobile Reset to prevent horizontal overflow/scroll issues */
+        html,
+        body {
+            width: 100%;
+            min-width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: inherit;
+        }
+
         /* --- General Styles --- */
         body {
             transition: overflow 0.3s;
         }
 
-        /* Styles to match the provided menu image look */
+        /* Styles for Off-Canvas Menu */
         #off-canvas-menu {
             background-color: #121926;
             transition: transform 0.7s ease-out;
@@ -77,13 +95,12 @@
         }
 
         #off-canvas-nav a {
-            /* Ensures proper spacing and the light divider line */
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             padding-bottom: 12px !important;
             padding-top: 12px !important;
         }
 
-        /* --- Video/Hero/Image Styles --- */
+        /* --- Background Images --- */
         .bg-hero {
             background-image: url('https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg?auto=compress&cs=tinysrgb&w=1260');
             background-size: cover;
@@ -97,6 +114,7 @@
             background-position: center;
         }
 
+        /* --- Video Hero Styles (Ensures video fills viewport) --- */
         .video-hero {
             position: relative;
             overflow: hidden;
@@ -128,7 +146,7 @@
             }
         }
 
-        /* FIX 3: Adjusted image stack item styles for better scaling */
+        /* --- About Section Image Stack Styles (Existing) --- */
         .event-image-stack-item {
             top: 50%;
             left: 50%;
@@ -147,7 +165,6 @@
             border-radius: 8px;
         }
 
-        /* Reset transform origin to center */
         .event-image-stack-item:nth-child(1) {
             transform: translate(-50%, -50%) rotate(10deg) translate(15px, 15px);
             z-index: 10;
@@ -185,37 +202,58 @@
             background-color: black;
         }
 
-        /* FIX: Applying direct CSS animation properties to the Portfolio track to guarantee infinite loop */
-        .image-scroll-track {
-            display: flex;
-            width: max-content;
-            animation: horizontal-grid-scroll 45s linear infinite;
-            will-change: transform;
-        }
-
-        .image-scroll-track:hover {
-            animation-play-state: paused;
-        }
-
+        /* --- PORTFOLIO INFINITE SCROLL (Marquee Logic) --- */
         #featured-scroll-grid-container {
+            /* Acts as the carousel wrapper, HIDES OVERFLOW */
             position: relative;
             height: 350px;
             overflow: hidden;
             padding: 10px 0;
         }
 
-        .image-scroll-group {
+        .carousel-track {
+            /* This holds the duplicated content (A+A) */
             display: flex;
-            flex-shrink: 0;
+            /* Use max-content so the container is exactly 2x the content width */
+            width: max-content;
+            animation: scrolling-carousel 45s linear infinite;
+            will-change: transform;
+            /* Remove width override from JS */
+            max-width: none !important;
         }
 
-        .image-scroll-item {
-            position: relative;
+        /* CAROUSEL CONTAINER */
+        #featured-scroll-grid-container {
             overflow: hidden;
-            width: 320px;
-            height: 300px;
-            border-radius: 8px;
-            margin-right: 20px;
+            position: relative;
+            width: 100%;
+        }
+
+        /* TRACK WITH INFINITE ANIMATION */
+        .carousel-track {
+            display: flex;
+            width: max-content;
+            animation: scroll 40s linear infinite;
+        }
+
+        /* PAUSE ON HOVER */
+        .carousel-track:hover {
+            animation-play-state: paused;
+        }
+
+        /* IMAGE GROUP */
+        .image-scroll-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* IMAGE BOXES */
+        .image-scroll-item {
+            min-width: 350px;
+            height: 450px;
+            flex-shrink: 0;
+            overflow: hidden;
+            border-radius: 16px;
         }
 
         .image-scroll-item img {
@@ -224,43 +262,169 @@
             object-fit: cover;
         }
 
-        /* Testimonial Scroll */
-        .horizontal-scroll-container {
-            /* Removed overflow-x: scroll for JS control/CSS infinite scroll */
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            padding-bottom: 1rem;
-            scroll-behavior: smooth;
-            overflow-x: hidden;
+        /* SCROLL ANIMATION */
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
         }
 
-        .horizontal-scroll-container::-webkit-scrollbar {
-            display: none;
+        /* --- TESTIMONIAL SLIDER STYLES --- */
+
+        .slider-container {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+            padding: 0 40px; /* Space for the arrows */
+            margin: 0 auto;
         }
 
-        /* NEW: Testimonial Inner Track for CSS Infinite Scroll */
-        #testimonial-track-inner {
+        .slider-track {
             display: flex;
-            width: max-content;
-            animation: testimonial-scroll 40s linear infinite;
-            will-change: transform;
-        }
-
-        .testimonial-scroll-track:hover #testimonial-track-inner {
-            animation-play-state: paused;
+            transition: transform 0.5s ease-in-out;
+            padding-bottom: 20px;
         }
 
         .testimonial-card {
-            min-width: 80vw;
-            max-width: 450px;
-            margin-right: 24px;
-            padding: 24px;
-            background-color: #1f2937;
+            /* GAP/WIDTH DEFINITION: Default to 2 cards per row on desktop (30px gap) */
+            flex: 0 0 calc(50% - 30px);
+            margin: 15px; /* Creates 30px horizontal gap between cards */
+
+            /* DESIGN STYLES - DARK CARD REVERTED */
+            background-color: #1f2937; /* Dark background */
+            color: #ffffff; /* White text */
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            flex-shrink: 0;
+            padding: 20px 40px;
+            text-align: center;
+            /* Blue shadow/outline effect */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 0 4px #2563eb; 
+            position: relative;
+            min-height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        /* Adjustments for Dark Card Text/Elements */
+        .testimonial-card p {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            font-style: italic;
+            margin-bottom: 24px;
+            position: relative;
+            color: #cbd5e1; /* Light gray quote text */
+            z-index: 10;
+        }
+
+        /* Large Quote icons for effect (Light blue/cyan for visibility) */
+        .testimonial-card p::before,
+        .testimonial-card p::after {
+            color: rgba(59, 130, 246, 0.2); 
+        }
+        
+        .testimonial-card img {
+            z-index: 10;
+            /* Use card background color for inner separation */
+            box-shadow: 0 0 0 5px #1f2937;
+        }
+
+        .testimonial-card h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #4ade80; /* Bright green name color */
+            z-index: 10;
+        }
+
+        .testimonial-card .title {
+            color: #94a3b8; /* Subtle gray subtitle color */
+            font-size: 0.9rem;
+            margin-top: 4px;
+            z-index: 10;
+        }
+
+
+        /* Arrow Styling for integrated controls */
+        .slider-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            background-color: white;
+            color: #1f2937;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .slider-control:hover {
+            background-color: #f3f4f6;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        #prevBtn {
+            left: 0;
+            padding-right: 2px;
+        }
+
+        #nextBtn {
+            right: 0;
+            padding-left: 2px;
+        }
+
+        .slider-pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            margin: 0 5px;
+            border-radius: 50%;
+            background-color: #374151;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .dot.active {
+            background-color: #3b82f6;
+            transform: scale(1.2);
+        }
+
+        /* Mobile Adjustments: Single card view on mobile with 30px gap */
+        @media (max-width: 768px) {
+            .testimonial-card {
+                /* GAP/WIDTH DEFINITION: Single card view on mobile with 30px gap */
+                flex: 0 0 calc(100% - 30px);
+                margin: 15px; /* Keeps the 30px gap between adjacent cards */
+                padding: 20px;
+                min-height: 300px;
+            }
+
+            .slider-container {
+                padding: 0 15px; /* Smaller padding for arrows on mobile */
+            }
+
+            .slider-control {
+                width: 35px;
+                height: 35px;
+            }
         }
     </style>
+
 </head>
 
 <body class="bg-gray-900 text-white">
@@ -294,20 +458,19 @@
         </div>
 
         <nav id="off-canvas-nav" class="space-y-1 text-xl">
-            <a href="index.html" class="text-white hover:text-teal-400 transition-colors pb-3 pt-3 menu-link block">
+            <a href="index.html" class="text-white hover:text-teal-400 transition-colors menu-link block">
                 <i class="fas fa-home w-6 mr-3"></i> Home
             </a>
-            <a href="about.html" class="text-white hover:text-teal-400 transition-colors pb-3 pt-3 menu-link block">
+            <a href="about.html" class="text-white hover:text-teal-400 transition-colors menu-link block">
                 <i class="fas fa-info-circle w-6 mr-3"></i> About
             </a>
-            <a href="services.html" class="text-white hover:text-teal-400 transition-colors pb-3 pt-3 menu-link block">
+            <a href="services.html" class="text-white hover:text-teal-400 transition-colors menu-link block">
                 <i class="fas fa-briefcase w-6 mr-3"></i> Services
             </a>
-            <a href="gallery.html" class="text-white hover:text-teal-400 transition-colors pb-3 pt-3 menu-link block">
+            <a href="gallery.html" class="text-white hover:text-teal-400 transition-colors menu-link block">
                 <i class="fas fa-image w-6 mr-3"></i> Gallery
             </a>
-
-            <a href="contact.html" class="text-white hover:text-teal-400 transition-colors pt-3 menu-link block">
+            <a href="contact.html" class="text-white hover:text-teal-400 transition-colors menu-link block">
                 <i class="fas fa-envelope w-6 mr-3"></i> Contact
             </a>
             <div class="border-t border-white/10 mt-8 pt-4"></div>
@@ -324,16 +487,40 @@
     <div id="menu-backdrop" class="fixed inset-0 bg-black/50 z-40 opacity-0 invisible transition-opacity duration-300">
     </div>
 
+    <div id="contact-modal"
+        class="modal fixed inset-0 z-[100] bg-gray-900/70 backdrop-blur-md flex items-center justify-center opacity-0 invisible transition-opacity duration-300 ease-out">
+        <div id="modal-content"
+            class="bg-gray-800 p-8 rounded-xl shadow-2xl w-11/12 max-w-lg text-center relative animate-contactOverlayZoom">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            <h3 class="text-3xl font-bold text-teal-400 mb-4">Let's Craft Your Experience</h3>
+            <p class="text-gray-300 mb-6">Tell us about your next event or brand challenge.</p>
+            <form class="space-y-4">
+                <input type="text" placeholder="Your Name" required
+                    class="w-full p-3 bg-gray-900 text-white rounded border border-gray-700 focus:border-blue-500 focus:outline-none">
+                <input type="email" placeholder="Your Email" required
+                    class="w-full p-3 bg-gray-900 text-white rounded border border-gray-700 focus:border-blue-500 focus:outline-none">
+                <textarea placeholder="Event Details / Project Scope" rows="4" required
+                    class="w-full p-3 bg-gray-900 text-white rounded border border-gray-700 focus:border-blue-500 focus:outline-none"></textarea>
+                <button type="submit"
+                    class="w-full bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white px-8 py-3 rounded-lg transition-all font-medium">
+                    Submit Project Brief
+                </button>
+            </form>
+        </div>
+    </div>
+
     <section class="relative min-h-screen flex items-center justify-center overflow-hidden video-hero">
         <video id="hero-video" class="absolute inset-0 w-full h-full object-cover z-0" autoplay muted loop playsinline
             preload="auto">
             <source src="assets/videos/maya logo1.mp4" type="video/mp4">
-            <source src="https://cdn.pixabay.com/video/2016/03/09/2549-176243_large.mp4" type="video/mp4">
             <source src="https://cdn.pixabay.com/video/2017/08/30/18071-230473561_large.mp4" type="video/mp4">
+            Your browser does not support the video tag.
         </video>
         <div id="fallback-bg" class="absolute inset-0 bg-hero z-0" style="display: none;"></div>
-
-        <div class="relative z-10 text-center max-w-4xl mx-auto px-4 text-white pt-20">
+        <div class="absolute inset-0 bg-black/50 z-10"></div>
+        <div class="relative z-20 text-center max-w-4xl mx-auto px-4 text-white pt-20">
             <h1 class="text-5xl sm:text-7xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-400 opacity-0"
                 id="hero-title">
                 The Creative Powerhouse
@@ -512,10 +699,10 @@
                     <img src="./assets/images/EVENTSCONSULTINGSOULUTIONS.jpg" alt="Consulting"
                         class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
                     <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2 text-teal-400">EVENTS CONSULTING & STRATEGY</h3>
+                        <h3 class="text-xl font-bold mb-2 text-teal-400">EVENTS CONSULTING & STRATEGY </h3>
                         <p class="text-gray-400 text-sm mb-4">Creating and designing comprehensive solutions for events,
-                            marketing
-                            communication, and consulting to provide the best experiences locally and internationally.
+                            marketing communication, and consulting to provide the best experiences locally and
+                            internationally.
                         </p>
                     </div>
                 </div>
@@ -555,232 +742,68 @@
         </div>
     </section>
 
-    <section id="unified-portfolio-carousel" class="bg-gray-950 py-20">
+    <section id="unified-portfolio-carousel" class="py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl md:text-5xl font-bold mb-12 text-teal-400 scroll-animated-element portfolio-title">
+
+            <h2 class="text-4xl md:text-5xl font-bold mb-12 text-teal-400">
                 🚀 Our Event Portfolio: Experiences Brought to Life
             </h2>
-            <p class="text-lg text-gray-400 mb-8 max-w-3xl mx-auto scroll-animated-element portfolio-subtitle">
-                Explore a curated selection of our most innovative and impactful projects, showcasing our mastery in
-                technical production, stage design, and immersive environments.
+
+            <p class="text-lg text-gray-400 mb-8 max-w-3xl mx-auto">
+                Explore a curated selection of our most innovative and impactful projects,
+                showcasing technical production, stage design, and immersive environments.
             </p>
 
             <div id="featured-scroll-grid-container" class="max-w-full mx-auto h-[350px]">
-                <div id="featured-scroll-track" class="image-scroll-track">
-                    <div class="image-scroll-group">
-                        <div class="image-scroll-item">
-                            <img src="https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=1260"
-                                alt="Concert Stage">
-                        </div>
-                        <div class="image-scroll-item">
-                            <img src="https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=600"
-                                alt="Gala Dinner Setup">
-                        </div>
-                        <div class="image-scroll-item">
-                            <img src="./assets/images/Energetic-Events.jpg" alt="Conference Audience">
-                        </div>
-                        <div class="image-scroll-item">
-                            <img src="./services/Hybrid-Events.jpg" alt="Hybrid Studio Setup">
-                        </div>
-                        <div class="image-scroll-item">
-                            <img src="./testimonials/Corporate-Gala.jpg" alt="Corporate Gala Event">
-                        </div>
-                        <div class="image-scroll-item">
-                            <img src="./testimonials/Wedding-Reception.jpg" alt="Grand Social Celebrations">
-                        </div>
-                        <div class="image-scroll-item">
-                            <img src="./testimonials/Concert-Experience.jpg" alt="Technical Production Setup">
-                        </div>
-                    </div>
+
+                <div id="featured-scroll-track" class="carousel-track">
 
                     <div class="image-scroll-group">
                         <div class="image-scroll-item">
-                            <img src="https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                                alt="Outdoor Music Festival">
+                            <img src="https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=1260">
                         </div>
                         <div class="image-scroll-item">
-                            <img src="https://images.pexels.com/photos/4099411/pexels-photo-4099411.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                                alt="Product Launch Booth">
+                            <img src="https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg">
                         </div>
                         <div class="image-scroll-item">
-                            <img src="https://images.pexels.com/photos/1619572/pexels-photo-1619572.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                                alt="Fashion Show Setup">
+                            <img src="https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg">
                         </div>
                         <div class="image-scroll-item">
-                            <img src="https://images.pexels.com/photos/10368305/pexels-photo-10368305.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                                alt="Corporate Awards Ceremony">
-                        </div>
-                    </div>
-                    <div class="image-scroll-group">
-                        <div class="image-scroll-item">
-                            <img src="https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=1260"
-                                alt="Concert Stage Duplicate">
+                            <img src="https://images.pexels.com/photos/1188049/pexels-photo-1188049.jpeg">
                         </div>
                         <div class="image-scroll-item">
-                            <img src="https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=600"
-                                alt="Gala Dinner Setup Duplicate">
+                            <img src="https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg">
                         </div>
                         <div class="image-scroll-item">
-                            <img src="./assets/images/Energetic-Events.jpg" alt="Conference Audience Duplicate">
+                            <img src="https://images.pexels.com/photos/1680140/pexels-photo-1680140.jpeg">
                         </div>
                         <div class="image-scroll-item">
-                            <img src="./services/Hybrid-Events.jpg" alt="Hybrid Studio Setup Duplicate">
-                        </div>
-                        <div class="image-scroll-item">
-                            <img src="./testimonials/Corporate-Gala.jpg" alt="Corporate Gala Event Duplicate">
-                        </div>
-                        <div class="image-scroll-item">
-                            <img src="./testimonials/Wedding-Reception.jpg" alt="Grand Social Celebrations Duplicate">
-                        </div>
-                        <div class="image-scroll-item">
-                            <img src="./testimonials/Concert-Experience.jpg" alt="Technical Production Setup Duplicate">
+                            <img src="https://images.pexels.com/photos/1587927/pexels-photo-1587927.jpeg">
                         </div>
                     </div>
 
-                    <div class="image-scroll-group">
+                    <div class="image-scroll-group" aria-hidden="true">
                         <div class="image-scroll-item">
-                            <img src="https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                                alt="Outdoor Music Festival Duplicate">
-                        </div>
-                        <div class="image-scroll-item">
-                            <img src="https://images.pexels.com/photos/4099411/pexels-photo-4099411.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                                alt="Product Launch Booth Duplicate">
+                            <img src="https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=1260">
                         </div>
                         <div class="image-scroll-item">
-                            <img src="https://images.pexels.com/photos/1619572/pexels-photo-1619572.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                                alt="Fashion Show Setup Duplicate">
+                            <img src="https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg">
                         </div>
                         <div class="image-scroll-item">
-                            <img src="https://images.pexels.com/photos/10368305/pexels-photo-10368305.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                                alt="Corporate Awards Ceremony Duplicate">
+                            <img src="https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg">
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="testimonials" class="py-20 bg-gray-850">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 scroll-animated-element testimonials-title-block">
-                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white">Trusted by Leaders</h2>
-                <p class="text-gray-400 max-w-2xl mx-auto">
-                    We deliver experiences that are strategically smart and emotionally powerful. Here’s what our valued
-                    clients say.
-                </p>
-                <div class="testimonial-navigation-wrapper mt-8 flex justify-center space-x-4">
-                    <button id="prev-testimonial"
-                        class="p-3 rounded-full bg-gray-900 text-teal-400 hover:bg-gray-700 transition">
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                    <button id="next-testimonial"
-                        class="p-3 rounded-full bg-gray-900 text-teal-400 hover:bg-gray-700 transition">
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="horizontal-scroll-container testimonial-scroll-track">
-                <div id="testimonial-track-inner">
-                    <div class="testimonial-card snap-center text-center bg-gray-900 shadow-xl scroll-animated-element testimonial-item">
-                        <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=400"
-                            alt="Anita Sharma"
-                            class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-pink-500 mb-6">
-                        <div class="mb-6 flex justify-center space-x-1 text-yellow-400">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i class="fas fa-star"></i>
+                        <div class="image-scroll-item">
+                            <img src="https://images.pexels.com/photos/1188049/pexels-photo-1188049.jpeg">
                         </div>
-                        <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
-                            "The Maya Adfinity team flawlessly handled our product launch. Their professionalism,
-                            creativity, and attention to detail made the entire experience seamless and enjoyable. Truly
-                            a full-scale creative powerhouse."
-                        </p>
-                        <h4 class="text-lg font-bold text-white">Anita Sharma</h4>
-                        <p class="text-blue-400">CEO at InnovateX</p>
-                    </div>
-
-                    <div class="testimonial-card snap-center text-center bg-gray-900 shadow-xl scroll-animated-element testimonial-item">
-                        <img src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400"
-                            alt="Vikram Singh"
-                            class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-green-500 mb-6">
-                        <div class="mb-6 flex justify-center space-x-1 text-yellow-400">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i class="fas fa-star"></i>
+                        <div class="image-scroll-item">
+                            <img src="https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg">
                         </div>
-                        <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
-                            "Maya Adfinity transformed our annual festival into a spectacular celebration. Their attention
-                            to logistics, entertainment management, and overall guest experience was outstanding. Highly
-                            recommended!"
-                        </p>
-                        <h4 class="text-lg font-bold text-white">Vikram Singh</h4>
-                        <p class="text-blue-400">Event Manager at FunFest</p>
-                    </div>
-
-                    <div class="testimonial-card snap-center text-center bg-gray-900 shadow-xl scroll-animated-element testimonial-item">
-                        <img src="https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=400"
-                            alt="Rajesh Kumar"
-                            class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-blue-500 mb-6">
-                        <div class="mb-6 flex justify-center space-x-1 text-yellow-400">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i class="fas fa-star"></i>
+                        <div class="image-scroll-item">
+                            <img src="https://images.pexels.com/photos/1680140/pexels-photo-1680140.jpeg">
                         </div>
-                        <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
-                            "Maya Adfinity exceeded all our expectations for our annual corporate conference. Their
-                            attention to detail and creative solutions delivered a truly transformative and unforgettable
-                            experience."
-                        </p>
-                        <h4 class="text-lg font-bold text-white">Rajesh Kumar</h4>
-                        <p class="text-blue-400">Managing Director at TechCorp India</p>
-                    </div>
-
-                    <div class="testimonial-card snap-center text-center bg-gray-900 shadow-xl scroll-animated-element testimonial-item">
-                        <img src="https://images.pexels.com/photos/3775087/pexels-photo-3775087.jpeg?auto=compress&cs=tinysrgb&w=400"
-                            alt="Deepa Varma"
-                            class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-teal-500 mb-6">
-                        <div class="mb-6 flex justify-center space-x-1 text-yellow-400">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                        <div class="image-scroll-item">
+                            <img src="https://images.pexels.com/photos/1587927/pexels-photo-1587927.jpeg">
                         </div>
-                        <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
-                            "The sheer scale and technical brilliance of the stage design were breathtaking. Maya Adfinity
-                            is the only choice for large-scale, immersive brand experiences."
-                        </p>
-                        <h4 class="text-lg font-bold text-white">Deepa Varma</h4>
-                        <p class="text-blue-400">Head of Marketing, GlobalTech</p>
-                    </div>
-
-                    <div class="testimonial-card snap-center text-center bg-gray-900 shadow-xl scroll-animated-element testimonial-item">
-                        <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=400"
-                            alt="Anita Sharma"
-                            class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-pink-500 mb-6">
-                        <div class="mb-6 flex justify-center space-x-1 text-yellow-400">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </div>
-                        <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
-                            "The Maya Adfinity team flawlessly handled our product launch. Their professionalism,
-                            creativity, and attention to detail made the entire experience seamless and enjoyable. Truly
-                            a full-scale creative powerhouse."
-                        </p>
-                        <h4 class="text-lg font-bold text-white">Anita Sharma</h4>
-                        <p class="text-blue-400">CEO at InnovateX</p>
-                    </div>
-
-                    <div class="testimonial-card snap-center text-center bg-gray-900 shadow-xl scroll-animated-element testimonial-item">
-                        <img src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400"
-                            alt="Vikram Singh"
-                            class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-green-500 mb-6">
-                        <div class="mb-6 flex justify-center space-x-1 text-yellow-400">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </div>
-                        <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed italic">
-                            "Maya Adfinity transformed our annual festival into a spectacular celebration. Their attention
-                            to logistics, entertainment management, and overall guest experience was outstanding. Highly
-                            recommended!"
-                        </p>
-                        <h4 class="text-lg font-bold text-white">Vikram Singh</h4>
-                        <p class="text-blue-400">Event Manager at FunFest</p>
                     </div>
 
                 </div>
@@ -788,6 +811,73 @@
         </div>
     </section>
 
+    <section id="testimonials" class="py-20 bg-gray-950">
+        <div class="max-w-7xl mx-auto text-center mb-12">
+            <h2 class="text-white text-4xl font-bold">Trusted by Leaders</h2>
+            <p class="text-gray-400 mt-2">Real experiences from our valued clients</p>
+        </div>
+
+        <div class="slider-container max-w-7xl">
+            <div id="slider-track" class="slider-track">
+
+                <div class="testimonial-card">
+                    <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&w=200"
+                        class="w-20 h-20 rounded-full mx-auto mb-4 border-4 border-pink-500">
+
+                    <p>
+                        "Smart Slider 3 is a great solution for adding stylish, animated sliders to your site. The list of features are impressive, and there is a great and helpful team of developers behind this solid plugin."
+                    </p>
+                    <h4 class="font-bold">Ben Pines</h4>
+                    <p class="title">CMO at Elementor</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <img src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&w=200"
+                        class="w-20 h-20 rounded-full mx-auto mb-4 border-4 border-green-500">
+
+                    <p>
+                        "I've worked with a lot of different slider plugins and I can honestly say Smart Slider 3 is the BEST solution for WordPress. It's powerful, yet so much fun to use. The free version has more features than other premium sliders."
+                    </p>
+                    <h4 class="font-bold">Raelene Morey</h4>
+                    <p class="title">Founder at Words By Birds</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <img src="https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&w=200"
+                        class="w-20 h-20 rounded-full mx-auto mb-4 border-4 border-blue-500">
+
+                    <p>
+                        "No matter what you want to accomplish, I can heartily recommend the free version. It already provides more functionality than any other slider plugin – even many premium ones."
+                    </p>
+                    <h4 class="font-bold">Daniel Pataki</h4>
+                    <p class="title">CTO at Kirsta</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <img src="https://images.pexels.com/photos/3775087/pexels-photo-3775087.jpeg?auto=compress&w=200"
+                        class="w-20 h-20 rounded-full mx-auto mb-4 border-4 border-teal-500">
+
+                    <p>
+                        "Best event creative experience we ever had. Maya Adfinity team delivered an exceptional experience, handling every detail with precision and creative flair."
+                    </p>
+                    <h4 class="font-bold">Deepa Varma</h4>
+                    <p class="title">Head of Marketing, Future Corp</p>
+                </div>
+
+            </div>
+
+            <div id="slider-pagination" class="slider-pagination">
+                </div>
+
+            <button id="prevBtn" class="slider-control">
+                <i class="fas fa-angle-left"></i>
+            </button>
+            <button id="nextBtn" class="slider-control">
+                <i class="fas fa-angle-right"></i>
+            </button>
+        </div>
+
+    </section>
     <section class="py-20 relative bg-cta">
         <div class="absolute inset-0 bg-gray-900/80"></div>
         <div class="relative z-10 max-w-4xl mx-auto text-center px-4">
@@ -829,12 +919,10 @@
                         </li>
                         <li><a href="about.html" class="text-gray-400 hover:text-blue-400 transition-colors">About Us</a>
                         </li>
-                        <li><a href="service.html"
-                                class="text-gray-400 hover:text-blue-400 transition-colors">Services</a></li>
-                        <li><a href="gallery.html"
-                                class="text-gray-400 hover:text-blue-400 transition-colors">Portfolio</a></li>
-                        <li><a href="contact.html"
-                                class="text-gray-400 hover:text-blue-400 transition-colors">Contact</a></li>
+                        <li><a href="service.html" class="text-gray-400 hover:text-blue-400 transition-colors">Services</a></li>
+                        <li><a href="gallery.html" class="text-gray-400 hover:text-blue-400 transition-colors">Portfolio</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-blue-400 transition-colors">Contact</a>
+                        </li>
                     </ul>
                 </div>
 
@@ -874,31 +962,88 @@
         </div>
     </footer>
 
-    <div id="contact-modal"
-        class="modal fixed inset-0 z-[100] bg-gray-900/70 backdrop-blur-md flex items-center justify-center opacity-0 invisible transition-opacity duration-300 ease-out">
-        </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
 
     <script>
-        // === GSAP ANIMAETED COUNTER LOGIC (Used via ScrollTrigger) ===
-        function animateCount(targetId, targetValue, duration = 2, suffix = '') {
-            const element = document.getElementById(targetId);
-            if (!element) return;
-            gsap.to({
-                value: 0
-            }, {
-                value: targetValue,
-                duration: duration,
-                ease: 'power1.out',
-                onUpdate: function () {
-                    element.textContent = Math.floor(this.targets()[0].value).toLocaleString() + suffix;
-                },
-                onComplete: function () {
-                    element.textContent = targetValue.toLocaleString() + suffix;
-                }
-            });
+        let index = 0;
+        const track = document.getElementById("slider-track");
+        const cards = document.querySelectorAll(".testimonial-card");
+        const paginationContainer = document.getElementById("slider-pagination");
+
+        // Set the horizontal margin value used in CSS (15px * 2 = 30px total gap)
+        const CARD_MARGIN_H = 15;
+
+        // Calculate the maximum index that can be displayed fully
+        function getMaxIndex() {
+            // Check screen width to determine how many cards are visible
+            const visibleCards = window.innerWidth >= 768 ? 2 : 1;
+            return cards.length - visibleCards;
         }
 
+        // Update the slider position
+        function updateSlider() {
+            // Card width includes content width plus horizontal margins on left and right
+            const cardWidth = cards.length > 0 ? cards[0].offsetWidth + (2 * CARD_MARGIN_H) : 0; 
+
+            // Boundary checks
+            const maxIndex = getMaxIndex();
+            if (index > maxIndex) {
+                index = maxIndex;
+            }
+            if (index < 0) {
+                index = 0;
+            }
+            
+            // Only translate if cardWidth is defined
+            if (cardWidth > 0) {
+                // Ensure we slide by one card increment, which is its full width + gap
+                track.style.transform = `translateX(-${index * cardWidth}px)`;
+            }
+            updatePaginationDots();
+        }
+
+        // Handle pagination dots
+        function updatePaginationDots() {
+            if (!paginationContainer) return;
+            // Clear existing dots
+            paginationContainer.innerHTML = '';
+
+            const maxIndex = getMaxIndex();
+
+            for (let i = 0; i <= maxIndex; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if (i === index) {
+                    dot.classList.add('active');
+                }
+                dot.addEventListener('click', () => {
+                    index = i;
+                    updateSlider();
+                });
+                paginationContainer.appendChild(dot);
+            }
+        }
+
+
+        document.getElementById("nextBtn").addEventListener("click", () => {
+            if (index < getMaxIndex()) index++;
+            updateSlider();
+        });
+
+        document.getElementById("prevBtn").addEventListener("click", () => {
+            if (index > 0) index--;
+            updateSlider();
+        });
+
+        // Run once on load and on resize
+        updateSlider();
+        window.addEventListener("resize", updateSlider);
+
+        // Initial call to generate dots
+        updatePaginationDots();
+    </script>
+    <script>
         // === MODAL & MENU LOGIC ===
         const modal = document.getElementById('contact-modal');
         let popupTimer;
@@ -919,13 +1064,6 @@
                 modal.classList.add('invisible', 'opacity-0');
             }
             document.body.style.overflow = '';
-            startPopupTimer();
-        }
-
-        function startPopupTimer() {
-            clearInterval(popupTimer);
-            // Re-enable if modal implementation is complete
-            // popupTimer = setInterval(openModal, 20000); 
         }
 
         const menu = document.getElementById('off-canvas-menu');
@@ -939,7 +1077,7 @@
             paused: true
         });
 
-        // Initialize Menu Links: SLIDE FROM RIGHT (x: 50) and slower duration
+        // Initialize Menu Links: SLIDE FROM RIGHT (x: 50)
         menuTimeline.from(menuLinks, {
             x: 50,
             opacity: 0,
@@ -955,7 +1093,6 @@
             menuBackdrop.classList.add('opacity-100', 'visible');
             document.body.style.overflow = 'hidden';
 
-            // Play the menu animation timeline from the beginning
             menuTimeline.timeScale(1).play(0);
         }
 
@@ -966,77 +1103,36 @@
                 menuBackdrop.classList.remove('opacity-100', 'visible');
                 menuBackdrop.classList.add('opacity-0', 'invisible');
 
-                // FIX: Ensure body overflow is restored only if the modal is not visible 
+                // Ensure body overflow is restored only if the modal is not visible
                 const modalIsHidden = modal ? modal.classList.contains('invisible') : true;
 
                 if (modalIsHidden) {
                     document.body.style.overflow = '';
                 }
             });
-
         }
 
-        // === TESTIMONIAL SCROLL ARROW LOGIC (FIXED) ===
-        const testimonialTrackInner = document.getElementById('testimonial-track-inner');
-        const testimonialContainer = document.querySelector('.testimonial-scroll-track');
-        const prevButton = document.getElementById('prev-testimonial');
-        const nextButton = document.getElementById('next-testimonial');
+        // === TESTIMONIAL SCROLL ARROW LOGIC (FOR CSS SCROLL-SNAP) ===
+        // Note: The previous testimonial scroll logic has been deprecated 
+        // in favor of the custom JS slider logic at the bottom.
 
-        function scrollTestimonials(direction) {
-            if (!testimonialContainer || !testimonialTrackInner) return;
-
-            // Find the active element to calculate precise scroll position
-            const firstCard = testimonialTrackInner.querySelector('.testimonial-card');
-            if (!firstCard) return;
-
-            // Calculate the exact width of one card including its right margin
-            const cardStyle = window.getComputedStyle(firstCard);
-            const cardWidth = firstCard.offsetWidth;
-            const cardMarginRight = parseFloat(cardStyle.marginRight);
-            const scrollDistance = cardWidth + cardMarginRight;
-
-            // Temporarily pause the CSS animation for manual scroll
-            testimonialTrackInner.style.animationPlayState = 'paused';
-
-            // Calculate the target scroll position
-            const targetScrollLeft = testimonialContainer.scrollLeft + (direction * scrollDistance);
-
-            // Use GSAP for smooth scrolling, as the browser's scroll behavior is hidden/overridden by GSAP/CSS
-            gsap.to(testimonialContainer, {
-                scrollLeft: targetScrollLeft,
-                duration: 0.5,
-                ease: "power2.out",
-                onComplete: () => {
-                    // Resume CSS animation after scrolling completes
-                    testimonialTrackInner.style.animationPlayState = 'running';
-                }
-            });
-
-        }
-
-        if (prevButton) prevButton.addEventListener('click', () => scrollTestimonials(-1));
-        if (nextButton) nextButton.addEventListener('click', () => scrollTestimonials(1));
-
-
-        // === INITIALIZATION AND EVENT LISTENERS ===
+        // === INITIALIZATION AND EVENT LISTENERS (GSAP ScrollTrigger) ===
         document.addEventListener('DOMContentLoaded', function () {
-            startPopupTimer();
             gsap.registerPlugin(ScrollTrigger);
 
-            // 1. Initial State Setup 
-            const animElements = document.querySelectorAll('.scroll-animated-element');
+            // --- REMOVED JS WIDTH CALCULATION ---
+            // The scroll should now work reliably using the CSS max-content + translateX(-50%)
 
-            // Set initial state for all scroll-triggered elements (Fade Up default)
+            // 1. Initial State Setup (Existing GSAP logic)
+            const animElements = document.querySelectorAll('.scroll-animated-element');
             gsap.set(animElements, {
                 opacity: 0,
                 y: 30
             });
-
-            // Set initial state for menu links
+            const menuLinks = document.querySelectorAll('#off-canvas-nav .menu-link');
             gsap.set(menuLinks, {
                 opacity: 0
             });
-
 
             // --- Helper function for quick FadeUp animation ---
             function createFadeUpTrigger(selector, startOffset = "top 85%", delay = 0) {
@@ -1053,7 +1149,6 @@
                     }
                 });
             }
-
 
             // --- HERO SECTION ANIMATION (Runs once on load) ---
             gsap.from("#hero-title", {
@@ -1075,7 +1170,6 @@
                 delay: 1.1
             });
 
-
             // --- ABOUT SECTION (Split-Screen Slide & Text) ---
             const aboutTimeline = gsap.timeline({
                 scrollTrigger: {
@@ -1086,7 +1180,6 @@
                 }
             });
 
-            // Explicitly set initial x-positions for the left/right slide
             gsap.set(".about-text-content", {
                 x: -100,
                 opacity: 0,
@@ -1097,7 +1190,6 @@
                 opacity: 0,
                 y: 30
             });
-
 
             aboutTimeline.to(".about-title-block", {
                 opacity: 1,
