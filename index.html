@@ -100,7 +100,7 @@
             padding-top: 12px !important;
         }
 
-        /* --- Background Images --- */
+        /* --- Background Images (for fallback) --- */
         .bg-hero {
             background-image: url('https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg?auto=compress&cs=tinysrgb&w=1260');
             background-size: cover;
@@ -279,7 +279,7 @@
             overflow: hidden;
             width: 100%;
             position: relative;
-            padding: 0 40px; /* Space for the arrows */
+            padding: 0 40px;
             margin: 0 auto;
         }
 
@@ -332,15 +332,15 @@
             color: rgba(59, 130, 246, 0.2);
             z-index: 1;
         }
-        
+
         .testimonial-card p::after {
-             content: "”";
-             bottom: -60px;
-             right: -20px;
+            content: "”";
+            bottom: -60px;
+            right: -20px;
         }
         .testimonial-card p::before {
-             top: -20px;
-             left: -20px;
+            top: -20px;
+            left: -20px;
         }
 
 
@@ -613,7 +613,7 @@
         </div>
     </section>
 
-    <section id="service-showcase" class="bg-gray-900 py-20">
+    <section id="service-showcase" class="py-20 bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2
                 class="text-center text-4xl md:text-5xl font-bold mb-16 text-teal-400 scroll-animated-element service-showcase-title">
@@ -1063,6 +1063,7 @@
     <script>
         // === MODAL & MENU LOGIC ===
         const modal = document.getElementById('contact-modal');
+        const heroVideo = document.getElementById('hero-video'); // Get the video element
         let popupTimer;
 
         function openModal() {
@@ -1129,16 +1130,55 @@
             });
         }
 
-        // === TESTIMONIAL SCROLL ARROW LOGIC (FOR CSS SCROLL-SNAP) ===
-        // Note: The previous testimonial scroll logic has been deprecated 
-        // in favor of the custom JS slider logic at the bottom.
-
-        // === INITIALIZATION AND EVENT LISTENERS (GSAP ScrollTrigger) ===
+        // === VIDEO CONTROL LOGIC (MUTE ON SCROLL) ===
         document.addEventListener('DOMContentLoaded', function () {
             gsap.registerPlugin(ScrollTrigger);
 
-            // --- REMOVED JS WIDTH CALCULATION ---
-            // The scroll should now work reliably using the CSS max-content + translateX(-50%)
+            // ... (rest of the GSAP initialization code) ...
+            
+            // --- HERO SECTION SCROLL CONTROL (Mute on scroll down) ---
+            if (heroVideo) {
+                ScrollTrigger.create({
+                    trigger: "#about", // Trigger when the #about section starts (hero is leaving)
+                    start: "top bottom", // Starts when #about top hits bottom of viewport
+                    // Action when scrolling DOWN past the trigger point
+                    onEnter: () => {
+                        heroVideo.pause();
+                        heroVideo.muted = true;
+                    },
+                    // Action when scrolling UP past the trigger point
+                    onLeaveBack: () => {
+                        // Only unmute/play if the screen is large enough or specific conditions met
+                        if (heroVideo.paused) {
+                            heroVideo.muted = false;
+                            heroVideo.play();
+                        }
+                    },
+                    // Ensure the video is muted when the hero section is completely out of view (onEnterBack)
+                    // and unmuted when it comes back into view (onLeave)
+                    toggleActions: "play pause resume pause", // This is optional, but helps manage playback
+                });
+
+                // Set up a simple scroll trigger for the top of the video container
+                ScrollTrigger.create({
+                    trigger: ".video-hero",
+                    start: "top top", // When the hero section hits the top of the viewport
+                    end: "bottom top",
+                    // Mute/Pause when scrolling DOWN past the top of the video container
+                    onLeave: () => {
+                         heroVideo.muted = true; 
+                    },
+                    // Unmute/Play when scrolling UP back into the video container
+                    onEnterBack: () => {
+                         heroVideo.muted = false; 
+                    },
+                });
+
+                // Since we removed 'muted', initial autoplay might fail on some browsers.
+                // We'll trust the user interaction or the autoplay to handle initial state.
+            }
+            
+            // ... (rest of the GSAP section initialization code, kept below for structure) ...
 
             // 1. Initial State Setup (Existing GSAP logic)
             const animElements = document.querySelectorAll('.scroll-animated-element');
