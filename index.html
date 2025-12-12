@@ -301,7 +301,7 @@
             padding: 20px 40px;
             text-align: center;
             /* Blue shadow/outline effect */
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 0 4px #2563eb; 
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 0 4px #2563eb;
             position: relative;
             min-height: 350px;
             display: flex;
@@ -310,7 +310,7 @@
             align-items: center;
             overflow: hidden;
         }
-        
+
         /* Adjustments for Dark Card Text/Elements */
         .testimonial-card p {
             font-size: 1.125rem;
@@ -325,9 +325,25 @@
         /* Large Quote icons for effect (Light blue/cyan for visibility) */
         .testimonial-card p::before,
         .testimonial-card p::after {
-            color: rgba(59, 130, 246, 0.2); 
+            content: "“"; /* Added content property for quotes */
+            position: absolute;
+            font-size: 6rem;
+            line-height: 1;
+            color: rgba(59, 130, 246, 0.2);
+            z-index: 1;
         }
         
+        .testimonial-card p::after {
+             content: "”";
+             bottom: -60px;
+             right: -20px;
+        }
+        .testimonial-card p::before {
+             top: -20px;
+             left: -20px;
+        }
+
+
         .testimonial-card img {
             z-index: 10;
             /* Use card background color for inner separation */
@@ -512,9 +528,9 @@
     </div>
 
     <section class="relative min-h-screen flex items-center justify-center overflow-hidden video-hero">
-        <video id="hero-video" class="absolute inset-0 w-full h-full object-cover z-0" autoplay muted loop playsinline
+        <video id="hero-video" class="absolute inset-0 w-full h-full object-cover z-0" autoplay loop playsinline
             preload="auto">
-            <source src="assets/videos/maya logo1.mp4" type="video/mp4">
+            <source src="assets/videos/3D Globe Slideshow_free .mp4" type="video/mp4">
             <source src="https://cdn.pixabay.com/video/2017/08/30/18071-230473561_large.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
@@ -867,7 +883,7 @@
             </div>
 
             <div id="slider-pagination" class="slider-pagination">
-                </div>
+            </div>
 
             <button id="prevBtn" class="slider-control">
                 <i class="fas fa-angle-left"></i>
@@ -977,6 +993,7 @@
         // Calculate the maximum index that can be displayed fully
         function getMaxIndex() {
             // Check screen width to determine how many cards are visible
+            // We want 2 cards on desktop (>=768px) and 1 card on mobile (<768px)
             const visibleCards = window.innerWidth >= 768 ? 2 : 1;
             return cards.length - visibleCards;
         }
